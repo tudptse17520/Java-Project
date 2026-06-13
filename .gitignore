@@ -1,0 +1,143 @@
+# ==================================================
+# Operating System
+# ==================================================
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# ==================================================
+# IDEs (Root & Sub-folders)
+# ==================================================
+
+# IntelliJ IDEA
+.idea/
+backend/.idea/
+frontend/.idea/
+*.iml
+backend/*.iml
+frontend/*.iml
+
+# VS Code
+.vscode/
+backend/.vscode/
+frontend/.vscode/
+
+# Eclipse / STS
+.project
+.classpath
+.settings/
+
+# NetBeans
+nbproject/
+build/
+
+# ==================================================
+# Backend - Spring Boot / Maven
+# ==================================================
+
+# Maven build output
+backend/target/
+target/
+
+# Maven wrapper jar
+.mvn/wrapper/maven-wrapper.jar
+backend/.mvn/wrapper/maven-wrapper.jar
+
+# Logs
+*.log
+logs/
+backend/logs/
+
+# Temporary files
+*.tmp
+*.temp
+
+# ==================================================
+# Backend Environment Files (Security)
+# ==================================================
+
+backend/.env
+backend/application-local.properties
+backend/application-local.yml
+backend/src/main/resources/application-local.properties
+backend/src/main/resources/application-local.yml
+
+# ==================================================
+# Frontend - Node.js / React / Next.js
+# ==================================================
+
+frontend/node_modules/
+
+# Next.js
+frontend/.next/
+frontend/out/
+
+# React build
+frontend/build/
+frontend/dist/
+
+# Turbopack
+frontend/.turbo/
+
+# Cache
+frontend/.cache/
+
+# ==================================================
+# Frontend Environment Files (Security)
+# ==================================================
+
+frontend/.env
+frontend/.env.local
+frontend/.env.development.local
+frontend/.env.test.local
+frontend/.env.production.local
+
+# ==================================================
+# Package Managers
+# ==================================================
+
+# npm
+npm-debug.log*
+
+# yarn
+yarn-debug.log*
+yarn-error.log*
+
+# pnpm
+pnpm-debug.log*
+
+# ==================================================
+# Testing & Coverage
+# ==================================================
+
+coverage/
+reports/
+frontend/coverage/
+backend/coverage/
+
+# ==================================================
+# Generated Files
+# ==================================================
+
+*.class
+*.jar
+*.war
+*.ear
+
+# ==================================================
+# Database Files (Local Only & SQL Server Backup)
+# ==================================================
+
+*.db
+*.sqlite
+*.sqlite3
+*.bak
+*.sql
+
+# ==================================================
+# Misc
+# ==================================================
+
+*.swp
+*.swo
+*~

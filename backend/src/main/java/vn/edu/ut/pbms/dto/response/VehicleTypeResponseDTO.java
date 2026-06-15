@@ -1,11 +1,11 @@
-package vn.edu.ut.pbms.vehicle_type;
+package vn.edu.ut.pbms.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import vn.edu.ut.pbms.constant.VehicleTypeStatus;
 
 /**
  * DTO for sending vehicle type data back to the client in API responses.

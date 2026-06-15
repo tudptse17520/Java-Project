@@ -1,4 +1,4 @@
-package vn.edu.ut.pbms.vehicle_type;
+package vn.edu.ut.pbms.constant;
 
 /**
  * Status enum for VehicleType entity.

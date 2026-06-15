@@ -1,10 +1,13 @@
-package vn.edu.ut.pbms.vehicle_type;
+package vn.edu.ut.pbms.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import vn.edu.ut.pbms.dto.request.VehicleTypeRequestDTO;
+import vn.edu.ut.pbms.dto.response.VehicleTypeResponseDTO;
+import vn.edu.ut.pbms.service.VehicleTypeService;
 
 import java.util.List;
 

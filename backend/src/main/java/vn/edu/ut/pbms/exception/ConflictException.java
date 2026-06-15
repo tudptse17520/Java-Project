@@ -1,4 +1,4 @@
-package vn.edu.ut.pbms.common.exception;
+package vn.edu.ut.pbms.exception;
 
 /**
  * Exception thrown when a resource conflict occurs (e.g., duplicate name).

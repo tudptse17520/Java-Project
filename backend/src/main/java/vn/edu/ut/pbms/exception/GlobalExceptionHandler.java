@@ -1,4 +1,4 @@
-package vn.edu.ut.pbms.common.exception;
+package vn.edu.ut.pbms.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

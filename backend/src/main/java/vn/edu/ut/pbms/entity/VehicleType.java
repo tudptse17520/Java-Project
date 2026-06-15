@@ -1,14 +1,22 @@
-package vn.edu.ut.pbms.vehicle_type;
+package vn.edu.ut.pbms.entity;
 
-import jakarta.persistence.*;
+import java.util.List;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import vn.edu.ut.pbms.pricing_policy.PricingPolicy;
-import vn.edu.ut.pbms.vehicle.Vehicle;
-
-import java.util.List;
+import vn.edu.ut.pbms.constant.VehicleTypeStatus;
 
 /**
  * Entity representing a vehicle type category (e.g., Car, Motorcycle, Bicycle).
@@ -26,10 +34,10 @@ public class VehicleType {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "type_name", nullable = false, unique = true, length = 100)
+    @Column(name = "type_name", nullable = false, unique = true, columnDefinition = "nvarchar(100)")
     private String typeName;
 
-    @Column(length = 255)
+    @Column(columnDefinition = "nvarchar(255)")
     private String description;
 
     @Enumerated(EnumType.STRING)
@@ -38,7 +46,6 @@ public class VehicleType {
     private VehicleTypeStatus status = VehicleTypeStatus.ACTIVE;
 
     // ==================== Relationships ====================
-
     /**
      * One vehicle type can have many pricing policies (1:N).
      */

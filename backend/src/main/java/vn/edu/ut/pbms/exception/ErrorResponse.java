@@ -1,4 +1,4 @@
-package vn.edu.ut.pbms.common.exception;
+package vn.edu.ut.pbms.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

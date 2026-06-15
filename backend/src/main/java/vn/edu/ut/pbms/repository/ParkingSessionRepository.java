@@ -1,7 +1,9 @@
-package vn.edu.ut.pbms.parking_session;
+package vn.edu.ut.pbms.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+import vn.edu.ut.pbms.constant.ParkingSessionStatus;
+import vn.edu.ut.pbms.entity.ParkingSession;
 
 /**
  * Repository for ParkingSession entity.
@@ -18,5 +20,5 @@ public interface ParkingSessionRepository extends JpaRepository<ParkingSession, 
      * @param status        the parking session status to match (IN)
      * @return true if at least one active parking session exists for vehicles of this type
      */
-    boolean existsByVehicleVehicleTypeIdAndStatus(Long vehicleTypeId, ParkingSessionStatus status);
+    boolean existsByVehicle_VehicleType_IdAndStatus(Long vehicleTypeId, ParkingSessionStatus status);
 }

@@ -1,4 +1,4 @@
-package vn.edu.ut.pbms.pricing_policy;
+package vn.edu.ut.pbms.constant;
 
 /**
  * Status enum for PricingPolicy entity.

@@ -1,4 +1,4 @@
-package vn.edu.ut.pbms.parking_session;
+package vn.edu.ut.pbms.constant;
 
 /**
  * Status enum for ParkingSession entity.

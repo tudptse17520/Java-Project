@@ -1,10 +1,9 @@
-package vn.edu.ut.pbms.vehicle;
+package vn.edu.ut.pbms.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import vn.edu.ut.pbms.vehicle_type.VehicleType;
 
 /**
  * Stub entity for Vehicle.

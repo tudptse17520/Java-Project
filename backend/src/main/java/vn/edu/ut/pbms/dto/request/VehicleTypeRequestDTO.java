@@ -1,4 +1,4 @@
-package vn.edu.ut.pbms.vehicle_type;
+package vn.edu.ut.pbms.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import vn.edu.ut.pbms.constant.VehicleTypeStatus;
 
 /**
  * DTO for receiving vehicle type data from client requests (Create / Update).

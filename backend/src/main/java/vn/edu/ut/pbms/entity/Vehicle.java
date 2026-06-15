@@ -2,17 +2,16 @@ package vn.edu.ut.pbms.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * Stub entity for Vehicle.
- * Contains only the minimal fields needed for VehicleType relationships and E3 deactivation check.
- * TODO: Expand with full fields (license plate, color, owner, etc.) when implementing Vehicle feature.
- */
+import java.util.List;
+
 @Entity
 @Table(name = "vehicle")
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Vehicle {
@@ -21,7 +20,28 @@ public class Vehicle {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false, unique = true, length = 20)
+    private String plate;
+
+    @Column(nullable = false, columnDefinition = "nvarchar(50)")
+    private String brand;
+
+    @Column(nullable = false, columnDefinition = "nvarchar(30)")
+    private String color;
+
+    // ==================== Relationships ====================
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "vehicle_type_id")
     private VehicleType vehicleType;
+
+    @OneToMany(mappedBy = "vehicle", fetch = FetchType.LAZY)
+    private List<ParkingSession> parkingSessions;
+
+    // @OneToMany(mappedBy = "vehicle", fetch = FetchType.LAZY)
+    // private List<Booking> bookings; // Tạm ẩn cho đến khi có entity Booking
 }

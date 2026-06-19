@@ -36,8 +36,8 @@ public class ParkingSlot {
     private Floor floor;
 
     @OneToMany(mappedBy = "parkingSlot", fetch = FetchType.LAZY)
-    private List<ParkingSession> parkingSessions;
+    private List<Booking> bookings;
 
-    // @OneToMany(mappedBy = "parkingSlot", fetch = FetchType.LAZY)
-    // private List<Booking> bookings; // Tạm ẩn cho đến khi có entity Booking
+    @OneToMany(mappedBy = "parkingSlot", fetch = FetchType.LAZY)
+    private List<ParkingSession> parkingSessions;
 }

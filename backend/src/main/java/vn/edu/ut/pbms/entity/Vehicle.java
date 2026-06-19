@@ -40,8 +40,8 @@ public class Vehicle {
     private VehicleType vehicleType;
 
     @OneToMany(mappedBy = "vehicle", fetch = FetchType.LAZY)
-    private List<ParkingSession> parkingSessions;
+    private List<Booking> bookings;
 
-    // @OneToMany(mappedBy = "vehicle", fetch = FetchType.LAZY)
-    // private List<Booking> bookings; // Tạm ẩn cho đến khi có entity Booking
+    @OneToMany(mappedBy = "vehicle", fetch = FetchType.LAZY)
+    private List<ParkingSession> parkingSessions;
 }

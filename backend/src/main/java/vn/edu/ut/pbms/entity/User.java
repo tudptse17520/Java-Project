@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import vn.edu.ut.pbms.constant.Role;
+import vn.edu.ut.pbms.constant.UserStatus;
 
 import java.util.List;
 
@@ -38,14 +39,19 @@ public class User {
     @Builder.Default
     private Role role = Role.USER;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    @Builder.Default
+    private UserStatus status = UserStatus.ACTIVE;
+
     // ==================== Relationships ====================
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Vehicle> vehicles;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    private List<ParkingSession> parkingSessions;
+    private List<Booking> bookings;
 
-    // @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    // private List<Booking> bookings; // Tạm ẩn cho đến khi có entity Booking
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<ParkingSession> parkingSessions;
 }

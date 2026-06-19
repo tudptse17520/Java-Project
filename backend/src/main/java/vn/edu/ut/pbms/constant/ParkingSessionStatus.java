@@ -2,9 +2,9 @@ package vn.edu.ut.pbms.constant;
 
 /**
  * Status enum for ParkingSession entity.
- * IN = vehicle is currently parked, OUT = vehicle has left.
+ * IN_PROGRESS = xe đang đỗ trong bãi, COMPLETED = xe đã rời bãi.
  */
 public enum ParkingSessionStatus {
-    IN,
-    OUT
+    IN_PROGRESS,
+    COMPLETED
 }

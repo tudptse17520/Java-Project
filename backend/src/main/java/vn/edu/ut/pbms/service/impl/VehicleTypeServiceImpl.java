@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import vn.edu.ut.pbms.constant.ParkingSessionStatus;
-import vn.edu.ut.pbms.constant.PricingPolicyStatus;
+
 import vn.edu.ut.pbms.constant.VehicleTypeStatus;
 import vn.edu.ut.pbms.dto.request.VehicleTypeRequestDTO;
 import vn.edu.ut.pbms.dto.response.VehicleTypeResponseDTO;
@@ -100,17 +100,17 @@ public class VehicleTypeServiceImpl implements VehicleTypeService {
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Không tìm thấy loại phương tiện với ID: " + id));
 
-        // E3 Check 1: Active pricing policies
+        // E3 Check 1: Pricing policies referencing this vehicle type
         boolean hasActivePricingPolicy = pricingPolicyRepository
-                .existsByVehicleType_IdAndStatus(id, PricingPolicyStatus.ACTIVE);
+                .existsByVehicleType_Id(id);
         if (hasActivePricingPolicy) {
             throw new BusinessRuleViolationException(
                     "Không thể ngừng áp dụng loại phương tiện này vì đang có bảng giá đang kích hoạt liên kết.");
         }
 
-        // E3 Check 2: Vehicles currently parked (ParkingSession status = IN)
+        // E3 Check 2: Vehicles currently parked (ParkingSession status = IN_PROGRESS)
         boolean hasActiveParking = parkingSessionRepository
-                .existsByVehicle_VehicleType_IdAndStatus(id, ParkingSessionStatus.IN);
+                .existsByVehicle_VehicleType_IdAndStatus(id, ParkingSessionStatus.IN_PROGRESS);
         if (hasActiveParking) {
             throw new BusinessRuleViolationException(
                     "Không thể ngừng áp dụng loại phương tiện này vì đang có xe thuộc danh mục này đang đỗ trong bãi.");

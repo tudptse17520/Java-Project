@@ -17,7 +17,7 @@ public interface ParkingSessionRepository extends JpaRepository<ParkingSession, 
      * Uses Spring Data JPA derived query through nested property: vehicle -> vehicleType -> id.
      *
      * @param vehicleTypeId the vehicle type ID to check
-     * @param status        the parking session status to match (IN)
+     * @param status        the parking session status to match (IN_PROGRESS)
      * @return true if at least one active parking session exists for vehicles of this type
      */
     boolean existsByVehicle_VehicleType_IdAndStatus(Long vehicleTypeId, ParkingSessionStatus status);

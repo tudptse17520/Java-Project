@@ -2,18 +2,21 @@ package vn.edu.ut.pbms.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import vn.edu.ut.pbms.constant.PricingPolicyStatus;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 /**
- * Stub entity for PricingPolicy.
- * Contains only the minimal fields needed for VehicleType deactivation check (E3).
- * TODO: Expand with full fields when implementing Pricing Policy feature.
+ * Entity đại diện cho bảng pricing_policy trong SQL Server.
+ * Chính sách giá áp dụng riêng cho từng danh mục loại xe.
  */
 @Entity
 @Table(name = "pricing_policy")
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class PricingPolicy {
@@ -22,11 +25,18 @@ public class PricingPolicy {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "base_price", nullable = false, precision = 10, scale = 2)
+    private BigDecimal basePrice;
+
+    @Column(name = "extra_fee_per_hour", nullable = false, precision = 10, scale = 2)
+    private BigDecimal extraFeePerHour;
+
+    @Column(name = "effective_date", nullable = false)
+    private LocalDateTime effectiveDate;
+
+    // ==================== Relationships ====================
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "vehicle_type_id")
     private VehicleType vehicleType;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private PricingPolicyStatus status;
 }

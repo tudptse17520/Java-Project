@@ -6,7 +6,6 @@ import vn.edu.ut.pbms.entity.PricingPolicy;
 
 /**
  * Repository for PricingPolicy entity.
- * Provides query method for VehicleType deactivation check (E3).
  */
 @Repository
 public interface PricingPolicyRepository extends JpaRepository<PricingPolicy, Long> {

@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import vn.edu.ut.pbms.constant.ParkingSessionStatus;
-
 import vn.edu.ut.pbms.constant.VehicleTypeStatus;
 import vn.edu.ut.pbms.dto.request.VehicleTypeRequestDTO;
 import vn.edu.ut.pbms.dto.response.VehicleTypeResponseDTO;
@@ -13,7 +12,6 @@ import vn.edu.ut.pbms.exception.BusinessRuleViolationException;
 import vn.edu.ut.pbms.exception.ConflictException;
 import vn.edu.ut.pbms.exception.ResourceNotFoundException;
 import vn.edu.ut.pbms.repository.ParkingSessionRepository;
-import vn.edu.ut.pbms.repository.PricingPolicyRepository;
 import vn.edu.ut.pbms.repository.VehicleTypeRepository;
 import vn.edu.ut.pbms.service.VehicleTypeService;
 
@@ -22,7 +20,8 @@ import java.util.stream.Collectors;
 
 /**
  * Implementation of VehicleTypeService.
- * Handles all CRUD operations and business rule validations (E2, E3).
+ * Handles all CRUD operations and business rule validations (E1, E2, E3).
+ * E3 check: chỉ kiểm tra có xe nào thuộc loại phương tiện đang đỗ trong bãi (ParkingSession IN_PROGRESS).
  */
 @Service
 @RequiredArgsConstructor
@@ -30,7 +29,6 @@ import java.util.stream.Collectors;
 public class VehicleTypeServiceImpl implements VehicleTypeService {
 
     private final VehicleTypeRepository vehicleTypeRepository;
-    private final PricingPolicyRepository pricingPolicyRepository;
     private final ParkingSessionRepository parkingSessionRepository;
 
     // ==================== GET - Lấy danh sách ====================
@@ -100,15 +98,7 @@ public class VehicleTypeServiceImpl implements VehicleTypeService {
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Không tìm thấy loại phương tiện với ID: " + id));
 
-        // E3 Check 1: Pricing policies referencing this vehicle type
-        boolean hasActivePricingPolicy = pricingPolicyRepository
-                .existsByVehicleType_Id(id);
-        if (hasActivePricingPolicy) {
-            throw new BusinessRuleViolationException(
-                    "Không thể ngừng áp dụng loại phương tiện này vì đang có bảng giá đang kích hoạt liên kết.");
-        }
-
-        // E3 Check 2: Vehicles currently parked (ParkingSession status = IN_PROGRESS)
+        // E3: Kiểm tra có xe nào thuộc loại phương tiện này đang đỗ trong bãi không
         boolean hasActiveParking = parkingSessionRepository
                 .existsByVehicle_VehicleType_IdAndStatus(id, ParkingSessionStatus.IN_PROGRESS);
         if (hasActiveParking) {

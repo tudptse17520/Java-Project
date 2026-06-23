@@ -3,8 +3,9 @@ package vn.edu.ut.pbms.entity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import vn.edu.ut.pbms.constant.ParkingSessionStatus;
 
 import java.math.BigDecimal;
@@ -17,7 +18,8 @@ import java.util.List;
  */
 @Entity
 @Table(name = "parking_session")
-@Data
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor

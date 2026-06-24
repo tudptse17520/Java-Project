@@ -3,15 +3,17 @@ package vn.edu.ut.pbms.entity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import vn.edu.ut.pbms.constant.ParkingSlotStatus;
 
 import java.util.List;
 
 @Entity
 @Table(name = "parking_slot")
-@Data
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor

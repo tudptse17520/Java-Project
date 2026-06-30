@@ -1,11 +1,9 @@
 package vn.edu.ut.pbms.service;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import vn.edu.ut.pbms.constant.BuildingStatus;
 import vn.edu.ut.pbms.dto.request.BuildingRequestDTO;
 import vn.edu.ut.pbms.dto.request.BuildingStatusRequestDTO;
-import vn.edu.ut.pbms.dto.response.BuildingDetailResponseDTO;
+import vn.edu.ut.pbms.dto.response.BuildingListResponseDTO;
 import vn.edu.ut.pbms.dto.response.BuildingResponseDTO;
 
 /**
@@ -15,14 +13,12 @@ import vn.edu.ut.pbms.dto.response.BuildingResponseDTO;
 public interface BuildingService {
 
     /**
-     * Retrieve a paginated list of buildings filtered by name (keyword) and status.
+     * Retrieve a list of buildings filtered by status.
      *
-     * @param keyword the search term for building name (optional)
      * @param status  the status to filter by (optional)
-     * @param pageable pagination configuration
-     * @return a page of building details including floors
+     * @return a response containing a message and list of building details
      */
-    Page<BuildingDetailResponseDTO> getBuildings(String keyword, BuildingStatus status, Pageable pageable);
+    BuildingListResponseDTO getBuildings(BuildingStatus status);
 
     /**
      * Create a new building.
@@ -49,4 +45,13 @@ public interface BuildingService {
      * @return the response containing building ID and message
      */
     BuildingResponseDTO updateBuildingStatus(Long id, BuildingStatusRequestDTO requestDTO);
+
+    /**
+     * Delete an existing building.
+     * Checks if there are any active parking sessions before deletion.
+     *
+     * @param id the ID of the building to delete
+     * @return the response containing deleted building ID and message
+     */
+    BuildingResponseDTO deleteBuilding(Long id);
 }

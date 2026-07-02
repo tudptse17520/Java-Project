@@ -10,31 +10,28 @@ import vn.edu.ut.pbms.entity.ParkingSlot;
 import vn.edu.ut.pbms.repository.ParkingSlotRepository;
 
 @Service
-@RequiredArgsConstructor // Tự động inject ParkingSlotRepository vào thông qua Constructor của Lombok
+@RequiredArgsConstructor
 public class ParkingSlotServiceImpl implements ParkingSlotService {
 
-    private final ParkingSlotRepository parkingSlotRepository;
+    private final ParkingSlotRepository repository;
 
     @Override
-    public List<ParkingSlot> getAllParkingSlots() {
-        return parkingSlotRepository.findAll();
+    public List<ParkingSlot> findSlots(Long floorId, ParkingSlotStatus status) {
+        if (floorId != null && status != null) {
+            return repository.findByFloorIdAndStatus(floorId, status);
+        } else if (floorId != null) {
+            return repository.findByFloor_Id(floorId); 
+        } else if (status != null) {
+            return repository.findByStatus(status);
+        }
+        return repository.findAll();
     }
 
     @Override
-    public ParkingSlot getParkingSlotById(Long id) {
-        return parkingSlotRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Không tìm thấy ô đỗ xe với ID: " + id));
-    }
-
-    @Override
-    public List<ParkingSlot> getSlotsByFloor(Long floorId) {
-        return parkingSlotRepository.findByFloorId(floorId);
-    }
-
-    @Override
-    public ParkingSlot updateSlotStatus(Long id, ParkingSlotStatus status) {
-        ParkingSlot slot = getParkingSlotById(id);
+    public ParkingSlot updateStatus(Long id, ParkingSlotStatus status) {
+        ParkingSlot slot = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy ô đỗ ID: " + id));
         slot.setStatus(status);
-        return parkingSlotRepository.save(slot);
+        return repository.save(slot);
     }
 }

@@ -6,15 +6,9 @@ import vn.edu.ut.pbms.constant.ParkingSlotStatus;
 import vn.edu.ut.pbms.entity.ParkingSlot;
 
 public interface ParkingSlotService {
-    // Lấy tất cả ô đỗ xe
-    List<ParkingSlot> getAllParkingSlots();
-
-    // Lấy ô đỗ xe theo ID
-    ParkingSlot getParkingSlotById(Long id);
-
-    // Tìm ô đỗ xe theo tầng
-    List<ParkingSlot> getSlotsByFloor(Long floorId);
-
-    // Cập nhật trạng thái ô đỗ xe (VD: Từ trống sang đã có xe)
-    ParkingSlot updateSlotStatus(Long id, ParkingSlotStatus status);
+    // Khớp với controller: tìm slot theo floor_id và status
+    List<ParkingSlot> findSlots(Long floorId, ParkingSlotStatus status);
+    
+    // Khớp với controller: cập nhật status
+    ParkingSlot updateStatus(Long id, ParkingSlotStatus status);
 }

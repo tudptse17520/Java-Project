@@ -10,3 +10,4 @@ import vn.edu.ut.pbms.entity.ParkingSlot;
 @Repository
 public interface ParkingSlotRepository extends JpaRepository<ParkingSlot, Long> {
 }
+long countByStatus(ParkingSlotStatus status);

@@ -197,3 +197,9 @@ export const DRIVER_NAV: NavItem[] = [
     roles: [Role.USER],
   },
 ];
+
+export const adminMenus = ADMIN_NAV;
+export const managerMenus = MANAGER_NAV;
+export const staffMenus = STAFF_NAV;
+export const driverMenus = DRIVER_NAV;
+

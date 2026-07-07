@@ -15,7 +15,7 @@ import {
   pricingPolicySchema,
   PricingPolicyFormValues,
 } from "@/features/pricing-policies/schemas/pricing-policy.schema";
-import { VehicleTypeOption } from "@/services/vehicle-type.service";
+import { VehicleType } from "@/features/vehicle-types/types/vehicle-type.type";
 
 interface PricingPolicyFormDialogProps {
   open: boolean;
@@ -23,7 +23,7 @@ interface PricingPolicyFormDialogProps {
   onSubmit: (values: PricingPolicyFormValues) => void;
   defaultValues?: PricingPolicy | null;
   isLoading?: boolean;
-  vehicleTypes: VehicleTypeOption[];
+  vehicleTypes: VehicleType[];
   isLoadingVehicleTypes?: boolean;
 }
 
@@ -233,7 +233,7 @@ export function PricingPolicyFormDialog({
           </div>
 
           {/* Actions */}
-          <div className="flex justify-end gap-3 pt-4">
+          <div className="flex justify-end gap-2 pt-4">
             <Button
               type="button"
               variant="outline"

@@ -1,39 +1,60 @@
 package vn.edu.ut.pbms.service.impl;
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import vn.edu.ut.pbms.repository.ParkingSlotRepository;
 import vn.edu.ut.pbms.service.ReportService;
+import vn.edu.ut.pbms.constant.ParkingSlotStatus;
+import vn.edu.ut.pbms.dto.report.OccupancyRateReportDTO;
+import vn.edu.ut.pbms.dto.report.VehicleEntryExitReportDTO;
+import vn.edu.ut.pbms.entity.ParkingSession;
+import vn.edu.ut.pbms.repository.ParkingSessionRepository;
 
 @Service
 @RequiredArgsConstructor
 public class ReportServiceImpl implements ReportService {
 
     private final ParkingSlotRepository parkingSlotRepository;
+
+    private final ParkingSessionRepository parkingSessionRepository;
+
     @Override
     public OccupancyRateReportDTO getOccupancyRate() {
-        // Đếm tổng số slot
+
         long totalSlots = parkingSlotRepository.count();
 
-        // Đếm số slot đang được sử dụng
         long occupiedSlots = parkingSlotRepository.countByStatus(ParkingSlotStatus.OCCUPIED);
 
-        // Đếm số slot còn trống
         long availableSlots = parkingSlotRepository.countByStatus(ParkingSlotStatus.AVAILABLE);
 
-        // Tính tỷ lệ lấp đầy
         double occupancyRate = 0;
 
         if (totalSlots > 0) {
             occupancyRate = (occupiedSlots * 100.0) / totalSlots;
         }
 
-        // Trả kết quả về DTO
         return OccupancyRateReportDTO.builder()
                 .totalSlots(totalSlots)
                 .occupiedSlots(occupiedSlots)
                 .availableSlots(availableSlots)
                 .occupancyRate(occupancyRate)
                 .build();
+    }
+
+    @Override
+    public List<VehicleEntryExitReportDTO> getVehicleEntryExitReport() {
+
+        List<ParkingSession> sessions = parkingSessionRepository.findAll();
+
+        return sessions.stream()
+                .map(session -> VehicleEntryExitReportDTO.builder()
+                        .ticketCode(session.getTicketCode())
+                        .plate(session.getPlate())
+                        .timeIn(session.getTimeIn())
+                        .timeOut(session.getTimeOut())
+                        .status(session.getStatus().name())
+                        .build())
+                .toList();
     }
 }

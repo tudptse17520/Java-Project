@@ -1,5 +1,7 @@
 package vn.edu.ut.pbms.controller;
 
+import java.util.List;
+import vn.edu.ut.pbms.dto.report.VehicleEntryExitReportDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,5 +19,9 @@ public class ReportController {
     @GetMapping("/occupancy-rate")
     public OccupancyRateReportDTO getOccupancyRate() {
         return reportService.getOccupancyRate();
+    }
+    @GetMapping("/vehicle-entry-exit")
+    public List<VehicleEntryExitReportDTO> getVehicleEntryExitReport() {
+        return reportService.getVehicleEntryExitReport();
     }
 }

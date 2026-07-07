@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import vn.edu.ut.pbms.dto.report.OccupancyRateReportDTO;
+import vn.edu.ut.pbms.dto.report.PeakHourReportDTO;
 import vn.edu.ut.pbms.dto.report.RevenueReportDTO;
 import vn.edu.ut.pbms.dto.report.VehicleEntryExitReportDTO;
 import vn.edu.ut.pbms.service.ReportService;
@@ -32,5 +33,10 @@ public class ReportController {
     @GetMapping("/revenue")
     public RevenueReportDTO getRevenueReport() {
         return reportService.getRevenueReport();
+    }
+
+    @GetMapping("/peak-hour")
+    public List<PeakHourReportDTO> getPeakHourReport() {
+        return reportService.getPeakHourReport();
     }
 }

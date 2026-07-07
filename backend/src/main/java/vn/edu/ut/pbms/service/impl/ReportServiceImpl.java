@@ -1,10 +1,15 @@
 package vn.edu.ut.pbms.service.impl;
 
 import java.math.BigDecimal;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import vn.edu.ut.pbms.constant.PaymentStatus;
+import vn.edu.ut.pbms.dto.report.PeakHourReportDTO;
 import vn.edu.ut.pbms.dto.report.RevenueReportDTO;
 import vn.edu.ut.pbms.entity.Payment;
 import vn.edu.ut.pbms.repository.ParkingSlotRepository;
@@ -83,5 +88,25 @@ public class ReportServiceImpl implements ReportService {
                 .totalRevenue(totalRevenue)
                 .totalTransactions(totalTransactions)
                 .build();
+    }
+
+    @Override
+    public List<PeakHourReportDTO> getPeakHourReport() {
+
+        List<ParkingSession> sessions = parkingSessionRepository.findAll();
+
+        Map<Integer, Long> peakHour = sessions.stream()
+                .collect(Collectors.groupingBy(
+                        session -> session.getTimeIn().getHour(),
+                        Collectors.counting()
+                ));
+
+        return peakHour.entrySet().stream()
+                .map(entry -> PeakHourReportDTO.builder()
+                        .hour(entry.getKey())
+                        .vehicleCount(entry.getValue())
+                        .build())
+                .sorted(Comparator.comparing(PeakHourReportDTO::getHour))
+                .toList();
     }
 }

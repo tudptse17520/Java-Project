@@ -9,6 +9,7 @@ import { useMemo } from "react";
 import { type ColumnDef } from "@tanstack/react-table";
 import { Eye, Settings2, XCircle } from "lucide-react";
 import { DataTable } from "@/components/common/data-table";
+import { StatusBadge } from "@/components/common/status-badge";
 import { Button } from "@/components/ui/button";
 import type { Payment } from "@/features/payments/types/payment.type";
 import { PaymentStatus, PAYMENT_STATUS_LABELS } from "@/constants/payment-status";
@@ -39,18 +40,19 @@ function formatVND(amount: number): string {
 /**
  * Màu sắc cho status badge
  */
-function getStatusColor(status: string): string {
+function getStatusVariant(status: string): "success" | "warning" | "danger" | "info" {
   switch (status) {
     case PaymentStatus.SUCCESS:
-      return "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400";
+      return "success";
     case PaymentStatus.PENDING:
-      return "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400";
+      return "warning";
     case PaymentStatus.FAILED:
-      return "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400";
+      return "danger";
     default:
-      return "bg-gray-100 text-gray-600";
+      return "info";
   }
 }
+
 
 export function PaymentTable({
   data,
@@ -103,14 +105,9 @@ export function PaymentTable({
           const label =
             PAYMENT_STATUS_LABELS[status as PaymentStatus] || status;
           return (
-            <span
-              className={cn(
-                "inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium",
-                getStatusColor(status)
-              )}
-            >
+            <StatusBadge variant={getStatusVariant(status)}>
               {label}
-            </span>
+            </StatusBadge>
           );
         },
       },

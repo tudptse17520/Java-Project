@@ -6,6 +6,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { StatusBadge } from "@/components/common/status-badge";
 import type { Payment } from "@/features/payments/types/payment.type";
 import { PaymentStatus, PAYMENT_STATUS_LABELS } from "@/constants/payment-status";
 import {
@@ -33,18 +34,19 @@ function formatVND(amount: number): string {
 /**
  * Màu sắc cho status badge
  */
-function getStatusColor(status: string): string {
+function getStatusVariant(status: string): "success" | "warning" | "danger" | "info" {
   switch (status) {
     case PaymentStatus.SUCCESS:
-      return "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400";
+      return "success";
     case PaymentStatus.PENDING:
-      return "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400";
+      return "warning";
     case PaymentStatus.FAILED:
-      return "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400";
+      return "danger";
     default:
-      return "bg-gray-100 text-gray-600";
+      return "info";
   }
 }
+
 
 export function PaymentDetailDialog({
   open,
@@ -112,14 +114,9 @@ export function PaymentDetailDialog({
           />
           <div className="flex items-center justify-between border-t pt-3">
             <span className="text-sm text-muted-foreground">Trạng thái</span>
-            <span
-              className={cn(
-                "inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium",
-                getStatusColor(payment.status)
-              )}
-            >
+            <StatusBadge variant={getStatusVariant(payment.status)}>
               {statusLabel}
-            </span>
+            </StatusBadge>
           </div>
         </div>
 

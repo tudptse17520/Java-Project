@@ -7,6 +7,8 @@
 "use client";
 
 import { PageHeader } from "@/components/common/page-header";
+import { PageContainer } from "@/components/common/page-container";
+import { Toolbar } from "@/components/common/toolbar";
 import { Button } from "@/components/ui/button";
 import { ConfirmDialog } from "@/components/common/confirm-dialog";
 import { Plus } from "lucide-react";
@@ -51,7 +53,7 @@ export default function PaymentPage() {
   const { data: payments = [], isLoading } = usePayments(filter);
 
   return (
-    <div className="space-y-6">
+    <PageContainer>
       {/* Header */}
       <PageHeader
         title="Quản lý thanh toán"
@@ -65,11 +67,13 @@ export default function PaymentPage() {
       />
 
       {/* Bộ lọc */}
-      <PaymentFilter
-        filter={filter}
-        onFilterChange={handleFilterChange}
-        onClearFilters={handleClearFilters}
-      />
+      <Toolbar>
+        <PaymentFilter
+          filter={filter}
+          onFilterChange={handleFilterChange}
+          onClearFilters={handleClearFilters}
+        />
+      </Toolbar>
 
       {/* Bảng dữ liệu */}
       <PaymentTable
@@ -119,6 +123,6 @@ export default function PaymentPage() {
         variant="danger"
         isLoading={isCancelling}
       />
-    </div>
+    </PageContainer>
   );
 }

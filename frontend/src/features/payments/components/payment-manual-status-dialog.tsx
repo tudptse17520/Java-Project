@@ -72,7 +72,7 @@ export function PaymentManualStatusDialog({
 
         <form onSubmit={handleFormSubmit} className="mt-4 space-y-4">
           {/* Trạng thái mới */}
-          <div className="flex flex-col gap-1.5">
+          <div className="flex flex-col gap-2">
             <label className="text-sm font-medium">
               Trạng thái mới <span className="text-destructive">*</span>
             </label>
@@ -95,7 +95,7 @@ export function PaymentManualStatusDialog({
           </div>
 
           {/* Ghi chú lý do */}
-          <div className="flex flex-col gap-1.5">
+          <div className="flex flex-col gap-2">
             <label className="text-sm font-medium">
               Lý do thao tác thủ công{" "}
               <span className="text-destructive">*</span>
@@ -114,7 +114,7 @@ export function PaymentManualStatusDialog({
           </div>
 
           {/* Actions */}
-          <div className="flex justify-end gap-3 pt-2">
+          <div className="flex justify-end gap-2 pt-2">
             <Button
               type="button"
               variant="outline"

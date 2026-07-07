@@ -75,7 +75,7 @@ export function PaymentCreateDialog({
 
         <form onSubmit={handleFormSubmit} className="mt-4 space-y-4">
           {/* Mã lượt gửi xe */}
-          <div className="flex flex-col gap-1.5">
+          <div className="flex flex-col gap-2">
             <label className="text-sm font-medium">
               Mã lượt gửi xe (parking_session_id)
             </label>
@@ -93,7 +93,7 @@ export function PaymentCreateDialog({
           </div>
 
           {/* Mã đặt chỗ */}
-          <div className="flex flex-col gap-1.5">
+          <div className="flex flex-col gap-2">
             <label className="text-sm font-medium">
               Mã đặt chỗ (booking_id)
             </label>
@@ -111,7 +111,7 @@ export function PaymentCreateDialog({
           </div>
 
           {/* Số tiền */}
-          <div className="flex flex-col gap-1.5">
+          <div className="flex flex-col gap-2">
             <label className="text-sm font-medium">
               Số tiền (VND) <span className="text-destructive">*</span>
             </label>
@@ -129,7 +129,7 @@ export function PaymentCreateDialog({
           </div>
 
           {/* Phương thức thanh toán */}
-          <div className="flex flex-col gap-1.5">
+          <div className="flex flex-col gap-2">
             <label className="text-sm font-medium">
               Phương thức thanh toán <span className="text-destructive">*</span>
             </label>
@@ -152,7 +152,7 @@ export function PaymentCreateDialog({
           </div>
 
           {/* Loại phí */}
-          <div className="flex flex-col gap-1.5">
+          <div className="flex flex-col gap-2">
             <label className="text-sm font-medium">
               Loại phí <span className="text-destructive">*</span>
             </label>
@@ -175,7 +175,7 @@ export function PaymentCreateDialog({
           </div>
 
           {/* Actions */}
-          <div className="flex justify-end gap-3 pt-2">
+          <div className="flex justify-end gap-2 pt-2">
             <Button
               type="button"
               variant="outline"

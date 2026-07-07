@@ -23,7 +23,7 @@ public class ParkingSlot {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "slot_name", nullable = false, columnDefinition = "nvarchar(100)")
+    @Column(name = "slot_name", nullable = false, length = 100)
     private String slotName;
 
     @Enumerated(EnumType.STRING)

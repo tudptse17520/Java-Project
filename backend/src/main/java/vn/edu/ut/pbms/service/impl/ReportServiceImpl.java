@@ -1,9 +1,14 @@
 package vn.edu.ut.pbms.service.impl;
 
+import java.math.BigDecimal;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import vn.edu.ut.pbms.constant.PaymentStatus;
+import vn.edu.ut.pbms.dto.report.RevenueReportDTO;
+import vn.edu.ut.pbms.entity.Payment;
 import vn.edu.ut.pbms.repository.ParkingSlotRepository;
+import vn.edu.ut.pbms.repository.PaymentRepository;
 import vn.edu.ut.pbms.service.ReportService;
 import vn.edu.ut.pbms.constant.ParkingSlotStatus;
 import vn.edu.ut.pbms.dto.report.OccupancyRateReportDTO;
@@ -19,6 +24,7 @@ public class ReportServiceImpl implements ReportService {
 
     private final ParkingSessionRepository parkingSessionRepository;
 
+    private final PaymentRepository paymentRepository;
     @Override
     public OccupancyRateReportDTO getOccupancyRate() {
 
@@ -56,5 +62,26 @@ public class ReportServiceImpl implements ReportService {
                         .status(session.getStatus().name())
                         .build())
                 .toList();
+    }
+
+    @Override
+    public RevenueReportDTO getRevenueReport() {
+
+        // Lấy tất cả các giao dịch thanh toán thành công
+        List<Payment> payments = paymentRepository.findByStatus(PaymentStatus.SUCCESS);
+
+        // Tính tổng doanh thu
+        BigDecimal totalRevenue = payments.stream()
+                .map(Payment::getAmount)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        // Đếm số giao dịch thành công
+        long totalTransactions = payments.size();
+
+        // Trả kết quả về DTO
+        return RevenueReportDTO.builder()
+                .totalRevenue(totalRevenue)
+                .totalTransactions(totalTransactions)
+                .build();
     }
 }

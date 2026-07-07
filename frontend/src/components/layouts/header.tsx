@@ -11,6 +11,7 @@ import { useAppStore } from "@/stores/app.store";
 import { useAuthStore } from "@/stores/auth.store";
 import { useThemeStore } from "@/stores/theme.store";
 import { Button } from "@/components/ui/button";
+import { Breadcrumbs } from "@/components/layouts/breadcrumbs";
 
 export function Header() {
   const { toggleSidebar } = useAppStore();
@@ -33,6 +34,7 @@ export function Header() {
         >
           <Menu className="h-4 w-4" />
         </Button>
+        <Breadcrumbs />
       </div>
 
       {/* Right side */}
@@ -54,7 +56,19 @@ export function Header() {
         {/* User info */}
         {user && (
           <div className="flex items-center gap-2">
-            <UserCircle className="h-6 w-6 text-muted-foreground" />
+            <div className="relative h-7 w-7 overflow-hidden rounded-full border bg-muted">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/default-avatar.png"
+                alt="User Avatar"
+                className="h-full w-full object-cover"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).src = `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(
+                    user.fullName || user.email || "User"
+                  )}`;
+                }}
+              />
+            </div>
             <span className="hidden text-sm font-medium sm:inline">
               {user.fullName || user.email}
             </span>

@@ -1,7 +1,6 @@
 package vn.edu.ut.pbms.dto.report;
 
 import java.math.BigDecimal;
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,10 +11,22 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class RevenueReportDTO {
+public class DashboardReportDTO {
+
+    @JsonProperty("total_entries")
+    private int totalEntries;
+
+    @JsonProperty("total_exits")
+    private int totalExits;
 
     @JsonProperty("total_revenue")
     private BigDecimal totalRevenue;
 
-    private List<?> details;
+    @JsonProperty("occupancy_rate")
+    private Double occupancyRate;
+
+    @JsonProperty("peak_hour")
+    private String peakHour;
+
+    private Object details;
 }

@@ -1,7 +1,6 @@
 package vn.edu.ut.pbms.service;
 
-import java.util.List;
-
+import vn.edu.ut.pbms.dto.report.DashboardReportDTO;
 import vn.edu.ut.pbms.dto.report.OccupancyRateReportDTO;
 import vn.edu.ut.pbms.dto.report.PeakHourReportDTO;
 import vn.edu.ut.pbms.dto.report.RevenueReportDTO;
@@ -9,11 +8,13 @@ import vn.edu.ut.pbms.dto.report.VehicleEntryExitReportDTO;
 
 public interface ReportService {
 
-    OccupancyRateReportDTO getOccupancyRate();
+    RevenueReportDTO getRevenueReport(String startDate, String endDate);
 
-    List<VehicleEntryExitReportDTO> getVehicleEntryExitReport();
+    VehicleEntryExitReportDTO getVehicleEntryExitReport(String startDate, String endDate, Long vehicleTypeId);
 
-    RevenueReportDTO getRevenueReport();
+    OccupancyRateReportDTO getOccupancyRateReport(String startDate, String endDate, Long vehicleTypeId);
 
-    List<PeakHourReportDTO> getPeakHourReport();
+    PeakHourReportDTO getPeakHourReport(String startDate, String endDate, Long vehicleTypeId);
+
+    DashboardReportDTO getDashboardReport(String startDate, String endDate, Long vehicleTypeId);
 }

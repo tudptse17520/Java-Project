@@ -17,4 +17,5 @@ public interface ParkingSlotRepository extends JpaRepository<ParkingSlot, Long> 
     List<ParkingSlot> findByStatus(ParkingSlotStatus status);
     List<ParkingSlot> findByFloorIdAndStatus(Long floorId, ParkingSlotStatus status);
     List<ParkingSlot> findByFloor_Id(Long floorId);
+    boolean existsByFloorIdAndSlotName(Long floorId, String slotName);
 }

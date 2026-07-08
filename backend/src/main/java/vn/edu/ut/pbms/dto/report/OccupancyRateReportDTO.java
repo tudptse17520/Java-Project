@@ -1,9 +1,11 @@
 package vn.edu.ut.pbms.dto.report;
 
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Data
 @Builder
@@ -11,12 +13,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class OccupancyRateReportDTO {
 
-    private long totalSlots;
+    @JsonProperty("average_occupancy_rate")
+    private Double averageOccupancyRate;
 
-    private long occupiedSlots;
+    @JsonProperty("max_occupancy_rate")
+    private Double maxOccupancyRate;
 
-    private long availableSlots;
-
-    private double occupancyRate;
-
+    private List<?> details;
 }

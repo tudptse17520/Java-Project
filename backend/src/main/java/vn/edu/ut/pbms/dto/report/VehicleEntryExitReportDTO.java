@@ -1,11 +1,11 @@
 package vn.edu.ut.pbms.dto.report;
 
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Data
 @Builder
@@ -13,13 +13,11 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class VehicleEntryExitReportDTO {
 
-    private String ticketCode;
+    @JsonProperty("total_entries")
+    private int totalEntries;
 
-    private String plate;
+    @JsonProperty("total_exits")
+    private int totalExits;
 
-    private LocalDateTime timeIn;
-
-    private LocalDateTime timeOut;
-
-    private String status;
+    private List<?> details;
 }

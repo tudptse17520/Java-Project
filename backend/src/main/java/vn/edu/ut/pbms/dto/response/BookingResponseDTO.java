@@ -1,6 +1,5 @@
-package vn.edu.ut.pbms.dto.request;
+package vn.edu.ut.pbms.dto.response;
 
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,8 +9,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-
-public class ReservationRequest {
-    @NotBlank(message = "Trạng thái không được để trống")
+public class BookingResponseDTO {
+    private Long id;
     private String status;
+    private String message;
 }

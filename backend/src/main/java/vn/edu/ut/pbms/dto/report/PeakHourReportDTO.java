@@ -1,9 +1,11 @@
 package vn.edu.ut.pbms.dto.report;
 
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Data
 @Builder
@@ -11,8 +13,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PeakHourReportDTO {
 
-    private int hour;
+    @JsonProperty("peak_hour")
+    private String peakHour;
 
-    private long vehicleCount;
+    @JsonProperty("vehicle_count")
+    private int vehicleCount;
 
+    private List<?> details;
 }

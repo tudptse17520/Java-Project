@@ -10,26 +10,47 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import vn.edu.ut.pbms.constant.ParkingSessionStatus;
+import vn.edu.ut.pbms.dto.request.CheckinRequest;
+import vn.edu.ut.pbms.dto.response.CheckinResponse;
 import vn.edu.ut.pbms.dto.response.ParkingSessionListResponseDTO;
 import vn.edu.ut.pbms.dto.response.ParkingSessionResponseDTO;
 import vn.edu.ut.pbms.entity.ParkingSession;
+import vn.edu.ut.pbms.entity.ParkingSlot;
+import vn.edu.ut.pbms.entity.Vehicle;
 import vn.edu.ut.pbms.exception.BusinessRuleViolationException;
+import vn.edu.ut.pbms.exception.ResourceNotFoundException;
+import vn.edu.ut.pbms.repository.ParkingSessionRepository;
+import vn.edu.ut.pbms.repository.ParkingSlotRepository;
+import vn.edu.ut.pbms.repository.VehicleRepository;
 import vn.edu.ut.pbms.service.ParkingSessionService;
 
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
+/**
+ * Implementation of ParkingSessionService.
+ * Xử lý luồng nghiệp vụ xe ra/vào và tra cứu lịch sử bãi xe.
+ */
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class ParkingSessionServiceImpl implements ParkingSessionService {
 
     private final EntityManager entityManager;
     private final ModelMapper modelMapper;
+    private final ParkingSessionRepository parkingSessionRepository;
+    private final VehicleRepository vehicleRepository;
+    private final ParkingSlotRepository parkingSlotRepository;
 
+    /**
+     * Tra cứu danh sách lượt gửi xe với bộ lọc động (Dynamic Query) dùng Criteria API.
+     */
     @Override
     @Transactional(readOnly = true)
     public ParkingSessionListResponseDTO getParkingSessions(String plate, String status, String fromDate) {
@@ -48,7 +69,6 @@ public class ParkingSessionServiceImpl implements ParkingSessionService {
         }
 
         // Ép chuỗi from_date sang LocalDateTime, kiểm tra định dạng hợp lệ
-        // Hỗ trợ cả chuỗi thuần (yyyy-MM-ddTHH:mm:ss) và chuỗi có múi giờ (yyyy-MM-ddTHH:mm:ssZ / +07:00)
         LocalDateTime parsedFromDate = null;
         if (fromDate != null && !fromDate.trim().isEmpty()) {
             String trimmed = fromDate.trim();
@@ -74,7 +94,6 @@ public class ParkingSessionServiceImpl implements ParkingSessionService {
         List<Predicate> predicates = new ArrayList<>();
 
         // Bộ lọc 1: Biển số xe (plate) - Tìm kiếm chính xác, không phân biệt hoa/thường
-        // Ép cả 2 vế về chữ hoa để đảm bảo an toàn bất kể Collation của DB (SQL Server, PostgreSQL...)
         if (plate != null && !plate.trim().isEmpty()) {
             predicates.add(cb.equal(cb.upper(root.get("plate")), plate.trim().toUpperCase()));
         }
@@ -102,15 +121,62 @@ public class ParkingSessionServiceImpl implements ParkingSessionService {
 
         // ==================== Bước 4: Đóng gói và Phản hồi (Flattening & Response) ====================
 
-        // Dùng ModelMapper ánh xạ các trường cơ bản (id, plate, timeIn, timeOut, totalFee) sang DTO.
         List<ParkingSessionResponseDTO> data = sessions.stream()
                 .map(session -> modelMapper.map(session, ParkingSessionResponseDTO.class))
                 .collect(Collectors.toList());
 
-        // Tính toán total_items và nạp danh sách vào mảng data
         return ParkingSessionListResponseDTO.builder()
                 .totalItems(data.size())
                 .data(data)
+                .build();
+    }
+
+    /**
+     * Xử lý tạo lượt gửi xe mới (Xe vào bãi - Check-in).
+     */
+    @Override
+    public CheckinResponse checkInVehicle(CheckinRequest request) {
+        // 1. Tìm các thông tin liên kết nếu có ID truyền lên
+        Vehicle vehicle = null;
+        if (request.getVehicleId() != null) {
+            vehicle = vehicleRepository.findById((long) request.getVehicleId())
+                    .orElseThrow(() -> new ResourceNotFoundException(
+                            "Không tìm thấy phương tiện với ID: " + request.getVehicleId()));
+        }
+
+        ParkingSlot parkingSlot = null;
+        if (request.getParkingSlotId() != null) {
+            parkingSlot = parkingSlotRepository.findById((long) request.getParkingSlotId())
+                    .orElseThrow(() -> new ResourceNotFoundException(
+                            "Không tìm thấy vị trí đỗ với ID: " + request.getParkingSlotId()));
+        }
+
+        // 2. Tạo mã code vé ngẫu nhiên, duy nhất
+        String ticketCode = "TK-" + UUID.randomUUID().toString().replace("-", "").substring(0, 10).toUpperCase();
+
+        // 3. Khởi tạo mốc thời gian vào bãi và trạng thái mặc định
+        LocalDateTime timeIn = LocalDateTime.now();
+        ParkingSessionStatus status = ParkingSessionStatus.IN_PROGRESS;
+
+        // 4. Build thực thể và thực hiện lưu vào cơ sở dữ liệu
+        ParkingSession session = ParkingSession.builder()
+                .plate(request.getPlate())
+                .ticketCode(ticketCode)
+                .timeIn(timeIn)
+                .status(status)
+                .vehicle(vehicle)
+                .parkingSlot(parkingSlot)
+                .build();
+
+        ParkingSession savedSession = parkingSessionRepository.save(session);
+
+        // 5. Đóng gói dữ liệu trả về cho Front-End
+        return CheckinResponse.builder()
+                .id(savedSession.getId().intValue())
+                .ticketCode(savedSession.getTicketCode())
+                .timeIn(savedSession.getTimeIn().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
+                .status(savedSession.getStatus().name())
+                .message("Xe check-in thành công.")
                 .build();
     }
 }

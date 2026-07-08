@@ -5,12 +5,18 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import vn.edu.ut.pbms.constant.BuildingStatus;
 import vn.edu.ut.pbms.dto.request.BuildingRequestDTO;
 import vn.edu.ut.pbms.dto.request.BuildingStatusRequestDTO;
+import vn.edu.ut.pbms.dto.response.BuildingBrowseResponseDTO;
+import vn.edu.ut.pbms.dto.response.BuildingDetailResponseDTO;
 import vn.edu.ut.pbms.dto.response.BuildingListResponseDTO;
 import vn.edu.ut.pbms.dto.response.BuildingResponseDTO;
 import vn.edu.ut.pbms.service.BuildingService;
+import vn.edu.ut.pbms.service.SseEmitterManager;
+
+import java.util.List;
 
 /**
  * REST Controller for Building Management.
@@ -22,6 +28,27 @@ import vn.edu.ut.pbms.service.BuildingService;
 public class BuildingController {
 
     private final BuildingService buildingService;
+    private final SseEmitterManager sseEmitterManager;
+
+    @GetMapping("/browse")
+    public ResponseEntity<List<BuildingBrowseResponseDTO>> browseBuildings() {
+        return ResponseEntity.ok(buildingService.browseBuildings());
+    }
+
+    @GetMapping("/detail/{id}")
+    public ResponseEntity<BuildingDetailResponseDTO> getBuildingDetail(@PathVariable Long id) {
+        return ResponseEntity.ok(buildingService.getBuildingDetail(id));
+    }
+
+    @GetMapping("/{id}/availability-stream")
+    public SseEmitter subscribeToAvailability(@PathVariable Long id) {
+        return sseEmitterManager.subscribe(id);
+    }
+
+    @GetMapping("/availability-stream")
+    public SseEmitter subscribeToGlobalAvailability() {
+        return sseEmitterManager.subscribe(null); // Subscribe to global
+    }
 
     // ==================== GET - Tra cứu ====================
 
@@ -92,8 +119,7 @@ public class BuildingController {
 
     /**
      * Delete an existing building.
-     * 
-     * @param id the building ID from path
+     * * @param id the building ID from path
      * @return HTTP 200 with building ID and success message
      */
     @DeleteMapping("/{id}")

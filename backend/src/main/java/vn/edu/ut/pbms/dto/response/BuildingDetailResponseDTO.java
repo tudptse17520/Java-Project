@@ -15,17 +15,24 @@ import java.util.List;
 @AllArgsConstructor
 public class BuildingDetailResponseDTO {
 
+    @JsonProperty("id")
     private Long id;
 
     @JsonProperty("building_name")
     private String buildingName;
 
+    @JsonProperty("address")
     private String address;
 
     @JsonProperty("number_of_floors")
     private Integer numberOfFloors;
 
+    @JsonProperty("status")
     private BuildingStatus status;
 
+    @JsonProperty("total_available_slots")
+    private Long totalAvailableSlots;
+
+    @JsonProperty("floors")
     private List<FloorResponseDTO> floors;
 }

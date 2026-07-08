@@ -124,4 +124,19 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.status(HttpStatus.PAYMENT_REQUIRED).body(errorResponse);
     }
+
+    /**
+     * Handle unpaid exit errors.
+     * Returns HTTP 402 Payment Required.
+     */
+    @ExceptionHandler(UnpaidExitException.class)
+    public ResponseEntity<ErrorResponse> handleUnpaidExitException(UnpaidExitException ex) {
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .status(HttpStatus.PAYMENT_REQUIRED.value())
+                .error("Payment Required")
+                .message(ex.getMessage())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.PAYMENT_REQUIRED).body(errorResponse);
+    }
 }

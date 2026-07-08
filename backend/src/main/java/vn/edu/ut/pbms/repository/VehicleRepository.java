@@ -27,4 +27,12 @@ public interface VehicleRepository extends JpaRepository<Vehicle, Long> {
      * @return true if the vehicle exists
      */
     boolean existsByPlate(String plate);
+
+    /**
+     * Find vehicles by user ID.
+     *
+     * @param userId the user ID
+     * @return list of vehicles owned by the user
+     */
+    java.util.List<Vehicle> findByUserId(Long userId);
 }

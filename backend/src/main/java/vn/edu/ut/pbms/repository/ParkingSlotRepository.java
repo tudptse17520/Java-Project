@@ -6,11 +6,9 @@ import org.springframework.stereotype.Repository;
 import vn.edu.ut.pbms.constant.ParkingSlotStatus;
 import vn.edu.ut.pbms.entity.ParkingSlot;
 
-/**
- * Repository interface for ParkingSlot entity.
- */
 @Repository
 public interface ParkingSlotRepository extends JpaRepository<ParkingSlot, Long> {
+    long countByStatus(ParkingSlotStatus status);
     
     // Tìm kiếm danh sách ô đỗ xe theo mã tầng (Floor ID)
     List<ParkingSlot> findByFloorId(Long floorId);

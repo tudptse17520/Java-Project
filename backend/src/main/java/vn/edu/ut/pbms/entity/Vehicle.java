@@ -25,10 +25,10 @@ public class Vehicle {
     @Column(nullable = false, unique = true, length = 20)
     private String plate;
 
-    @Column(nullable = false, columnDefinition = "nvarchar(50)")
+    @Column(nullable = false, length = 50)
     private String brand;
 
-    @Column(nullable = false, columnDefinition = "nvarchar(30)")
+    @Column(nullable = false, length = 30)
     private String color;
 
     // ==================== Relationships ====================

@@ -26,7 +26,7 @@ public class Building {
     @Column(name = "building_name", nullable = false, columnDefinition = "nvarchar(100)")
     private String buildingName;
 
-    @Column(nullable = false, columnDefinition = "nvarchar(255)")
+    @Column(nullable = false, length = 255)
     private String address;
 
     @Column(name = "number_of_floors", nullable = false)

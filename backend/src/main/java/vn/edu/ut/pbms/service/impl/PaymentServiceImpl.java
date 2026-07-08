@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import vn.edu.ut.pbms.config.VnpayConfig;
+import vn.edu.ut.pbms.constant.Constants;
 import vn.edu.ut.pbms.constant.FeeType;
 import vn.edu.ut.pbms.constant.PaymentMethod;
 import vn.edu.ut.pbms.constant.PaymentStatus;
@@ -58,12 +59,6 @@ public class PaymentServiceImpl implements PaymentService {
     private final ParkingSessionRepository parkingSessionRepository;
     private final BookingRepository bookingRepository;
     private final VnpayConfig vnpayConfig;
-
-    /**
-     * Hằng số mức phạt mất vé mặc định (200.000đ). Áp dụng khi fee_type =
-     * Lost_Ticket_Fine.
-     */
-    private static final BigDecimal DEFAULT_LOST_TICKET_FINE = new BigDecimal("200000");
 
     private static final DateTimeFormatter RESPONSE_DATE_FORMAT = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
     private static final DateTimeFormatter REQUEST_DATE_FORMAT = DateTimeFormatter.ofPattern("dd-MM-yyyy");
@@ -444,7 +439,7 @@ public class PaymentServiceImpl implements PaymentService {
 
         if (feeType == FeeType.LOST_TICKET_FINE) {
             // Lost_Ticket_Fine: so với hằng số mặc định
-            expectedAmount = DEFAULT_LOST_TICKET_FINE;
+            expectedAmount = Constants.DEFAULT_LOST_TICKET_FINE;
         } else {
             // Booking_Deposit: lấy basePrice từ PricingPolicy qua Booking → Vehicle → VehicleType → PricingPolicy
             if (dto.getBookingId() == null) {

@@ -12,6 +12,7 @@ import vn.edu.ut.pbms.entity.*;
 import vn.edu.ut.pbms.exception.*;
 import vn.edu.ut.pbms.repository.*;
 import vn.edu.ut.pbms.service.CheckoutService;
+import vn.edu.ut.pbms.service.SlotAvailabilityService;
 
 import java.math.BigDecimal;
 import java.time.Duration;
@@ -30,9 +31,7 @@ public class CheckoutServiceImpl implements CheckoutService {
     private final PricingPolicyRepository pricingPolicyRepository;
     private final FeedbackRepository feedbackRepository;
     private final UserRepository userRepository;
-
-    // Tiền phạt mất thẻ xe cố định: 100,000 VNĐ
-    private static final BigDecimal LOST_TICKET_FINE_AMOUNT = new BigDecimal("100000.00");
+    private final SlotAvailabilityService slotAvailabilityService;
 
     // Số giờ đỗ xe trong block đầu tiên mặc định: 4 giờ
     private static final long BASE_HOURS = 4;
@@ -114,9 +113,7 @@ public class CheckoutServiceImpl implements CheckoutService {
 
         // Giải phóng ô đỗ xe
         if (session.getParkingSlot() != null) {
-            ParkingSlot slot = session.getParkingSlot();
-            slot.setStatus(ParkingSlotStatus.AVAILABLE);
-            parkingSlotRepository.save(slot);
+            slotAvailabilityService.updateSlotStatus(session.getParkingSlot().getId(), ParkingSlotStatus.AVAILABLE);
         }
 
         return CheckOutResponse.builder()
@@ -161,7 +158,7 @@ public class CheckoutServiceImpl implements CheckoutService {
 
         BigDecimal baseFee = baseFeeResponse.getBaseFee();
         BigDecimal overtimeFee = baseFeeResponse.getOvertimeFee();
-        BigDecimal totalFee = baseFeeResponse.getTotalFee().add(LOST_TICKET_FINE_AMOUNT);
+        BigDecimal totalFee = baseFeeResponse.getTotalFee().add(Constants.DEFAULT_LOST_TICKET_FINE);
 
         // Tạo biên bản ghi nhận sự cố mất vé xe
         Feedback feedback = Feedback.builder()
@@ -179,16 +176,16 @@ public class CheckoutServiceImpl implements CheckoutService {
         return FeeCalculationResponse.builder()
                 .baseFee(baseFee)
                 .overtimeFee(overtimeFee)
-                .penaltyFee(LOST_TICKET_FINE_AMOUNT)
+                .penaltyFee(Constants.DEFAULT_LOST_TICKET_FINE)
                 .totalFee(totalFee)
-                .message("Đã ghi nhận mất thẻ xe. Tổng chi phí bao gồm tiền phạt mất thẻ: " + LOST_TICKET_FINE_AMOUNT + " VNĐ.")
+                .message("Đã ghi nhận mất thẻ xe. Tổng chi phí bao gồm tiền phạt mất thẻ: " + Constants.DEFAULT_LOST_TICKET_FINE + " VNĐ.")
                 .build();
     }
 
 
 
     @Override
-    @Transactional(readOnly = true)
+    @Transactional
     public void checkExitGate(Long sessionId) {
         ParkingSession session = getActiveSession(sessionId);
         validatePaymentStatus(session);
@@ -197,7 +194,26 @@ public class CheckoutServiceImpl implements CheckoutService {
     @Override
     @Transactional
     public CheckOutResponse checkOut(Long sessionId, CheckOutRequest request) {
-        ParkingSession session = getActiveSession(sessionId);
+        ParkingSession session = parkingSessionRepository.findById(sessionId)
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy phiên gửi xe với ID: " + sessionId));
+
+        if (session.getStatus() == ParkingSessionStatus.COMPLETED) {
+            if (session.getParkingSlot() != null) {
+                slotAvailabilityService.updateSlotStatus(session.getParkingSlot().getId(), ParkingSlotStatus.AVAILABLE);
+            }
+            if (session.getTimeOut() == null) {
+                session.setTimeOut(request.getTimeOut() != null ? request.getTimeOut() : LocalDateTime.now());
+                parkingSessionRepository.save(session);
+            }
+            return CheckOutResponse.builder()
+                    .sessionId(session.getId())
+                    .timeIn(session.getTimeIn())
+                    .timeOut(session.getTimeOut())
+                    .totalFee(session.getTotalFee())
+                    .status(session.getStatus())
+                    .message("Xử lý xe ra bãi hoàn tất (phiên đỗ xe đã thanh toán). Cổng barrier đã mở.")
+                    .build();
+        }
 
         // 1. Kiểm tra điều kiện thanh toán đầy đủ
         validatePaymentStatus(session);
@@ -216,9 +232,7 @@ public class CheckoutServiceImpl implements CheckoutService {
 
         // 3. Giải phóng slot đỗ xe thành AVAILABLE
         if (session.getParkingSlot() != null) {
-            ParkingSlot slot = session.getParkingSlot();
-            slot.setStatus(ParkingSlotStatus.AVAILABLE);
-            parkingSlotRepository.save(slot);
+            slotAvailabilityService.updateSlotStatus(session.getParkingSlot().getId(), ParkingSlotStatus.AVAILABLE);
         }
 
         // 4. Giải quyết các feedback chưa hoàn tất của phiên gửi này

@@ -297,21 +297,23 @@ public class CheckoutServiceImpl implements CheckoutService {
         }
 
         // Xác định VehicleType tương ứng
-        VehicleType vehicleType = null;
+        final VehicleType finalVehicleType;
         if (session.getVehicle() != null) {
-            vehicleType = session.getVehicle().getVehicleType();
+            finalVehicleType = session.getVehicle().getVehicleType();
         } else if (session.getParkingSlot() != null && session.getParkingSlot().getFloor() != null) {
-            vehicleType = session.getParkingSlot().getFloor().getVehicleType();
+            finalVehicleType = session.getParkingSlot().getFloor().getVehicleType();
+        } else {
+            finalVehicleType = null;
         }
 
-        if (vehicleType == null) {
+        if (finalVehicleType == null) {
             throw new ResourceNotFoundException("Không xác định được loại phương tiện cho phiên gửi xe này.");
         }
 
         // Lấy chính sách giá khả dụng tại thời điểm check-in
         PricingPolicy policy = pricingPolicyRepository
-                .findFirstByVehicleType_IdAndEffectiveDateLessThanEqualOrderByEffectiveDateDesc(vehicleType.getId(), timeIn)
-                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy chính sách giá phù hợp cho loại xe: " + vehicleType.getTypeName()));
+                .findFirstByVehicleType_IdAndEffectiveDateLessThanEqualOrderByEffectiveDateDesc(finalVehicleType.getId(), timeIn)
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy chính sách giá phù hợp cho loại xe: " + finalVehicleType.getTypeName()));
 
         // Tính số giờ đỗ xe (làm tròn lên)
         long totalMinutes = Duration.between(timeIn, timeOut).toMinutes();

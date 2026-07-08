@@ -4,6 +4,8 @@ import vn.edu.ut.pbms.dto.request.ManualStatusRequestDTO;
 import vn.edu.ut.pbms.dto.request.PaymentRequestDTO;
 import vn.edu.ut.pbms.dto.response.PaymentListResponseDTO;
 import vn.edu.ut.pbms.dto.response.PaymentResponseDTO;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.http.ResponseEntity;
 
 /**
  * Service interface for Payment business logic.
@@ -19,9 +21,10 @@ public interface PaymentService {
      * Cash payments are automatically set to SUCCESS.
      *
      * @param requestDTO the payment data from the client
+     * @param request the HTTP request for IP tracking
      * @return the created payment as a response DTO
      */
-    PaymentResponseDTO createPayment(PaymentRequestDTO requestDTO);
+    PaymentResponseDTO createPayment(PaymentRequestDTO requestDTO, HttpServletRequest request);
 
     /**
      * Retrieve a filtered list of payment transactions.
@@ -58,4 +61,12 @@ public interface PaymentService {
      * @return the cancelled payment as a response DTO
      */
     PaymentResponseDTO cancelPayment(Long id);
+
+    /**
+     * Process VNPAY Webhook IPN callback.
+     *
+     * @param request the HTTP request containing VNPAY parameters
+     * @return JSON response indicating success or failure to VNPAY
+     */
+    ResponseEntity<String> processVnpayIpn(HttpServletRequest request);
 }

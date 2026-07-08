@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import jakarta.servlet.http.HttpServletRequest;
 import vn.edu.ut.pbms.dto.request.ManualStatusRequestDTO;
 import vn.edu.ut.pbms.dto.request.PaymentRequestDTO;
 import vn.edu.ut.pbms.dto.response.PaymentListResponseDTO;
@@ -43,8 +44,9 @@ public class PaymentController {
      */
     @PostMapping
     public ResponseEntity<PaymentResponseDTO> createPayment(
-            @Valid @RequestBody PaymentRequestDTO requestDTO) {
-        PaymentResponseDTO createdPayment = paymentService.createPayment(requestDTO);
+            @Valid @RequestBody PaymentRequestDTO requestDTO,
+            HttpServletRequest request) {
+        PaymentResponseDTO createdPayment = paymentService.createPayment(requestDTO, request);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdPayment);
     }
 
@@ -112,5 +114,18 @@ public class PaymentController {
     public ResponseEntity<PaymentResponseDTO> cancelPayment(@PathVariable Long id) {
         PaymentResponseDTO cancelledPayment = paymentService.cancelPayment(id);
         return ResponseEntity.ok(cancelledPayment);
+    }
+
+    // ==================== VNPAY IPN Webhook ====================
+
+    /**
+     * Webhook endpoint for VNPAY Instant Payment Notification (IPN).
+     *
+     * @param request the HTTP request containing VNPAY parameters
+     * @return HTTP 200 OK with VNPAY formatted JSON response
+     */
+    @GetMapping("/vnpay-ipn")
+    public ResponseEntity<String> processVnpayIpn(HttpServletRequest request) {
+        return paymentService.processVnpayIpn(request);
     }
 }

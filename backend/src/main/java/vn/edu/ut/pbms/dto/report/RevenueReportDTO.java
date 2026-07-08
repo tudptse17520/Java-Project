@@ -1,0 +1,21 @@
+package vn.edu.ut.pbms.dto.report;
+
+import java.math.BigDecimal;
+import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class RevenueReportDTO {
+
+    @JsonProperty("total_revenue")
+    private BigDecimal totalRevenue;
+
+    private List<?> details;
+}

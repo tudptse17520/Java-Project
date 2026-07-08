@@ -1,13 +1,13 @@
 package vn.edu.ut.pbms.constant;
 
 /**
- * Loại chi phí thanh toán trong hệ thống.
- * PARKING_FEE = phí gửi xe thông thường.
- * BOOKING_DEPOSIT = tiền đặt cọc giữ chỗ.
- * LOST_TICKET_FINE = phí phạt mất thẻ/vé xe.
+ * Enum phân loại mục đích thanh toán.
+ * Parking_Fee = phí gửi xe theo thời gian,
+ * Booking_Deposit = cọc giữ chỗ đặt trước,
+ * Lost_Ticket_Fine = phí phạt mất vé.
  */
 public enum FeeType {
-    PARKING_FEE,
-    BOOKING_DEPOSIT,
-    LOST_TICKET_FINE
+    Parking_Fee,
+    Booking_Deposit,
+    Lost_Ticket_Fine
 }

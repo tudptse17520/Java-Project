@@ -22,9 +22,12 @@ import java.util.List;
  * REST Controller for Building Management.
  * Base endpoint: /api/v1/buildings
  */
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
 @RequestMapping("/api/v1/buildings")
 @RequiredArgsConstructor
+@Tag(name = "Building")
 public class BuildingController {
 
     private final BuildingService buildingService;

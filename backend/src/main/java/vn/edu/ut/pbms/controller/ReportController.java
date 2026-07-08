@@ -1,42 +1,69 @@
 package vn.edu.ut.pbms.controller;
 
-import java.util.List;
-
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-import vn.edu.ut.pbms.dto.report.OccupancyRateReportDTO;
-import vn.edu.ut.pbms.dto.report.PeakHourReportDTO;
-import vn.edu.ut.pbms.dto.report.RevenueReportDTO;
-import vn.edu.ut.pbms.dto.report.VehicleEntryExitReportDTO;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import vn.edu.ut.pbms.dto.report.*;
 import vn.edu.ut.pbms.service.ReportService;
 
 @RestController
-@RequestMapping("/api/reports")
+@RequestMapping("/api/v1/reports")
 @RequiredArgsConstructor
+@CrossOrigin
+@Tag(name = "Reports & Dashboard", description = "API kết xuất các báo cáo và chỉ số Dashboard")
 public class ReportController {
 
     private final ReportService reportService;
 
-    @GetMapping("/occupancy-rate")
-    public OccupancyRateReportDTO getOccupancyRate() {
-        return reportService.getOccupancyRate();
-    }
-
-    @GetMapping("/vehicle-entry-exit")
-    public List<VehicleEntryExitReportDTO> getVehicleEntryExitReport() {
-        return reportService.getVehicleEntryExitReport();
-    }
-
+    @Operation(summary = "Thống kê và đối soát doanh thu")
     @GetMapping("/revenue")
-    public RevenueReportDTO getRevenueReport() {
-        return reportService.getRevenueReport();
+    public ResponseEntity<RevenueReportDTO> getRevenueReport(
+            @RequestParam(name = "start_date", required = false) String startDate,
+            @RequestParam(name = "end_date", required = false) String endDate) {
+        RevenueReportDTO response = reportService.getRevenueReport(startDate, endDate);
+        return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/peak-hour")
-    public List<PeakHourReportDTO> getPeakHourReport() {
-        return reportService.getPeakHourReport();
+    @Operation(summary = "Xem báo cáo lượt xe vào/ra")
+    @GetMapping("/vehicle-flow")
+    public ResponseEntity<VehicleEntryExitReportDTO> getVehicleFlowReport(
+            @RequestParam(name = "start_date", required = false) String startDate,
+            @RequestParam(name = "end_date", required = false) String endDate,
+            @RequestParam(name = "vehicle_type_id", required = false) Long vehicleTypeId) {
+        VehicleEntryExitReportDTO response = reportService.getVehicleEntryExitReport(startDate, endDate, vehicleTypeId);
+        return ResponseEntity.ok(response);
+    }
+
+    @Operation(summary = "Xem tỷ lệ lấp đầy")
+    @GetMapping("/occupancy")
+    public ResponseEntity<OccupancyRateReportDTO> getOccupancyReport(
+            @RequestParam(name = "start_date", required = false) String startDate,
+            @RequestParam(name = "end_date", required = false) String endDate,
+            @RequestParam(name = "vehicle_type_id", required = false) Long vehicleTypeId) {
+        OccupancyRateReportDTO response = reportService.getOccupancyRateReport(startDate, endDate, vehicleTypeId);
+        return ResponseEntity.ok(response);
+    }
+
+    @Operation(summary = "Xem khung giờ cao điểm")
+    @GetMapping("/peak-hours")
+    public ResponseEntity<PeakHourReportDTO> getPeakHourReport(
+            @RequestParam(name = "start_date", required = false) String startDate,
+            @RequestParam(name = "end_date", required = false) String endDate,
+            @RequestParam(name = "vehicle_type_id", required = false) Long vehicleTypeId) {
+        PeakHourReportDTO response = reportService.getPeakHourReport(startDate, endDate, vehicleTypeId);
+        return ResponseEntity.ok(response);
+    }
+
+    @Operation(summary = "Xem Dashboard tổng quan")
+    @GetMapping
+    public ResponseEntity<DashboardReportDTO> getDashboardReport(
+            @RequestParam(name = "start_date", required = false) String startDate,
+            @RequestParam(name = "end_date", required = false) String endDate,
+            @RequestParam(name = "vehicle_type_id", required = false) Long vehicleTypeId) {
+        DashboardReportDTO response = reportService.getDashboardReport(startDate, endDate, vehicleTypeId);
+        return ResponseEntity.ok(response);
     }
 }

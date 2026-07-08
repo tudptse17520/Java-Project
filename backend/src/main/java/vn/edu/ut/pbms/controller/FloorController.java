@@ -11,9 +11,12 @@ import vn.edu.ut.pbms.service.FloorService;
 
 import java.util.List;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
 @RequestMapping("/api/v1/floors")
 @RequiredArgsConstructor
+@Tag(name = "Floor")
 public class FloorController {
 
     private final FloorService floorService;

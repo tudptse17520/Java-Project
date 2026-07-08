@@ -25,9 +25,12 @@ import vn.edu.ut.pbms.service.PaymentService;
  *
  * Nghiêm cấm khai báo @DeleteMapping.
  */
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
 @RequestMapping("/api/v1/payments")
 @RequiredArgsConstructor
+@Tag(name = "Payment")
 public class PaymentController {
 
     private final PaymentService paymentService;

@@ -29,9 +29,12 @@ import java.util.Map;
  * - E3 (ràng buộc): Controller tự catch BusinessRuleViolationException
  *                    → 400 với error: "BUSINESS_RULE_VIOLATION" (đúng API Contract)
  */
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
 @RequestMapping("/api/v1/pricing-policies")
 @RequiredArgsConstructor
+@Tag(name = "Pricing Policy")
 public class PricingPolicyController {
 
     private final PricingPolicyService pricingPolicyService;

@@ -21,9 +21,12 @@ import java.util.List;
  * - PUT    /api/v1/vehicle-type/{id}          → Cập nhật (200)
  * - PATCH  /api/v1/vehicle-type/{id}/deactivate → Ngừng áp dụng (200)
  */
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
-@RequestMapping("/api/v1/vehicle-type")
+@RequestMapping("/api/v1/vehicle-types")
 @RequiredArgsConstructor
+@Tag(name = "Vehicle Type")
 public class VehicleTypeController {
 
     private final VehicleTypeService vehicleTypeService;

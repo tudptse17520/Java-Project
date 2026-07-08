@@ -7,8 +7,11 @@ import vn.edu.ut.pbms.dto.request.ExceptionRequestDTOs.ViolationRequest;
 
 import java.util.Map;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
 @RequestMapping("/api/v1/violations")
+@Tag(name = "Violation")
 public class ViolationController {
 
     // 6. Ghi nhận xe đỗ sai vị trí

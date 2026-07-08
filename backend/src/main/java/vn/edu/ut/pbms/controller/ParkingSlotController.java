@@ -16,9 +16,12 @@ import vn.edu.ut.pbms.service.ParkingSlotService;
 
 import java.util.List;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
 @RequestMapping("/api/v1/slots")
 @RequiredArgsConstructor
+@Tag(name = "Parking Slot")
 public class ParkingSlotController {
 
     private final ParkingSlotService parkingSlotService;

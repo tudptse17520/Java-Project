@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import vn.edu.ut.pbms.dto.request.SystemConfigRequest;
 import vn.edu.ut.pbms.dto.response.SystemConfigListResponse;
 import vn.edu.ut.pbms.dto.response.SystemConfigUpdateResponse;
@@ -16,6 +17,7 @@ import vn.edu.ut.pbms.service.SystemConfigService;
 @RequestMapping("/api/v1/configurations")
 @RequiredArgsConstructor
 @CrossOrigin
+@Tag(name = "System Configuration")
 public class ParkingConfigurationController {
 
     private final SystemConfigService systemConfigService;

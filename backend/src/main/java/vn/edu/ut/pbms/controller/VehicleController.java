@@ -2,33 +2,40 @@ package vn.edu.ut.pbms.controller;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-import vn.edu.ut.pbms.entity.Vehicle;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import vn.edu.ut.pbms.dto.request.VehicleRequestDTO;
+import vn.edu.ut.pbms.dto.response.VehicleCreateResponseDTO;
+import vn.edu.ut.pbms.dto.response.VehicleResponseDTO;
 import vn.edu.ut.pbms.service.VehicleService;
 
 @RestController
-@RequestMapping("/api/vehicles")
+@RequestMapping("/api/v1/vehicles")
+@RequiredArgsConstructor
+@Tag(name = "Vehicle", description = "API quản lý phương tiện cá nhân")
 public class VehicleController {
 
-    @Autowired
-    private VehicleService vehicleService;
+    private final VehicleService vehicleService;
 
-    // Đăng ký xe mới
-    @PostMapping("/register")
-    public Vehicle registerVehicle(@RequestBody Vehicle vehicle) {
-        return vehicleService.registerVehicle(vehicle);
+    @Operation(summary = "Đăng ký xe cá nhân thành viên")
+    @PostMapping
+    public ResponseEntity<VehicleCreateResponseDTO> registerVehicle(
+            @Valid @RequestBody VehicleRequestDTO request) {
+        VehicleCreateResponseDTO response = vehicleService.registerVehicle(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    // Lấy danh sách xe của một user cụ thể
+    @Operation(summary = "Lấy danh sách xe của một user cụ thể")
     @GetMapping("/user/{userId}")
-    public List<Vehicle> getVehiclesByUser(@PathVariable Long userId) {
-        return vehicleService.getVehiclesByUserId(userId);
+    public ResponseEntity<List<VehicleResponseDTO>> getVehiclesByUser(
+            @PathVariable("userId") Long userId) {
+        List<VehicleResponseDTO> response = vehicleService.getVehiclesByUserId(userId);
+        return ResponseEntity.ok(response);
     }
 }

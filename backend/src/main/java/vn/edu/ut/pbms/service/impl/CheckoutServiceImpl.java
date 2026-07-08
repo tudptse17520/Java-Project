@@ -50,8 +50,8 @@ public class CheckoutServiceImpl implements CheckoutService {
             // Tạo biên bản ghi nhận sự cố sai biển số
             Feedback feedback = Feedback.builder()
                     .issueType(IssueType.WRONG_PLATE)
-                    .description("Xác thực biển số thất bại ở cổng ra. Biển số nhận diện lúc ra: " 
-                            + request.getPlateOut() + " (Ảnh: " + request.getPlateOutImage() 
+                    .description("Xác thực biển số thất bại ở cổng ra. Biển số nhận diện lúc ra: "
+                            + request.getPlateOut() + " (Ảnh: " + request.getPlateOutImage()
                             + ") khác với biển số lúc vào: " + session.getPlate() + ".")
                     .status(FeedbackStatus.REPORTED)
                     .parkingSession(session)
@@ -78,7 +78,7 @@ public class CheckoutServiceImpl implements CheckoutService {
         // Tạo feedback ghi nhận sự kiện override thành công
         Feedback feedback = Feedback.builder()
                 .issueType(IssueType.WRONG_PLATE)
-                .description("Nhân viên (ID: " + staff.getId() + ", Tên: " + staff.getFullName() 
+                .description("Nhân viên (ID: " + staff.getId() + ", Tên: " + staff.getFullName()
                         + ") đã phê duyệt ghi đè lỗi sai biển số. Lý do: " + request.getOverrideReason())
                 .status(FeedbackStatus.RESOLVED)
                 .parkingSession(session)
@@ -99,7 +99,7 @@ public class CheckoutServiceImpl implements CheckoutService {
         LocalDateTime now = LocalDateTime.now();
         session.setTimeOut(now);
         session.setStatus(ParkingSessionStatus.COMPLETED);
-        
+
         // Nếu chưa tính phí trước đó, gán phí gửi xe bằng cước phí hiện tại hoặc mặc định là 0
         if (session.getTotalFee() == null) {
             try {
@@ -109,7 +109,7 @@ public class CheckoutServiceImpl implements CheckoutService {
                 session.setTotalFee(BigDecimal.ZERO);
             }
         }
-        
+
         parkingSessionRepository.save(session);
 
         // Giải phóng ô đỗ xe
@@ -185,40 +185,7 @@ public class CheckoutServiceImpl implements CheckoutService {
                 .build();
     }
 
-    @Override
-    @Transactional
-    public PaymentResponse createPayment(PaymentRequest request) {
-        ParkingSession session = getActiveSession(request.getParkingSessionId());
 
-        Booking booking = null;
-        if (request.getBookingId() != null) {
-            // Giả định có BookingRepository để tìm booking, tạm thời xử lý nullable hoặc kiểm tra nếu cần
-            // Ở đây để giữ tính đơn giản, ta chỉ gán Booking khi cần, hoặc không cần kiểm tra chặt chẽ booking
-            // hoặc nếu cần có thể inject BookingRepository. Nhưng trong repository list không có BookingRepository.
-            // Ta có thể bỏ qua kiểm tra booking hoặc chỉ lấy từ session nếu có.
-            if (session.getBooking() != null && session.getBooking().getId().equals(request.getBookingId())) {
-                booking = session.getBooking();
-            }
-        }
-
-        // Lưu thông tin giao dịch thanh toán (Mặc định thành công trực tiếp cho API mô phỏng)
-        Payment payment = Payment.builder()
-                .amount(request.getAmount())
-                .paymentMethod(request.getPaymentMethod())
-                .paymentTime(LocalDateTime.now())
-                .status(PaymentStatus.SUCCESS)
-                .feeType(request.getFeeType())
-                .parkingSession(session)
-                .booking(booking)
-                .build();
-        payment = paymentRepository.save(payment);
-
-        return PaymentResponse.builder()
-                .id(payment.getId())
-                .paymentTime(payment.getPaymentTime())
-                .status(payment.getStatus())
-                .build();
-    }
 
     @Override
     @Transactional(readOnly = true)
@@ -238,13 +205,13 @@ public class CheckoutServiceImpl implements CheckoutService {
         // 2. Cập nhật thông tin phiên đỗ xe
         session.setTimeOut(request.getTimeOut());
         session.setStatus(ParkingSessionStatus.COMPLETED);
-        
+
         // Nếu totalFee chưa được set hoặc lưu trước đó
         if (session.getTotalFee() == null) {
             BigDecimal finalFee = calculateParkingFee(session, request.getTimeOut()).getTotalFee();
             session.setTotalFee(finalFee);
         }
-        
+
         parkingSessionRepository.save(session);
 
         // 3. Giải phóng slot đỗ xe thành AVAILABLE
@@ -288,7 +255,8 @@ public class CheckoutServiceImpl implements CheckoutService {
     }
 
     /**
-     * Tính toán chi phí đỗ xe thực tế dựa vào thời điểm gửi xe và chính sách giá.
+     * Tính toán chi phí đỗ xe thực tế dựa vào thời điểm gửi xe và chính sách
+     * giá.
      */
     private FeeCalculationResponse calculateParkingFee(ParkingSession session, LocalDateTime timeOut) {
         LocalDateTime timeIn = session.getTimeIn();
@@ -317,7 +285,9 @@ public class CheckoutServiceImpl implements CheckoutService {
 
         // Tính số giờ đỗ xe (làm tròn lên)
         long totalMinutes = Duration.between(timeIn, timeOut).toMinutes();
-        if (totalMinutes < 0) totalMinutes = 0;
+        if (totalMinutes < 0) {
+            totalMinutes = 0;
+        }
         long hoursRoundedUp = (long) Math.ceil(totalMinutes / 60.0);
 
         BigDecimal baseFee = policy.getBasePrice();
@@ -370,7 +340,7 @@ public class CheckoutServiceImpl implements CheckoutService {
             if (!hasFeedback) {
                 Feedback feedback = Feedback.builder()
                         .issueType(IssueType.UNPAID_EXIT)
-                        .description("Xe cố gắng qua cổng ra nhưng chưa thanh toán đủ phí. Đã thanh toán: " 
+                        .description("Xe cố gắng qua cổng ra nhưng chưa thanh toán đủ phí. Đã thanh toán: "
                                 + totalPaid + " VNĐ, Phải thanh toán: " + totalFee + " VNĐ.")
                         .status(FeedbackStatus.REPORTED)
                         .parkingSession(session)
@@ -378,7 +348,7 @@ public class CheckoutServiceImpl implements CheckoutService {
                 feedbackRepository.save(feedback);
             }
 
-            throw new UnpaidExitException("Xe chưa thanh toán đầy đủ phí đỗ xe. Số tiền còn thiếu: " 
+            throw new UnpaidExitException("Xe chưa thanh toán đầy đủ phí đỗ xe. Số tiền còn thiếu: "
                     + totalFee.subtract(totalPaid) + " VNĐ. Vui lòng thanh toán trước khi rời bãi.");
         }
     }

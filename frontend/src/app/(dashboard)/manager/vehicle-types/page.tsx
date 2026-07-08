@@ -1,6 +1,7 @@
 "use client";
 
 import { Plus } from "lucide-react";
+import { PageContainer } from "@/components/common/page-container";
 import { PageHeader } from "@/components/common/page-header";
 import { Button } from "@/components/ui/button";
 import { ConfirmDialog } from "@/components/common/confirm-dialog";
@@ -29,7 +30,7 @@ export default function VehicleTypesPage() {
   } = useVehicleTypeActions();
 
   return (
-    <div className="space-y-6">
+    <PageContainer>
       <PageHeader
         title="Quản lý Loại Phương Tiện"
         description="Xem danh sách, thêm mới và thiết lập các loại phương tiện được phép gửi trong bãi."
@@ -65,6 +66,6 @@ export default function VehicleTypesPage() {
         confirmText="Ngừng áp dụng"
         isLoading={isDeactivating}
       />
-    </div>
+    </PageContainer>
   );
 }

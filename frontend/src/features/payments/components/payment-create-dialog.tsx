@@ -17,6 +17,7 @@ import {
   PAYMENT_METHODS,
   FEE_TYPES,
 } from "@/features/payments/constants/payment.constants";
+import { FormContainer, FormHeader, FormFields, FormActions } from "@/components/common/form-container";
 
 interface PaymentCreateDialogProps {
   open: boolean;
@@ -68,12 +69,13 @@ export function PaymentCreateDialog({
 
       {/* Dialog */}
       <div className="relative z-50 w-full max-w-lg rounded-lg border bg-background p-6 shadow-lg">
-        <h2 className="text-lg font-semibold">Tạo thanh toán mới</h2>
-        <p className="mt-1 text-sm text-muted-foreground">
-          Nhập thông tin giao dịch thanh toán.
-        </p>
+        <FormContainer onSubmit={handleFormSubmit}>
+          <FormHeader
+            title="Tạo thanh toán mới"
+            description="Nhập thông tin giao dịch thanh toán."
+          />
 
-        <form onSubmit={handleFormSubmit} className="mt-4 space-y-4">
+          <FormFields>
           {/* Mã lượt gửi xe */}
           <div className="flex flex-col gap-2">
             <label className="text-sm font-medium">
@@ -174,8 +176,10 @@ export function PaymentCreateDialog({
             )}
           </div>
 
+          </FormFields>
+
           {/* Actions */}
-          <div className="flex justify-end gap-2 pt-2">
+          <FormActions>
             <Button
               type="button"
               variant="outline"
@@ -187,8 +191,8 @@ export function PaymentCreateDialog({
             <Button type="submit" disabled={isLoading}>
               {isLoading ? "Đang xử lý..." : "Tạo thanh toán"}
             </Button>
-          </div>
-        </form>
+          </FormActions>
+        </FormContainer>
       </div>
     </div>
   );

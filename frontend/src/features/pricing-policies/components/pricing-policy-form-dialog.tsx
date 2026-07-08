@@ -16,6 +16,7 @@ import {
   PricingPolicyFormValues,
 } from "@/features/pricing-policies/schemas/pricing-policy.schema";
 import { VehicleType } from "@/features/vehicle-types/types/vehicle-type.type";
+import { FormContainer, FormHeader, FormFields, FormActions } from "@/components/common/form-container";
 
 interface PricingPolicyFormDialogProps {
   open: boolean;
@@ -114,16 +115,15 @@ export function PricingPolicyFormDialog({
 
       {/* Dialog */}
       <div className="relative z-50 w-full max-w-lg rounded-lg border bg-background p-6 shadow-lg">
-        <h2 className="text-lg font-semibold">
-          {isEditing ? "Cập nhật bảng giá" : "Thêm bảng giá mới"}
-        </h2>
-        <p className="mt-1 text-sm text-muted-foreground">
-          {isEditing
-            ? "Chỉnh sửa thông tin bảng giá bên dưới."
-            : "Nhập thông tin bảng giá mới bên dưới."}
-        </p>
+        <FormContainer onSubmit={handleSubmit(onFormSubmit)}>
+          <FormHeader
+            title={isEditing ? "Cập nhật bảng giá" : "Thêm bảng giá mới"}
+            description={isEditing
+              ? "Chỉnh sửa thông tin bảng giá bên dưới."
+              : "Nhập thông tin bảng giá mới bên dưới."}
+          />
 
-        <form onSubmit={handleSubmit(onFormSubmit)} className="mt-6 space-y-4">
+          <FormFields>
           {/* Loại phương tiện */}
           <div>
             <label
@@ -232,8 +232,10 @@ export function PricingPolicyFormDialog({
             )}
           </div>
 
+          </FormFields>
+
           {/* Actions */}
-          <div className="flex justify-end gap-3 pt-4">
+          <FormActions>
             <Button
               type="button"
               variant="outline"
@@ -249,8 +251,8 @@ export function PricingPolicyFormDialog({
                   ? "Cập nhật"
                   : "Lưu"}
             </Button>
-          </div>
-        </form>
+          </FormActions>
+        </FormContainer>
       </div>
     </div>
   );

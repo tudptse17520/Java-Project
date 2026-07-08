@@ -15,6 +15,7 @@ import {
 } from "@/features/payments/schemas/payment.schema";
 import { MANUAL_STATUS_OPTIONS } from "@/features/payments/constants/payment.constants";
 import type { Payment } from "@/features/payments/types/payment.type";
+import { FormContainer, FormHeader, FormFields, FormActions } from "@/components/common/form-container";
 
 interface PaymentManualStatusDialogProps {
   open: boolean;
@@ -65,12 +66,13 @@ export function PaymentManualStatusDialog({
 
       {/* Dialog */}
       <div className="relative z-50 w-full max-w-md rounded-lg border bg-background p-6 shadow-lg">
-        <h2 className="text-lg font-semibold">Cập nhật trạng thái thủ công</h2>
-        <p className="mt-1 text-sm text-muted-foreground">
-          Giao dịch #{payment.id} — Đang ở trạng thái PENDING
-        </p>
+        <FormContainer onSubmit={handleFormSubmit}>
+          <FormHeader
+            title="Cập nhật trạng thái thủ công"
+            description={`Giao dịch #${payment.id} — Đang ở trạng thái PENDING`}
+          />
 
-        <form onSubmit={handleFormSubmit} className="mt-4 space-y-4">
+          <FormFields>
           {/* Trạng thái mới */}
           <div className="flex flex-col gap-2">
             <label className="text-sm font-medium">
@@ -113,8 +115,10 @@ export function PaymentManualStatusDialog({
             )}
           </div>
 
+          </FormFields>
+
           {/* Actions */}
-          <div className="flex justify-end gap-2 pt-2">
+          <FormActions>
             <Button
               type="button"
               variant="outline"
@@ -126,8 +130,8 @@ export function PaymentManualStatusDialog({
             <Button type="submit" disabled={isLoading}>
               {isLoading ? "Đang xử lý..." : "Xác nhận"}
             </Button>
-          </div>
-        </form>
+          </FormActions>
+        </FormContainer>
       </div>
     </div>
   );

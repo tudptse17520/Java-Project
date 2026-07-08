@@ -3,6 +3,7 @@
 import { useMemo } from "react";
 import { type ColumnDef } from "@tanstack/react-table";
 import { DataTable } from "@/components/common/data-table";
+import { StatusBadge } from "@/components/common/status-badge";
 import { VehicleType } from "@/features/vehicle-types/types/vehicle-type.type";
 import {
   VehicleTypeStatus,
@@ -57,16 +58,9 @@ export function VehicleTypeTable({
           const status = row.original.status;
           const isActive = status === VehicleTypeStatus.ACTIVE;
           return (
-            <div
-              className={cn(
-                "inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold transition-colors",
-                isActive
-                  ? "bg-green-100 text-green-800"
-                  : "bg-red-100 text-red-800"
-              )}
-            >
+            <StatusBadge variant={isActive ? "success" : "danger"}>
               {VEHICLE_TYPE_STATUS_LABELS[status]}
-            </div>
+            </StatusBadge>
           );
         },
       },

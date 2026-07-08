@@ -11,6 +11,7 @@ import {
 } from "@/features/vehicle-types/schemas/vehicle-type.schema";
 import { VehicleType } from "@/features/vehicle-types/types/vehicle-type.type";
 import { VehicleTypeStatus } from "@/constants/vehicle-type-status";
+import { FormContainer, FormHeader, FormFields, FormActions } from "@/components/common/form-container";
 
 interface VehicleTypeFormDialogProps {
   open: boolean;
@@ -72,18 +73,14 @@ export function VehicleTypeFormDialog({
 
       {/* Dialog */}
       <div className="relative z-50 w-full max-w-lg rounded-lg border bg-background p-6 shadow-lg">
-        <div className="mb-4">
-          <h2 className="text-xl font-semibold">
-            {isEditing ? "Cập nhật loại phương tiện" : "Thêm loại phương tiện"}
-          </h2>
-          <p className="text-sm text-muted-foreground">
-            {isEditing
+        <FormContainer onSubmit={handleSubmit(onSubmit)}>
+          <FormHeader 
+            title={isEditing ? "Cập nhật loại phương tiện" : "Thêm loại phương tiện"}
+            description={isEditing
               ? "Thay đổi thông tin của loại phương tiện hiện tại."
               : "Thêm một loại phương tiện mới vào hệ thống."}
-          </p>
-        </div>
-
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          />
+          <FormFields>
           {/* Type Name */}
           <div className="space-y-1">
             <label
@@ -129,16 +126,18 @@ export function VehicleTypeFormDialog({
             )}
           </div>
 
+          </FormFields>
+
           {/* Action Buttons */}
-          <div className="mt-6 flex justify-end gap-3">
+          <FormActions>
             <Button type="button" variant="outline" onClick={onClose} disabled={isLoading}>
               Hủy
             </Button>
             <Button type="submit" disabled={isLoading}>
               {isLoading ? "Đang lưu..." : "Lưu lại"}
             </Button>
-          </div>
-        </form>
+          </FormActions>
+        </FormContainer>
       </div>
     </div>
   );

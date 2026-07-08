@@ -32,6 +32,12 @@ public interface PaymentCustomRepository extends JpaRepository<Payment, Long> {
             + "AND p.feeType = vn.edu.ut.pbms.constant.FeeType.PARKING_FEE")
     BigDecimal sumSuccessfulAmountBySessionId(@Param("sessionId") Long sessionId);
 
+    @Query("SELECT COALESCE(SUM(p.amount), 0) FROM Payment p "
+            + "WHERE p.booking.id = :bookingId "
+            + "AND p.status = vn.edu.ut.pbms.constant.PaymentStatus.SUCCESS "
+            + "AND p.feeType = vn.edu.ut.pbms.constant.FeeType.BOOKING_DEPOSIT")
+    BigDecimal sumSuccessfulAmountByBookingId(@Param("bookingId") Long bookingId);
+
     /**
      * Find payments by dynamic filters (payment_method, status, from_date). All
      * parameters are optional — null values are ignored in the query.

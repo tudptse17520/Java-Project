@@ -198,6 +198,34 @@ public class PaymentServiceImpl implements PaymentService {
         return mapToResponseDTO(payment);
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public vn.edu.ut.pbms.dto.response.PaymentDebtResponseDTO getRemainingDebt(Long sessionId) {
+        ParkingSession session = parkingSessionRepository.findById(sessionId)
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy lượt gửi xe với ID: " + sessionId));
+
+        if (session.getTotalFee() == null) {
+            throw new BusinessRuleViolationException("Lượt gửi xe chưa được tính phí (total_fee chưa có giá trị). Vui lòng gọi API calculate-fee bên Checkout trước.");
+        }
+
+        BigDecimal sumPaid = paymentCustomRepository.sumSuccessfulAmountBySessionId(session.getId());
+        if (session.getBooking() != null) {
+            sumPaid = sumPaid.add(paymentCustomRepository.sumSuccessfulAmountByBookingId(session.getBooking().getId()));
+        }
+
+        BigDecimal remainingDebt = session.getTotalFee().subtract(sumPaid);
+        if (remainingDebt.compareTo(BigDecimal.ZERO) < 0) {
+            remainingDebt = BigDecimal.ZERO;
+        }
+
+        return vn.edu.ut.pbms.dto.response.PaymentDebtResponseDTO.builder()
+                .sessionId(session.getId())
+                .totalFee(session.getTotalFee())
+                .paidFee(sumPaid)
+                .remainingFee(remainingDebt)
+                .build();
+    }
+
     // ==================== PATCH - Staff cập nhật thủ công ====================
     @Override
     public PaymentResponseDTO updatePaymentStatus(Long id, ManualStatusRequestDTO requestDTO) {
@@ -469,6 +497,9 @@ public class PaymentServiceImpl implements PaymentService {
         }
 
         BigDecimal sumPaid = paymentCustomRepository.sumSuccessfulAmountBySessionId(session.getId());
+        if (session.getBooking() != null) {
+            sumPaid = sumPaid.add(paymentCustomRepository.sumSuccessfulAmountByBookingId(session.getBooking().getId()));
+        }
         BigDecimal remainingDebt = session.getTotalFee().subtract(sumPaid);
 
         if (dto.getAmount().compareTo(remainingDebt) > 0) {
@@ -487,6 +518,9 @@ public class PaymentServiceImpl implements PaymentService {
         }
 
         BigDecimal sumPaid = paymentCustomRepository.sumSuccessfulAmountBySessionId(session.getId());
+        if (session.getBooking() != null) {
+            sumPaid = sumPaid.add(paymentCustomRepository.sumSuccessfulAmountByBookingId(session.getBooking().getId()));
+        }
         BigDecimal remainingDebt = session.getTotalFee().subtract(sumPaid);
 
         if (remainingDebt.compareTo(BigDecimal.ZERO) <= 0) {

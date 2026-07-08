@@ -50,6 +50,20 @@ public class PaymentController {
         return ResponseEntity.status(HttpStatus.CREATED).body(createdPayment);
     }
 
+    /**
+     * Get the remaining debt details for a parking session.
+     * This provides total fee, paid fee (including booking deposits), and remaining fee.
+     *
+     * @param sessionId the parking session ID
+     * @return the debt details
+     */
+    @GetMapping("/sessions/{sessionId}/debt")
+    public ResponseEntity<vn.edu.ut.pbms.dto.response.PaymentDebtResponseDTO> getRemainingDebt(
+            @PathVariable("sessionId") Long sessionId) {
+        vn.edu.ut.pbms.dto.response.PaymentDebtResponseDTO response = paymentService.getRemainingDebt(sessionId);
+        return ResponseEntity.ok(response);
+    }
+
     // ==================== GET - Danh sách giao dịch ====================
 
     /**

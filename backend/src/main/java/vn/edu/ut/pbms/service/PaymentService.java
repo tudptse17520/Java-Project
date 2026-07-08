@@ -45,6 +45,14 @@ public interface PaymentService {
     PaymentResponseDTO getPaymentById(Long id);
 
     /**
+     * Calculate and return the remaining debt for a parking session.
+     *
+     * @param sessionId the parking session ID
+     * @return the debt details including total fee, paid fee, and remaining fee
+     */
+    vn.edu.ut.pbms.dto.response.PaymentDebtResponseDTO getRemainingDebt(Long sessionId);
+
+    /**
      * Staff manual update of a PENDING payment status.
      * Validates that the payment is still PENDING and that the audit note is sufficient.
      *

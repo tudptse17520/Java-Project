@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
- * Entity đại diện cho bảng pricing_policy trong MySQL.
+ * Entity đại diện cho bảng pricing_policy trong SQL Server.
  * Chính sách giá áp dụng riêng cho từng danh mục loại xe.
  */
 @Entity

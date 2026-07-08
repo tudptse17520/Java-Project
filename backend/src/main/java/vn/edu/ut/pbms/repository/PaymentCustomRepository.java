@@ -29,7 +29,7 @@ public interface PaymentCustomRepository extends JpaRepository<Payment, Long> {
     @Query("SELECT COALESCE(SUM(p.amount), 0) FROM Payment p "
             + "WHERE p.parkingSession.id = :sessionId "
             + "AND p.status = vn.edu.ut.pbms.constant.PaymentStatus.SUCCESS "
-            + "AND p.feeType = 'Parking_Fee'")
+            + "AND p.feeType = vn.edu.ut.pbms.constant.FeeType.PARKING_FEE")
     BigDecimal sumSuccessfulAmountBySessionId(@Param("sessionId") Long sessionId);
 
     /**

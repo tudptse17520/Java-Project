@@ -78,11 +78,11 @@ public class PaymentServiceImpl implements PaymentService {
         FeeType feeType = parseFeeType(requestDTO.getFeeType());
 
         // 3. Validate cross-mapping: fee_type MUST match the provided ID type
-        if (requestDTO.getBookingId() != null && feeType != FeeType.Booking_Deposit) {
+        if (requestDTO.getBookingId() != null && feeType != FeeType.BOOKING_DEPOSIT) {
             throw new BusinessRuleViolationException(
                     "Giao dịch sai: Khi thanh toán cho đơn đặt chỗ (booking_id), loại phí bắt buộc phải là Booking_Deposit.");
         }
-        if (requestDTO.getParkingSessionId() != null && feeType == FeeType.Booking_Deposit) {
+        if (requestDTO.getParkingSessionId() != null && feeType == FeeType.BOOKING_DEPOSIT) {
             throw new BusinessRuleViolationException(
                     "Giao dịch sai: Khi thanh toán cho lượt gửi xe (parking_session_id), loại phí không được là Booking_Deposit.");
         }
@@ -91,7 +91,7 @@ public class PaymentServiceImpl implements PaymentService {
         PaymentMethod paymentMethod = parsePaymentMethod(requestDTO.getPaymentMethod());
 
         // 4. E2 Check (Fixed Fee Mismatch) - Booking_Deposit hoặc Lost_Ticket_Fine
-        if (feeType == FeeType.Booking_Deposit || feeType == FeeType.Lost_Ticket_Fine) {
+        if (feeType == FeeType.BOOKING_DEPOSIT || feeType == FeeType.LOST_TICKET_FINE) {
             validateFixedFeeMismatch(requestDTO, feeType);
         }
 
@@ -104,7 +104,7 @@ public class PaymentServiceImpl implements PaymentService {
                     .orElseThrow(() -> new ResourceNotFoundException(
                     "Không tìm thấy lượt gửi xe với ID: " + requestDTO.getParkingSessionId()));
 
-            if (feeType == FeeType.Parking_Fee) {
+            if (feeType == FeeType.PARKING_FEE) {
                 validateOverpayment(requestDTO, parkingSession);
             }
         }
@@ -119,7 +119,7 @@ public class PaymentServiceImpl implements PaymentService {
         Payment payment = Payment.builder()
                 .amount(requestDTO.getAmount())
                 .paymentMethod(requestDTO.getPaymentMethod())
-                .feeType(requestDTO.getFeeType())
+                .feeType(feeType)
                 .parkingSession(parkingSession)
                 .booking(booking)
                 .status(PaymentStatus.PENDING)
@@ -414,7 +414,7 @@ public class PaymentServiceImpl implements PaymentService {
     private void validateFixedFeeMismatch(PaymentRequestDTO dto, FeeType feeType) {
         BigDecimal expectedAmount;
 
-        if (feeType == FeeType.Lost_Ticket_Fine) {
+        if (feeType == FeeType.LOST_TICKET_FINE) {
             // Lost_Ticket_Fine: so với hằng số mặc định
             expectedAmount = DEFAULT_LOST_TICKET_FINE;
         } else {
@@ -500,7 +500,7 @@ public class PaymentServiceImpl implements PaymentService {
      */
     private FeeType parseFeeType(String feeType) {
         try {
-            return FeeType.valueOf(feeType);
+            return FeeType.valueOf(feeType.toUpperCase());
         } catch (IllegalArgumentException e) {
             throw new BusinessRuleViolationException(
                     "Loại phí '" + feeType + "' không hợp lệ. Các giá trị hợp lệ: Parking_Fee, Booking_Deposit, Lost_Ticket_Fine.");
@@ -529,7 +529,7 @@ public class PaymentServiceImpl implements PaymentService {
                 .bookingId(payment.getBooking() != null ? payment.getBooking().getId() : null)
                 .amount(payment.getAmount())
                 .paymentMethod(payment.getPaymentMethod())
-                .feeType(payment.getFeeType())
+                .feeType(payment.getFeeType().name())
                 .paymentTime(payment.getPaymentTime() != null
                         ? payment.getPaymentTime().format(RESPONSE_DATE_FORMAT)
                         : null)

@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import vn.edu.ut.pbms.constant.FeeType;
 import vn.edu.ut.pbms.constant.PaymentStatus;
 
 import java.math.BigDecimal;
@@ -42,8 +43,9 @@ public class Payment {
     @Builder.Default
     private PaymentStatus status = PaymentStatus.PENDING;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "fee_type", nullable = false, length = 50)
-    private String feeType;
+    private FeeType feeType;
 
     // ==================== Relationships ====================
 

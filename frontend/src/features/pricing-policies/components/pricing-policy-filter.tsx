@@ -5,10 +5,10 @@
 
 "use client";
 
-import { VehicleTypeOption } from "@/services/vehicle-type.service";
+import { VehicleType } from "@/features/vehicle-types/types/vehicle-type.type";
 
 interface PricingPolicyFilterProps {
-  vehicleTypes: VehicleTypeOption[];
+  vehicleTypes: VehicleType[];
   isLoading?: boolean;
   value?: number;
   onChange: (vehicleTypeId: number | undefined) => void;

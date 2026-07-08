@@ -10,4 +10,7 @@ import vn.edu.ut.pbms.entity.Building;
  */
 @Repository
 public interface BuildingRepository extends JpaRepository<Building, Long> {
+
+    boolean existsByBuildingName(String buildingName);
 }
+

@@ -11,10 +11,13 @@ public class ModelMapperConfig {
     @Bean
     public ModelMapper modelMapper() {
         ModelMapper modelMapper = new ModelMapper();
+        
+        // Cấu hình nâng cao cho ModelMapper giúp ánh xạ DTO chính xác
         modelMapper.getConfiguration()
-                .setMatchingStrategy(MatchingStrategies.STRICT)
-                .setFieldMatchingEnabled(true)
-                .setSkipNullEnabled(true);
+                .setMatchingStrategy(MatchingStrategies.STRICT) 
+                .setFieldMatchingEnabled(true)                 
+                .setSkipNullEnabled(true);                      
+                
         return modelMapper;
     }
 }

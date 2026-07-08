@@ -1,11 +1,20 @@
 package vn.edu.ut.pbms.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import vn.edu.ut.pbms.constant.BuildingStatus;
+
 import java.util.List;
 
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class BuildingDetailResponseDTO {
+
     @JsonProperty("id")
     private Long id;
 
@@ -19,7 +28,7 @@ public class BuildingDetailResponseDTO {
     private Integer numberOfFloors;
 
     @JsonProperty("status")
-    private String status;
+    private BuildingStatus status;
 
     @JsonProperty("total_available_slots")
     private Long totalAvailableSlots;

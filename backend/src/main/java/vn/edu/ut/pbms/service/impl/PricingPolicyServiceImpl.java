@@ -110,7 +110,7 @@ public class PricingPolicyServiceImpl implements PricingPolicyService {
                         MessageConstants.PRICING_POLICY_NOT_FOUND + id));
 
         // E3: Kiểm tra ràng buộc dữ liệu - không cập nhật nếu loại xe của bảng giá này
-        // đang có ParkingSession IN_PROGRESS hoặc COMPLETED
+        // đang có ParkingSession IN_PROGRESS
         checkParkingSessionConstraint(pricingPolicy.getVehicleType().getId(),
                 MessageConstants.PRICING_POLICY_IN_USE_UPDATE);
 
@@ -156,7 +156,7 @@ public class PricingPolicyServiceImpl implements PricingPolicyService {
                         MessageConstants.PRICING_POLICY_NOT_FOUND + id));
 
         // E3: Kiểm tra ràng buộc dữ liệu - không xóa nếu loại xe của bảng giá này
-        // đang có ParkingSession IN_PROGRESS hoặc COMPLETED
+        // đang có ParkingSession IN_PROGRESS
         checkParkingSessionConstraint(pricingPolicy.getVehicleType().getId(),
                 MessageConstants.PRICING_POLICY_IN_USE_DELETE);
 
@@ -172,9 +172,9 @@ public class PricingPolicyServiceImpl implements PricingPolicyService {
     // ==================== Helper ====================
 
     /**
-     * Kiểm tra ràng buộc E3: xem có ParkingSession nào đang IN_PROGRESS hoặc COMPLETED
-     * cho loại xe của bảng giá này không.
-     * Sử dụng ParkingSessionRepository có sẵn (không sửa code cũ).
+     * Kiểm tra ràng buộc E3: xem có ParkingSession nào đang IN_PROGRESS
+     * cho loại xe của bảng giá này không. (Đã nới lỏng: bỏ qua COMPLETED)
+     * Sử dụng ParkingSessionRepository có sẵn.
      *
      * @param vehicleTypeId mã loại xe cần kiểm tra
      * @param errorMessage  thông báo lỗi nếu vi phạm ràng buộc
@@ -182,10 +182,8 @@ public class PricingPolicyServiceImpl implements PricingPolicyService {
     private void checkParkingSessionConstraint(Long vehicleTypeId, String errorMessage) {
         boolean hasInProgressSession = parkingSessionRepository
                 .existsByVehicle_VehicleType_IdAndStatus(vehicleTypeId, ParkingSessionStatus.IN_PROGRESS);
-        boolean hasCompletedSession = parkingSessionRepository
-                .existsByVehicle_VehicleType_IdAndStatus(vehicleTypeId, ParkingSessionStatus.COMPLETED);
 
-        if (hasInProgressSession || hasCompletedSession) {
+        if (hasInProgressSession) {
             throw new BusinessRuleViolationException(errorMessage);
         }
     }

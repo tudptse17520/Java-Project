@@ -43,7 +43,7 @@ public class PricingPolicy {
     private LocalDateTime effectiveDate;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(name = "status", nullable = false, columnDefinition = "VARCHAR(50) DEFAULT 'ACTIVE'")
     @Builder.Default
     private PricingPolicyStatus status = PricingPolicyStatus.ACTIVE;
 

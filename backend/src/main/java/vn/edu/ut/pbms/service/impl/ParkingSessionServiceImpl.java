@@ -9,20 +9,25 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import vn.edu.ut.pbms.constant.BookingStatus;
+import vn.edu.ut.pbms.constant.ParkingSlotStatus;
 import vn.edu.ut.pbms.constant.ParkingSessionStatus;
 import vn.edu.ut.pbms.dto.request.CheckinRequest;
 import vn.edu.ut.pbms.dto.response.CheckinResponse;
 import vn.edu.ut.pbms.dto.response.ParkingSessionListResponseDTO;
 import vn.edu.ut.pbms.dto.response.ParkingSessionResponseDTO;
+import vn.edu.ut.pbms.entity.Booking;
 import vn.edu.ut.pbms.entity.ParkingSession;
 import vn.edu.ut.pbms.entity.ParkingSlot;
 import vn.edu.ut.pbms.entity.Vehicle;
 import vn.edu.ut.pbms.exception.BusinessRuleViolationException;
 import vn.edu.ut.pbms.exception.ResourceNotFoundException;
+import vn.edu.ut.pbms.repository.BookingRepository;
 import vn.edu.ut.pbms.repository.ParkingSessionRepository;
 import vn.edu.ut.pbms.repository.ParkingSlotRepository;
 import vn.edu.ut.pbms.repository.VehicleRepository;
 import vn.edu.ut.pbms.service.ParkingSessionService;
+import vn.edu.ut.pbms.service.SlotAvailabilityService;
 
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
@@ -47,6 +52,8 @@ public class ParkingSessionServiceImpl implements ParkingSessionService {
     private final ParkingSessionRepository parkingSessionRepository;
     private final VehicleRepository vehicleRepository;
     private final ParkingSlotRepository parkingSlotRepository;
+    private final BookingRepository bookingRepository;
+    private final SlotAvailabilityService slotAvailabilityService;
 
     /**
      * Tra cứu danh sách lượt gửi xe với bộ lọc động (Dynamic Query) dùng Criteria API.
@@ -144,6 +151,11 @@ public class ParkingSessionServiceImpl implements ParkingSessionService {
                             "Không tìm thấy phương tiện với ID: " + request.getVehicleId()));
         }
 
+        // Tìm phương tiện theo biển số nếu không truyền vehicle_id (để link xe thành viên)
+        if (vehicle == null && request.getPlate() != null && !request.getPlate().trim().isEmpty()) {
+            vehicle = vehicleRepository.findByPlate(request.getPlate().trim()).orElse(null);
+        }
+
         ParkingSlot parkingSlot = null;
         if (request.getParkingSlotId() != null) {
             parkingSlot = parkingSlotRepository.findById((long) request.getParkingSlotId())
@@ -151,26 +163,60 @@ public class ParkingSessionServiceImpl implements ParkingSessionService {
                             "Không tìm thấy vị trí đỗ với ID: " + request.getParkingSlotId()));
         }
 
-        // 2. Tạo mã code vé ngẫu nhiên, duy nhất
+        // Tìm kiếm và áp dụng thông tin đặt chỗ trước (Booking) nếu có
+        Booking matchedBooking = null;
+        if (vehicle != null) {
+            List<Booking> activeBookings = bookingRepository.findByVehicleIdAndStatus(vehicle.getId(), BookingStatus.CONFIRMED);
+            if (activeBookings.isEmpty()) {
+                activeBookings = bookingRepository.findByVehicleIdAndStatus(vehicle.getId(), BookingStatus.PENDING);
+            }
+            if (!activeBookings.isEmpty()) {
+                matchedBooking = activeBookings.get(0);
+                matchedBooking.setStatus(BookingStatus.CHECKED_IN);
+                bookingRepository.save(matchedBooking);
+
+                // Ưu tiên sử dụng slot đỗ đã được đặt trước nếu request không truyền lên
+                if (parkingSlot == null) {
+                    parkingSlot = matchedBooking.getParkingSlot();
+                }
+            }
+        }
+
+        // 2. Kiểm tra tính khả dụng và cập nhật trạng thái ô đỗ
+        if (parkingSlot != null) {
+            if (parkingSlot.getStatus() == ParkingSlotStatus.OCCUPIED ||
+                parkingSlot.getStatus() == ParkingSlotStatus.MAINTENANCE ||
+                parkingSlot.getStatus() == ParkingSlotStatus.LOCKED) {
+                throw new BusinessRuleViolationException(
+                        "Vị trí đỗ '" + parkingSlot.getSlotName() + "' hiện tại không khả dụng.");
+            }
+
+            // Cập nhật trạng thái ô đỗ thành OCCUPIED và phát sự kiện SSE
+            slotAvailabilityService.updateSlotStatus(parkingSlot.getId(), ParkingSlotStatus.OCCUPIED);
+        }
+
+        // 3. Tạo mã code vé ngẫu nhiên, duy nhất
         String ticketCode = "TK-" + UUID.randomUUID().toString().replace("-", "").substring(0, 10).toUpperCase();
 
-        // 3. Khởi tạo mốc thời gian vào bãi và trạng thái mặc định
+        // 4. Khởi tạo mốc thời gian vào bãi và trạng thái mặc định
         LocalDateTime timeIn = LocalDateTime.now();
         ParkingSessionStatus status = ParkingSessionStatus.IN_PROGRESS;
 
-        // 4. Build thực thể và thực hiện lưu vào cơ sở dữ liệu
+        // 5. Build thực thể và thực hiện lưu vào cơ sở dữ liệu
         ParkingSession session = ParkingSession.builder()
                 .plate(request.getPlate())
                 .ticketCode(ticketCode)
                 .timeIn(timeIn)
                 .status(status)
                 .vehicle(vehicle)
+                .user(vehicle != null ? vehicle.getUser() : null)
                 .parkingSlot(parkingSlot)
+                .booking(matchedBooking)
                 .build();
 
         ParkingSession savedSession = parkingSessionRepository.save(session);
 
-        // 5. Đóng gói dữ liệu trả về cho Front-End
+        // 6. Đóng gói dữ liệu trả về cho Front-End
         return CheckinResponse.builder()
                 .id(savedSession.getId().intValue())
                 .ticketCode(savedSession.getTicketCode())

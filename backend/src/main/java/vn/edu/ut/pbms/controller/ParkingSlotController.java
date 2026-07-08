@@ -2,10 +2,14 @@ package vn.edu.ut.pbms.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vn.edu.ut.pbms.constant.ParkingSlotStatus;
+import vn.edu.ut.pbms.dto.request.ParkingSlotRequest;
 import vn.edu.ut.pbms.dto.request.SlotUpdateRequest;
+import vn.edu.ut.pbms.dto.response.ParkingSlotCreateResponse;
+import vn.edu.ut.pbms.dto.response.ParkingSlotListResponse;
 import vn.edu.ut.pbms.dto.response.ParkingSlotResponse;
 import vn.edu.ut.pbms.entity.ParkingSlot;
 import vn.edu.ut.pbms.service.ParkingSlotService;
@@ -20,13 +24,13 @@ public class ParkingSlotController {
     private final ParkingSlotService parkingSlotService;
 
     @GetMapping
-    public ResponseEntity<List<ParkingSlotResponse>> getSlots(
+    public ResponseEntity<ParkingSlotListResponse> getSlots(
             @RequestParam(required = false) Long floor_id,
             @RequestParam(required = false) ParkingSlotStatus status) {
         
         List<ParkingSlot> slots = parkingSlotService.findSlots(floor_id, status);
         
-        List<ParkingSlotResponse> response = slots.stream().map(s -> ParkingSlotResponse.builder()
+        List<ParkingSlotResponse> data = slots.stream().map(s -> ParkingSlotResponse.builder()
                 .id(s.getId())
                 // Lấy ID từ đối tượng Floor đã được map (xử lý null an toàn)
                 .floorId(s.getFloor() != null ? s.getFloor().getId() : null)
@@ -34,7 +38,12 @@ public class ParkingSlotController {
                 .status(s.getStatus() != null ? s.getStatus().name() : "UNKNOWN")
                 .build()).toList();
                 
-        return ResponseEntity.ok(response);
+        long totalAvailable = slots.stream().filter(s -> s.getStatus() == ParkingSlotStatus.AVAILABLE).count();
+                
+        return ResponseEntity.ok(ParkingSlotListResponse.builder()
+                .totalAvailable(totalAvailable)
+                .data(data)
+                .build());
     }
 
     @PatchMapping("/{id}/status")
@@ -51,5 +60,12 @@ public class ParkingSlotController {
                 .slotName(updated.getSlotName())
                 .status(updated.getStatus().name())
                 .build());
+    }
+
+    @PostMapping
+    public ResponseEntity<ParkingSlotCreateResponse> createSlot(
+            @Valid @RequestBody ParkingSlotRequest request) {
+        ParkingSlotCreateResponse response = parkingSlotService.createSlot(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 }

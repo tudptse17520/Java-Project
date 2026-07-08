@@ -35,7 +35,7 @@ public class PricingPolicyResponseDTO {
     private BigDecimal extraFeePerHour;
 
     @JsonProperty("effective_date")
-    @JsonFormat(pattern = "dd-MM-yyyy")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate effectiveDate;
 
     @JsonProperty("status")

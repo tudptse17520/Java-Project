@@ -43,16 +43,8 @@ public class PricingPolicyServiceImpl implements PricingPolicyService {
 
     @Override
     @Transactional(readOnly = true)
-    public Map<String, Object> getAllPricingPolicies(Long vehicleTypeId) {
-        List<PricingPolicy> policies;
-
-        if (vehicleTypeId != null) {
-            // Lọc theo loại xe cụ thể
-            policies = pricingPolicyCrudRepository.findByVehicleType_Id(vehicleTypeId);
-        } else {
-            // Lấy toàn bộ danh sách
-            policies = pricingPolicyCrudRepository.findAll();
-        }
+    public Map<String, Object> getAllPricingPolicies() {
+        List<PricingPolicy> policies = pricingPolicyCrudRepository.findAll();
 
         List<PricingPolicyResponseDTO> data = policies.stream()
                 .map(this::mapToResponseDTO)
@@ -60,6 +52,26 @@ public class PricingPolicyServiceImpl implements PricingPolicyService {
 
         Map<String, Object> response = new HashMap<>();
         response.put("message", MessageConstants.PRICING_POLICY_LIST_SUCCESS);
+        response.put("data", data);
+        return response;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Map<String, Object> getPricingPoliciesByVehicleTypeId(Long vehicleTypeId) {
+        // Lọc theo loại xe cụ thể
+        List<PricingPolicy> policies = pricingPolicyCrudRepository.findByVehicleType_Id(vehicleTypeId);
+
+        List<PricingPolicyResponseDTO> data = policies.stream()
+                .map(this::mapToResponseDTO)
+                .collect(Collectors.toList());
+
+        Map<String, Object> response = new HashMap<>();
+        if (data.isEmpty()) {
+            response.put("message", "Chưa có bảng giá nào cho loại phương tiện này.");
+        } else {
+            response.put("message", MessageConstants.PRICING_POLICY_LIST_SUCCESS);
+        }
         response.put("data", data);
         return response;
     }

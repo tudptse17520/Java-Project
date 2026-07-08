@@ -39,7 +39,7 @@ public class PricingPolicyRequestDTO {
 
     @JsonProperty("effective_date")
     @NotNull(message = "Ngày áp dụng không được để trống.")
-    @JsonFormat(pattern = "dd-MM-yyyy")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate effectiveDate;
 
     @JsonProperty("status")

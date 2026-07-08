@@ -42,3 +42,4 @@ public class Building {
     @OneToMany(mappedBy = "building", fetch = FetchType.LAZY)
     private List<Floor> floors;
 }
+

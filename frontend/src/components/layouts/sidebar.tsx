@@ -15,14 +15,18 @@ import { useAuthStore } from "@/stores/auth.store";
 import { getNavGroupsByRole } from "@/config/menu";
 import { type Role } from "@/constants/role";
 
-export function Sidebar() {
+interface SidebarProps {
+  role?: Role;
+}
+
+export function Sidebar({ role }: SidebarProps) {
   const pathname = usePathname();
   const { isSidebarOpen, toggleSidebar } = useAppStore();
   const { user } = useAuthStore();
 
-  const navGroups = user
-    ? getNavGroupsByRole(user.role as Role)
-    : [];
+  const activeRole = role || (user?.role as Role);
+  const navGroups = activeRole ? getNavGroupsByRole(activeRole) : [];
+
 
   return (
     <aside

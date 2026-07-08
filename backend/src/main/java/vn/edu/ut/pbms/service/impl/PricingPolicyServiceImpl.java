@@ -88,6 +88,7 @@ public class PricingPolicyServiceImpl implements PricingPolicyService {
                 .basePrice(requestDTO.getBasePrice())
                 .extraFeePerHour(requestDTO.getExtraFeePerHour())
                 .effectiveDate(effectiveDateTime)
+                .status(requestDTO.getStatus() != null ? requestDTO.getStatus() : vn.edu.ut.pbms.constant.PricingPolicyStatus.ACTIVE)
                 .build();
 
         PricingPolicy savedPolicy = pricingPolicyCrudRepository.save(pricingPolicy);
@@ -132,6 +133,9 @@ public class PricingPolicyServiceImpl implements PricingPolicyService {
         pricingPolicy.setBasePrice(requestDTO.getBasePrice());
         pricingPolicy.setExtraFeePerHour(requestDTO.getExtraFeePerHour());
         pricingPolicy.setEffectiveDate(effectiveDateTime);
+        if (requestDTO.getStatus() != null) {
+            pricingPolicy.setStatus(requestDTO.getStatus());
+        }
 
         PricingPolicy updatedPolicy = pricingPolicyCrudRepository.save(pricingPolicy);
 
@@ -197,6 +201,7 @@ public class PricingPolicyServiceImpl implements PricingPolicyService {
                 .basePrice(pricingPolicy.getBasePrice())
                 .extraFeePerHour(pricingPolicy.getExtraFeePerHour())
                 .effectiveDate(pricingPolicy.getEffectiveDate().toLocalDate())
+                .status(pricingPolicy.getStatus())
                 .build();
     }
 }

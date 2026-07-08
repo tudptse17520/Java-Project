@@ -10,12 +10,18 @@ import lombok.Setter;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
+import vn.edu.ut.pbms.constant.PricingPolicyStatus;
+
 /**
  * Entity đại diện cho bảng pricing_policy trong MySQL.
  * Chính sách giá áp dụng riêng cho từng danh mục loại xe.
  */
 @Entity
 @Table(name = "pricing_policy")
+@SQLDelete(sql = "UPDATE pricing_policy SET status = 'INACTIVE' WHERE id = ?")
+@SQLRestriction("status = 'ACTIVE'")
 @Getter
 @Setter
 @Builder
@@ -35,6 +41,11 @@ public class PricingPolicy {
 
     @Column(name = "effective_date", nullable = false)
     private LocalDateTime effectiveDate;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    @Builder.Default
+    private PricingPolicyStatus status = PricingPolicyStatus.ACTIVE;
 
     // ==================== Relationships ====================
 

@@ -11,6 +11,8 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import vn.edu.ut.pbms.constant.PricingPolicyStatus;
+
 /**
  * DTO nhận dữ liệu bảng giá từ client (Create / Update).
  * Validation annotations xử lý E1 (bỏ trống thông tin bắt buộc).
@@ -39,4 +41,7 @@ public class PricingPolicyRequestDTO {
     @NotNull(message = "Ngày áp dụng không được để trống.")
     @JsonFormat(pattern = "dd-MM-yyyy")
     private LocalDate effectiveDate;
+
+    @JsonProperty("status")
+    private PricingPolicyStatus status;
 }

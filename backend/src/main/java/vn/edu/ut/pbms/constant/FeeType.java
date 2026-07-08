@@ -7,7 +7,7 @@ package vn.edu.ut.pbms.constant;
  * Lost_Ticket_Fine = phí phạt mất vé.
  */
 public enum FeeType {
-    Parking_Fee,
-    Booking_Deposit,
-    Lost_Ticket_Fine
+    PARKING_FEE,
+    BOOKING_DEPOSIT,
+    LOST_TICKET_FINE
 }

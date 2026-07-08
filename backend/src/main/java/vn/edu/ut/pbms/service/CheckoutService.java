@@ -45,13 +45,7 @@ public interface CheckoutService {
      */
     FeeCalculationResponse processLostTicket(Long sessionId, LostTicketRequest request);
 
-    /**
-     * Tạo giao dịch thanh toán cho phiên gửi xe.
-     *
-     * @param request chứa thông tin số tiền và phương thức thanh toán
-     * @return PaymentResponse kết quả giao dịch
-     */
-    PaymentResponse createPayment(PaymentRequest request);
+
 
     /**
      * Kiểm tra điều kiện thanh toán tại cổng ra trước khi mở barrier.

@@ -41,4 +41,7 @@ public class PaymentResponseDTO {
 
     @JsonProperty("status")
     private String status;
+
+    @JsonProperty("payment_url")
+    private String paymentUrl;
 }

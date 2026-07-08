@@ -6,13 +6,14 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import vn.edu.ut.pbms.constant.FeeType;
 import vn.edu.ut.pbms.constant.PaymentStatus;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
- * Entity đại diện cho bảng payment trong SQL Server.
+ * Entity đại diện cho bảng payment trong MySQL.
  * Ghi nhận thanh toán chi phí gửi xe hoặc tiền cọc đặt chỗ.
  */
 @Entity
@@ -31,7 +32,7 @@ public class Payment {
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal amount;
 
-    @Column(name = "payment_method", nullable = false, columnDefinition = "nvarchar(50)")
+    @Column(name = "payment_method", nullable = false, length = 50)
     private String paymentMethod;
 
     @Column(name = "payment_time", nullable = false)
@@ -42,8 +43,9 @@ public class Payment {
     @Builder.Default
     private PaymentStatus status = PaymentStatus.PENDING;
 
-    @Column(name = "fee_type", nullable = false, columnDefinition = "nvarchar(50)")
-    private String feeType;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "fee_type", nullable = false, length = 50)
+    private FeeType feeType;
 
     // ==================== Relationships ====================
 

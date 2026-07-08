@@ -30,7 +30,7 @@ public class User {
     @Column(nullable = false, length = 255)
     private String password;
 
-    @Column(name = "full_name", nullable = false, columnDefinition = "nvarchar(100)")
+    @Column(name = "full_name", nullable = false, length = 100)
     private String fullName;
 
     @Column(name = "phone_number", nullable = false, unique = true, length = 20)

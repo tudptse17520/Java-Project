@@ -199,8 +199,7 @@ public class BuildingServiceImpl implements BuildingService {
         Building building = buildingRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy tòa nhà với ID: " + id));
 
-        boolean isDuplicate = buildingRepository.findAll().stream()
-                .anyMatch(b -> b.getBuildingName().equalsIgnoreCase(requestDTO.getBuildingName()) && !b.getId().equals(id));
+        boolean isDuplicate = buildingRepository.existsByBuildingNameAndIdNot(requestDTO.getBuildingName(), id);
         if (isDuplicate) {
             throw new ConflictException("Tòa nhà '" + requestDTO.getBuildingName() + "' đã tồn tại trong hệ thống.");
         }

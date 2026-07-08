@@ -12,5 +12,7 @@ import vn.edu.ut.pbms.entity.Building;
 public interface BuildingRepository extends JpaRepository<Building, Long> {
 
     boolean existsByBuildingName(String buildingName);
+
+    boolean existsByBuildingNameAndIdNot(String buildingName, Long id);
 }
 

@@ -81,7 +81,7 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * Handle authentication errors (sai mật khẩu, tài khoản bị vô hiệu hóa).
+     * Handle authentication errors (Wrong password, account is inactive).
      * Returns HTTP 401 Unauthorized.
      */
     @ExceptionHandler(AuthenticationException.class)

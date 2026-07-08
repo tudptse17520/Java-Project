@@ -7,10 +7,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vn.edu.ut.pbms.dto.request.CheckinRequest;
 import vn.edu.ut.pbms.dto.response.CheckinResponse;
+import vn.edu.ut.pbms.dto.response.ParkingSessionListResponseDTO;
 import vn.edu.ut.pbms.service.ParkingSessionService;
 
 /**
- * Controller for Parking Session management.
+ * REST Controller for Parking Sessions management.
+ * Endpoint base: /api/v1/sessions
  */
 @RestController
 @RequestMapping("/api/v1/sessions")
@@ -21,10 +23,29 @@ public class ParkingSessionController {
     private final ParkingSessionService parkingSessionService;
 
     /**
-     * Endpoint to check in a vehicle.
+     * API: Lấy danh sách lượt gửi xe (Parking Sessions) với bộ lọc động.
+     * Staff dùng để tìm xe lúc ra, Manager dùng để "Theo dõi xe quá giờ"[cite: 139].
      *
-     * @param request the check-in details
-     * @return response with created status and details
+     * @param plate    (Tùy chọn) Tìm kiếm chính xác theo biển số [cite: 142]
+     * @param status   (Tùy chọn) Trạng thái lượt gửi: IN_PROGRESS (đang trong bãi) / COMPLETED (đã ra) [cite: 142]
+     * @param fromDate (Tùy chọn) Lọc thời gian vào bãi từ ngày... [cite: 142]
+     * @return HTTP 200 với total_items và mảng data chi tiết [cite: 144]
+     */
+    @GetMapping
+    public ResponseEntity<ParkingSessionListResponseDTO> getParkingSessions(
+            @RequestParam(required = false) String plate,
+            @RequestParam(required = false) String status,
+            @RequestParam(name = "from_date", required = false) String fromDate) {
+
+        ParkingSessionListResponseDTO response = parkingSessionService.getParkingSessions(plate, status, fromDate);
+        return ResponseEntity.ok(response);
+    }
+
+    /**
+     * API: Thực hiện Check-in cho xe vào bãi[cite: 74, 75].
+     *
+     * @param request Thông tin chi tiết lượt vào bãi (Biển số, ID xe nếu có,...) [cite: 78]
+     * @return HTTP 201 CREATED với thông tin vé điện tử vừa khởi tạo [cite: 80]
      */
     @PostMapping("/check-in")
     public ResponseEntity<CheckinResponse> checkInVehicle(@Valid @RequestBody CheckinRequest request) {

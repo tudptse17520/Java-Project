@@ -94,4 +94,34 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
     }
+
+    /**
+     * Handle license plate mismatch errors.
+     * Returns HTTP 409 Conflict.
+     */
+    @ExceptionHandler(LicensePlateMismatchException.class)
+    public ResponseEntity<ErrorResponse> handleLicensePlateMismatchException(LicensePlateMismatchException ex) {
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .status(HttpStatus.CONFLICT.value())
+                .error("Conflict")
+                .message(ex.getMessage())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
+    }
+
+    /**
+     * Handle unpaid exit errors.
+     * Returns HTTP 402 Payment Required.
+     */
+    @ExceptionHandler(UnpaidExitException.class)
+    public ResponseEntity<ErrorResponse> handleUnpaidExitException(UnpaidExitException ex) {
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .status(HttpStatus.PAYMENT_REQUIRED.value())
+                .error("Payment Required")
+                .message(ex.getMessage())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.PAYMENT_REQUIRED).body(errorResponse);
+    }
 }

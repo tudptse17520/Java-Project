@@ -79,4 +79,19 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
+
+    /**
+     * Handle authentication errors (Wrong password, account is inactive).
+     * Returns HTTP 401 Unauthorized.
+     */
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<ErrorResponse> handleAuthenticationException(AuthenticationException ex) {
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .status(HttpStatus.UNAUTHORIZED.value())
+                .error("Unauthorized")
+                .message(ex.getMessage())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+    }
 }

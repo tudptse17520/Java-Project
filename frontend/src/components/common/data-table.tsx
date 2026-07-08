@@ -141,30 +141,30 @@ export function DataTable<TData, TValue>({
       </div>
 
       {/* Pagination Info */}
-      {table.getPageCount() > 1 && (
-        <div className="flex items-center justify-between text-sm text-muted-foreground">
-          <span>
-            Trang {table.getState().pagination.pageIndex + 1} /{" "}
-            {table.getPageCount()}
-          </span>
-          <div className="flex gap-2">
-            <button
-              className="rounded border px-3 py-1 hover:bg-muted disabled:opacity-50"
-              onClick={() => table.previousPage()}
-              disabled={!table.getCanPreviousPage()}
-            >
-              Trước
-            </button>
-            <button
-              className="rounded border px-3 py-1 hover:bg-muted disabled:opacity-50"
-              onClick={() => table.nextPage()}
-              disabled={!table.getCanNextPage()}
-            >
-              Sau
-            </button>
-          </div>
+      <div className="flex items-center justify-between text-sm text-muted-foreground border-t pt-4 px-1">
+        <span>
+          Trang {table.getPageCount() > 0 ? table.getState().pagination.pageIndex + 1 : 0} /{" "}
+          {table.getPageCount()}
+        </span>
+        <div className="flex gap-2">
+          <button
+            type="button"
+            className="rounded border px-3 py-1 hover:bg-muted disabled:opacity-50 transition-colors"
+            onClick={() => table.previousPage()}
+            disabled={!table.getCanPreviousPage() || isLoading}
+          >
+            Trước
+          </button>
+          <button
+            type="button"
+            className="rounded border px-3 py-1 hover:bg-muted disabled:opacity-50 transition-colors"
+            onClick={() => table.nextPage()}
+            disabled={!table.getCanNextPage() || isLoading}
+          >
+            Sau
+          </button>
         </div>
-      )}
+      </div>
     </div>
   );
 }

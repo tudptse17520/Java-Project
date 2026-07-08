@@ -79,4 +79,49 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
+
+    /**
+     * Handle authentication errors (Wrong password, account is inactive).
+     * Returns HTTP 401 Unauthorized.
+     */
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<ErrorResponse> handleAuthenticationException(AuthenticationException ex) {
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .status(HttpStatus.UNAUTHORIZED.value())
+                .error("Unauthorized")
+                .message(ex.getMessage())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+    }
+
+    /**
+     * Handle license plate mismatch errors.
+     * Returns HTTP 409 Conflict.
+     */
+    @ExceptionHandler(LicensePlateMismatchException.class)
+    public ResponseEntity<ErrorResponse> handleLicensePlateMismatchException(LicensePlateMismatchException ex) {
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .status(HttpStatus.CONFLICT.value())
+                .error("Conflict")
+                .message(ex.getMessage())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
+    }
+
+    /**
+     * Handle unpaid exit errors.
+     * Returns HTTP 402 Payment Required.
+     */
+    @ExceptionHandler(UnpaidExitException.class)
+    public ResponseEntity<ErrorResponse> handleUnpaidExitException(UnpaidExitException ex) {
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .status(HttpStatus.PAYMENT_REQUIRED.value())
+                .error("Payment Required")
+                .message(ex.getMessage())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.PAYMENT_REQUIRED).body(errorResponse);
+    }
 }

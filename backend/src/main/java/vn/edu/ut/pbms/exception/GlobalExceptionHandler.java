@@ -6,6 +6,9 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 /**
  * Global exception handler that catches all custom exceptions
  * and returns standardized JSON error responses.
@@ -138,5 +141,20 @@ public class GlobalExceptionHandler {
                 .build();
 
         return ResponseEntity.status(HttpStatus.PAYMENT_REQUIRED).body(errorResponse);
+    }
+
+    /**
+     * Handle invalid state transition errors (e.g., updating a non-PENDING payment).
+     * Returns HTTP 400 Bad Request with error_code.
+     */
+    @ExceptionHandler(InvalidStateTransitionException.class)
+    public ResponseEntity<Map<String, Object>> handleInvalidStateTransitionException(InvalidStateTransitionException ex) {
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("status", HttpStatus.BAD_REQUEST.value());
+        body.put("error", "Bad Request");
+        body.put("error_code", ex.getErrorCode());
+        body.put("message", ex.getMessage());
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
     }
 }

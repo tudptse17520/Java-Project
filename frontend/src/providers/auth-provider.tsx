@@ -23,12 +23,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
     if (token) {
       try {
         // Decode JWT payload (base64) để lấy thông tin user
-        // Placeholder: sẽ triển khai chi tiết khi có API
+        // JWT chỉ chứa: sub (username), role, iat, exp
         const payload = JSON.parse(atob(token.split(".")[1]));
         setUser({
-          id: payload.sub || "",
-          email: payload.email || "",
-          fullName: payload.fullName || "",
+          username: payload.sub || "",
           role: payload.role || "USER",
         });
       } catch {

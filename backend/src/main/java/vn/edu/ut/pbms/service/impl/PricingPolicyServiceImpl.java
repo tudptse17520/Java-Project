@@ -43,16 +43,8 @@ public class PricingPolicyServiceImpl implements PricingPolicyService {
 
     @Override
     @Transactional(readOnly = true)
-    public Map<String, Object> getAllPricingPolicies(Long vehicleTypeId) {
-        List<PricingPolicy> policies;
-
-        if (vehicleTypeId != null) {
-            // Lọc theo loại xe cụ thể
-            policies = pricingPolicyCrudRepository.findByVehicleType_Id(vehicleTypeId);
-        } else {
-            // Lấy toàn bộ danh sách
-            policies = pricingPolicyCrudRepository.findAll();
-        }
+    public Map<String, Object> getAllPricingPolicies() {
+        List<PricingPolicy> policies = pricingPolicyCrudRepository.findAll();
 
         List<PricingPolicyResponseDTO> data = policies.stream()
                 .map(this::mapToResponseDTO)
@@ -60,6 +52,26 @@ public class PricingPolicyServiceImpl implements PricingPolicyService {
 
         Map<String, Object> response = new HashMap<>();
         response.put("message", MessageConstants.PRICING_POLICY_LIST_SUCCESS);
+        response.put("data", data);
+        return response;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Map<String, Object> getPricingPoliciesByVehicleTypeId(Long vehicleTypeId) {
+        // Lọc theo loại xe cụ thể
+        List<PricingPolicy> policies = pricingPolicyCrudRepository.findByVehicleType_Id(vehicleTypeId);
+
+        List<PricingPolicyResponseDTO> data = policies.stream()
+                .map(this::mapToResponseDTO)
+                .collect(Collectors.toList());
+
+        Map<String, Object> response = new HashMap<>();
+        if (data.isEmpty()) {
+            response.put("message", "Chưa có bảng giá nào cho loại phương tiện này.");
+        } else {
+            response.put("message", MessageConstants.PRICING_POLICY_LIST_SUCCESS);
+        }
         response.put("data", data);
         return response;
     }
@@ -88,6 +100,7 @@ public class PricingPolicyServiceImpl implements PricingPolicyService {
                 .basePrice(requestDTO.getBasePrice())
                 .extraFeePerHour(requestDTO.getExtraFeePerHour())
                 .effectiveDate(effectiveDateTime)
+                .status(requestDTO.getStatus() != null ? requestDTO.getStatus() : vn.edu.ut.pbms.constant.PricingPolicyStatus.ACTIVE)
                 .build();
 
         PricingPolicy savedPolicy = pricingPolicyCrudRepository.save(pricingPolicy);
@@ -109,7 +122,7 @@ public class PricingPolicyServiceImpl implements PricingPolicyService {
                         MessageConstants.PRICING_POLICY_NOT_FOUND + id));
 
         // E3: Kiểm tra ràng buộc dữ liệu - không cập nhật nếu loại xe của bảng giá này
-        // đang có ParkingSession IN_PROGRESS hoặc COMPLETED
+        // đang có ParkingSession IN_PROGRESS
         checkParkingSessionConstraint(pricingPolicy.getVehicleType().getId(),
                 MessageConstants.PRICING_POLICY_IN_USE_UPDATE);
 
@@ -132,6 +145,9 @@ public class PricingPolicyServiceImpl implements PricingPolicyService {
         pricingPolicy.setBasePrice(requestDTO.getBasePrice());
         pricingPolicy.setExtraFeePerHour(requestDTO.getExtraFeePerHour());
         pricingPolicy.setEffectiveDate(effectiveDateTime);
+        if (requestDTO.getStatus() != null) {
+            pricingPolicy.setStatus(requestDTO.getStatus());
+        }
 
         PricingPolicy updatedPolicy = pricingPolicyCrudRepository.save(pricingPolicy);
 
@@ -152,7 +168,7 @@ public class PricingPolicyServiceImpl implements PricingPolicyService {
                         MessageConstants.PRICING_POLICY_NOT_FOUND + id));
 
         // E3: Kiểm tra ràng buộc dữ liệu - không xóa nếu loại xe của bảng giá này
-        // đang có ParkingSession IN_PROGRESS hoặc COMPLETED
+        // đang có ParkingSession IN_PROGRESS
         checkParkingSessionConstraint(pricingPolicy.getVehicleType().getId(),
                 MessageConstants.PRICING_POLICY_IN_USE_DELETE);
 
@@ -168,9 +184,9 @@ public class PricingPolicyServiceImpl implements PricingPolicyService {
     // ==================== Helper ====================
 
     /**
-     * Kiểm tra ràng buộc E3: xem có ParkingSession nào đang IN_PROGRESS hoặc COMPLETED
-     * cho loại xe của bảng giá này không.
-     * Sử dụng ParkingSessionRepository có sẵn (không sửa code cũ).
+     * Kiểm tra ràng buộc E3: xem có ParkingSession nào đang IN_PROGRESS
+     * cho loại xe của bảng giá này không. (Đã nới lỏng: bỏ qua COMPLETED)
+     * Sử dụng ParkingSessionRepository có sẵn.
      *
      * @param vehicleTypeId mã loại xe cần kiểm tra
      * @param errorMessage  thông báo lỗi nếu vi phạm ràng buộc
@@ -178,10 +194,8 @@ public class PricingPolicyServiceImpl implements PricingPolicyService {
     private void checkParkingSessionConstraint(Long vehicleTypeId, String errorMessage) {
         boolean hasInProgressSession = parkingSessionRepository
                 .existsByVehicle_VehicleType_IdAndStatus(vehicleTypeId, ParkingSessionStatus.IN_PROGRESS);
-        boolean hasCompletedSession = parkingSessionRepository
-                .existsByVehicle_VehicleType_IdAndStatus(vehicleTypeId, ParkingSessionStatus.COMPLETED);
 
-        if (hasInProgressSession || hasCompletedSession) {
+        if (hasInProgressSession) {
             throw new BusinessRuleViolationException(errorMessage);
         }
     }
@@ -197,6 +211,7 @@ public class PricingPolicyServiceImpl implements PricingPolicyService {
                 .basePrice(pricingPolicy.getBasePrice())
                 .extraFeePerHour(pricingPolicy.getExtraFeePerHour())
                 .effectiveDate(pricingPolicy.getEffectiveDate().toLocalDate())
+                .status(pricingPolicy.getStatus())
                 .build();
     }
 }

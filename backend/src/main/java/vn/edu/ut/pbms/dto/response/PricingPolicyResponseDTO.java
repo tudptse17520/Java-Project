@@ -10,6 +10,8 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import vn.edu.ut.pbms.constant.PricingPolicyStatus;
+
 /**
  * DTO trả về thông tin bảng giá cho client trong API responses.
  * Cấu trúc khớp với API Contract Phase 1 – Section 4.1.B.
@@ -35,4 +37,7 @@ public class PricingPolicyResponseDTO {
     @JsonProperty("effective_date")
     @JsonFormat(pattern = "dd-MM-yyyy")
     private LocalDate effectiveDate;
+
+    @JsonProperty("status")
+    private PricingPolicyStatus status;
 }

@@ -15,12 +15,10 @@ export interface PlateValidationRequest {
 }
 
 export interface OverrideCheckoutRequest {
-  staff_id: number;
   override_reason: string;
 }
 
 export interface LostTicketRequest {
-  staff_id: number;
   note: string;
 }
 

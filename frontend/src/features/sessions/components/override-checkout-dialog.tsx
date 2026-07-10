@@ -8,7 +8,6 @@ import {
   OverrideCheckoutFormValues,
 } from "../schemas/checkout.schema";
 import { useCheckoutActions } from "../hooks/use-checkout-actions";
-import { useAuthStore } from "@/stores/auth.store";
 import { CHECKOUT_MESSAGES } from "../constants/session.constants";
 import { FormContainer, FormHeader, FormFields, FormActions } from "@/components/common/form-container";
 
@@ -25,7 +24,6 @@ export function OverrideCheckoutDialog({
   onClose,
   onSuccess,
 }: OverrideCheckoutDialogProps) {
-  const { user } = useAuthStore();
   const { overrideCheckoutMutation } = useCheckoutActions();
 
   const { register, handleSubmit, formState: { errors } } = useForm<OverrideCheckoutFormValues>({
@@ -34,13 +32,10 @@ export function OverrideCheckoutDialog({
   });
 
   const onSubmit = (values: OverrideCheckoutFormValues) => {
-    if (!user?.id) return;
-    
     overrideCheckoutMutation.mutate(
       {
         sessionId,
         request: {
-          staff_id: Number(user.id),
           override_reason: values.override_reason,
         },
       },

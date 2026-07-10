@@ -8,7 +8,6 @@ import {
   LostTicketFormValues,
 } from "../schemas/checkout.schema";
 import { useCheckoutActions } from "../hooks/use-checkout-actions";
-import { useAuthStore } from "@/stores/auth.store";
 import { CHECKOUT_MESSAGES } from "../constants/session.constants";
 import { FormContainer, FormHeader, FormFields, FormActions } from "@/components/common/form-container";
 
@@ -25,7 +24,6 @@ export function LostTicketDialog({
   onClose,
   onSuccess,
 }: LostTicketDialogProps) {
-  const { user } = useAuthStore();
   const { lostTicketMutation } = useCheckoutActions();
 
   const { register, handleSubmit, formState: { errors } } = useForm<LostTicketFormValues>({
@@ -34,13 +32,10 @@ export function LostTicketDialog({
   });
 
   const onSubmit = (values: LostTicketFormValues) => {
-    if (!user?.id) return;
-    
     lostTicketMutation.mutate(
       {
         sessionId,
         request: {
-          staff_id: Number(user.id),
           note: values.note,
         },
       },

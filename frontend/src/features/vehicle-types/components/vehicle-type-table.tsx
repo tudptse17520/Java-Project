@@ -52,6 +52,18 @@ export function VehicleTypeTable({
         },
       },
       {
+        accessorKey: "active_sessions_count",
+        header: "Đang đỗ (xe)",
+        cell: ({ row }) => {
+          const count = row.original.active_sessions_count || 0;
+          return (
+            <span className={cn("font-medium", count > 0 ? "text-blue-500" : "text-muted-foreground")}>
+              {count}
+            </span>
+          );
+        },
+      },
+      {
         accessorKey: "status",
         header: "Trạng thái",
         cell: ({ row }) => {

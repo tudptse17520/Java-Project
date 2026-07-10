@@ -5,6 +5,7 @@ export interface VehicleType {
   type_name: string;
   description: string | null;
   status: VehicleTypeStatus;
+  active_sessions_count?: number;
 }
 
 export interface VehicleTypeRequest {

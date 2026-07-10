@@ -11,12 +11,19 @@ import java.util.Map;
 public interface PricingPolicyService {
 
     /**
-     * Lấy danh sách tất cả bảng giá, hoặc lọc theo vehicle_type_id nếu có truyền.
+     * Lấy danh sách tất cả bảng giá của toàn bộ hệ thống.
      *
-     * @param vehicleTypeId (tùy chọn) mã loại xe để lọc
      * @return Map chứa "message" và "data" (danh sách PricingPolicyResponseDTO)
      */
-    Map<String, Object> getAllPricingPolicies(Long vehicleTypeId);
+    Map<String, Object> getAllPricingPolicies();
+
+    /**
+     * Lấy danh sách bảng giá cụ thể theo loại xe.
+     *
+     * @param vehicleTypeId mã loại xe cần lọc
+     * @return Map chứa "message" và "data"
+     */
+    Map<String, Object> getPricingPoliciesByVehicleTypeId(Long vehicleTypeId);
 
     /**
      * Thêm mới một bảng giá.

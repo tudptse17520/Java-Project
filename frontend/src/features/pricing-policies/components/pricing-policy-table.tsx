@@ -11,6 +11,7 @@ import { DataTable } from "@/components/common/data-table";
 import { PricingPolicy } from "@/features/pricing-policies/types/pricing-policy.type";
 import { Button } from "@/components/ui/button";
 import { Edit2, Trash2 } from "lucide-react";
+import { formatCurrency } from "@/utils/format-currency";
 
 interface PricingPolicyTableProps {
   data: PricingPolicy[];
@@ -19,15 +20,6 @@ interface PricingPolicyTableProps {
   onDelete: (policy: PricingPolicy) => void;
 }
 
-/**
- * Format số tiền sang định dạng VND
- */
-function formatCurrency(value: number): string {
-  return new Intl.NumberFormat("vi-VN", {
-    style: "currency",
-    currency: "VND",
-  }).format(value);
-}
 
 export function PricingPolicyTable({
   data,
@@ -72,7 +64,7 @@ export function PricingPolicyTable({
         accessorKey: "effective_date",
         header: "Ngày hiệu lực",
         cell: ({ row }) => (
-          <span>{row.original.effective_date}</span>
+          <span>{row.original.effective_date.replace(/-/g, "/")}</span>
         ),
       },
       {

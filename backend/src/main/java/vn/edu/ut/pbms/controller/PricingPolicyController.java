@@ -42,16 +42,27 @@ public class PricingPolicyController {
     // ==================== GET - Lấy danh sách / Tìm kiếm ====================
 
     /**
-     * Lấy danh sách bảng giá, có thể lọc theo vehicle_type_id (tùy chọn).
-     * Staff gọi để tính tiền, Manager gọi để xem danh sách.
+     * Lấy danh sách toàn bộ bảng giá trong hệ thống.
      *
-     * @param vehicleTypeId (tùy chọn) mã loại xe để lọc
      * @return HTTP 200 kèm danh sách bảng giá
      */
     @GetMapping
-    public ResponseEntity<Map<String, Object>> getAllPricingPolicies(
-            @RequestParam(value = "vehicle_type_id", required = false) Long vehicleTypeId) {
-        Map<String, Object> response = pricingPolicyService.getAllPricingPolicies(vehicleTypeId);
+    public ResponseEntity<Map<String, Object>> getAllPricingPolicies() {
+        Map<String, Object> response = pricingPolicyService.getAllPricingPolicies();
+        return ResponseEntity.ok(response);
+    }
+
+    /**
+     * Lấy danh sách bảng giá lọc theo vehicle_type_id.
+     * Trả về thông báo nếu loại xe chưa có bảng giá.
+     *
+     * @param vehicleTypeId mã loại xe để lọc
+     * @return HTTP 200 kèm danh sách bảng giá
+     */
+    @GetMapping("/vehicle-type/{vehicleTypeId}")
+    public ResponseEntity<Map<String, Object>> getPricingPoliciesByVehicleTypeId(
+            @PathVariable Long vehicleTypeId) {
+        Map<String, Object> response = pricingPolicyService.getPricingPoliciesByVehicleTypeId(vehicleTypeId);
         return ResponseEntity.ok(response);
     }
 

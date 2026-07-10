@@ -12,6 +12,7 @@ import { useAuthStore } from "@/stores/auth.store";
 import { useThemeStore } from "@/stores/theme.store";
 import { Button } from "@/components/ui/button";
 import { Breadcrumbs } from "@/components/layouts/breadcrumbs";
+import { removeCookie } from "@/utils/storage";
 
 export function Header() {
   const { toggleSidebar } = useAppStore();
@@ -20,6 +21,12 @@ export function Header() {
 
   const toggleTheme = () => {
     setTheme(theme === "dark" ? "light" : "dark");
+  };
+
+  const handleLogout = () => {
+    removeCookie("access_token");
+    useAuthStore.getState().clearUser();
+    window.location.href = "/login";
   };
 
   return (
@@ -75,8 +82,8 @@ export function Header() {
           </div>
         )}
 
-        {/* Logout placeholder */}
-        <Button variant="ghost" size="icon" className="h-8 w-8">
+        {/* Logout */}
+        <Button variant="ghost" size="icon" className="h-8 w-8" onClick={handleLogout}>
           <LogOut className="h-4 w-4" />
         </Button>
       </div>

@@ -64,13 +64,13 @@ export function Header() {
                 className="h-full w-full object-cover"
                 onError={(e) => {
                   (e.target as HTMLImageElement).src = `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(
-                    user.fullName || user.email || "User"
+                    user.fullName || user.username || "User"
                   )}`;
                 }}
               />
             </div>
             <span className="hidden text-sm font-medium sm:inline">
-              {user.fullName || user.email}
+              {user.fullName || user.username}
             </span>
           </div>
         )}

@@ -11,9 +11,33 @@ import type {
     OccupancyRateReport,
     PeakHourReport,
     VehicleEntryExitReport,
+    DashboardReport,
 } from "@/features/reports/types/report.type";
 
-const BASE_PATH = "/reports";
+const BASE_PATH = "/v1/reports";
+
+/**
+ * Dashboard Report Overview
+ */
+export const getDashboardReport = async (
+    filter?: ReportFilter
+): Promise<DashboardReport> => {
+    const params: Record<string, string | number> = {};
+
+    if (filter?.start_date) params.start_date = filter.start_date;
+    if (filter?.end_date) params.end_date = filter.end_date;
+    if (filter?.vehicle_type_id)
+        params.vehicle_type_id = filter.vehicle_type_id;
+
+    const response = await axiosClient.get<DashboardReport>(
+        `${BASE_PATH}`,
+        {
+            params,
+        }
+    );
+
+    return response.data;
+};
 
 /**
  * Revenue Report
@@ -52,7 +76,7 @@ export const getOccupancyRateReport = async (
         params.vehicle_type_id = filter.vehicle_type_id;
 
     const response = await axiosClient.get<OccupancyRateReport>(
-        `${BASE_PATH}/occupancy-rate`,
+        `${BASE_PATH}/occupancy`,
         {
             params,
         }
@@ -98,7 +122,7 @@ export const getVehicleEntryExitReport = async (
         params.vehicle_type_id = filter.vehicle_type_id;
 
     const response = await axiosClient.get<VehicleEntryExitReport>(
-        `${BASE_PATH}/vehicle-entry-exit`,
+        `${BASE_PATH}/vehicle-flow`,
         {
             params,
         }

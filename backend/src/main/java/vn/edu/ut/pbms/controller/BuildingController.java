@@ -63,9 +63,10 @@ public class BuildingController {
      */
     @GetMapping
     public ResponseEntity<BuildingListResponseDTO> getBuildings(
+            @RequestParam(required = false) String keyword,
             @RequestParam(required = false) BuildingStatus status) {
-
-        BuildingListResponseDTO response = buildingService.getBuildings(status);
+        
+        BuildingListResponseDTO response = buildingService.getBuildings(keyword, status);
         return ResponseEntity.ok(response);
     }
 

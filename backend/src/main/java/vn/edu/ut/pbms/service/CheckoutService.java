@@ -3,7 +3,7 @@ package vn.edu.ut.pbms.service;
 import vn.edu.ut.pbms.dto.request.*;
 import vn.edu.ut.pbms.dto.response.CheckOutResponse;
 import vn.edu.ut.pbms.dto.response.FeeCalculationResponse;
-import vn.edu.ut.pbms.dto.response.PaymentResponse;
+
 
 /**
  * Interface định nghĩa các nghiệp vụ xử lý xe ra bãi (Check-out).

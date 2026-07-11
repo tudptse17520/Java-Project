@@ -27,7 +27,7 @@ export function SlotFilter({
         <option value="">Tất cả tầng</option>
         {floors.map((floor) => (
           <option key={floor.id} value={floor.id}>
-            {floor.floor_name} - {floor.building_name}
+            {floor.floorName} - {floor.buildingName}
           </option>
         ))}
       </select>

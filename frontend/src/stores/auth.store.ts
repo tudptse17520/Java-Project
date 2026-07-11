@@ -8,10 +8,12 @@ import { create } from "zustand";
 import type { Role } from "@/constants/role";
 
 export interface AuthUser {
-  id: string;
-  email: string;
-  fullName: string;
+  username: string;
   role: Role | string;
+  // TODO: Các trường sau cần API GET /api/v1/auth/me để populate đầy đủ
+  id?: number;
+  fullName?: string;
+  phoneNumber?: string;
 }
 
 interface AuthState {

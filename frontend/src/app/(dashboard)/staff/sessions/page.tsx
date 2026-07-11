@@ -1,8 +1,57 @@
-﻿export default function Page() {
+// ---------------------------------------------
+// Parking Sessions Management Page
+// Trang quản lý và tra cứu lượt gửi xe cho Staff
+// Route: /staff/sessions
+// ---------------------------------------------
+
+"use client";
+
+import { useState } from "react";
+import { PageHeader } from "@/components/common/page-header";
+import { PageContainer } from "@/components/common/page-container";
+import { Toolbar } from "@/components/common/toolbar";
+import { SessionFilter } from "@/features/sessions/components/session-filter";
+import { SessionTable } from "@/features/sessions/components/session-table";
+import { useSessions } from "@/features/sessions/hooks/use-sessions";
+
+export default function StaffSessionsPage() {
+  const [filterParams, setFilterParams] = useState({
+    plate: "",
+    status: "ALL",
+    from_date: "",
+  });
+
+  const { data, isLoading, isError } = useSessions(filterParams);
+
+  const handleFilterChange = (key: string, value: string) => {
+    setFilterParams((prev) => ({ ...prev, [key]: value }));
+  };
+
   return (
-    <div>
-      <h1 className="text-2xl font-bold">Tra cuu luot gui</h1>
-      <p className="mt-2 text-muted-foreground">Trang dang duoc phat trien.</p>
-    </div>
+    <PageContainer>
+      {/* Header */}
+      <PageHeader
+        title="Quản Lý Lượt Gửi Xe"
+        description="Theo dõi và tra cứu danh sách các xe đang đỗ hoặc đã rời bãi."
+      />
+
+      {/* Bộ lọc */}
+      <Toolbar>
+        <SessionFilter
+          plate={filterParams.plate}
+          status={filterParams.status}
+          fromDate={filterParams.from_date}
+          onPlateChange={(val) => handleFilterChange("plate", val)}
+          onStatusChange={(val) => handleFilterChange("status", val)}
+          onFromDateChange={(val) => handleFilterChange("from_date", val)}
+        />
+      </Toolbar>
+
+      {/* Bảng dữ liệu */}
+      <SessionTable
+        sessions={data?.data || []}
+        isLoading={isLoading}
+      />
+    </PageContainer>
   );
 }

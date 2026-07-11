@@ -1,6 +1,8 @@
 import { PageContainer } from "@/components/common/page-container";
 import { PageHeader } from "@/components/common/page-header";
 import { Toolbar } from "@/components/common/toolbar";
+import { RevenueChart } from "@/features/reports/components/revenue-chart";
+import { OccupancyChart } from "@/features/reports/components/occupancy-chart";
 
 export default function ReportsDashboardPage() {
     return (
@@ -15,10 +17,9 @@ export default function ReportsDashboardPage() {
                 </div>
             </Toolbar>
             
-            <div className="mt-6 space-y-6">
-                <div className="text-center p-10 border border-dashed rounded-lg">
-                    <p className="text-muted-foreground">Khu vực hiển thị các biểu đồ (Đang phát triển)</p>
-                </div>
+            <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+                <RevenueChart />
+                <OccupancyChart />
             </div>
         </PageContainer>
     );

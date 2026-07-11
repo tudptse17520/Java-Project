@@ -36,7 +36,6 @@ export function BookingModal({
     reset,
     formState: { errors },
   } = useForm<BookingFormValues>({
-    // @ts-expect-error: Zod coerce number with refine causes Resolver type mismatch in RHF
     resolver: zodResolver(bookingFormSchema),
     defaultValues: {
       vehicleId: 0,
@@ -80,7 +79,7 @@ export function BookingModal({
           <span className="sr-only">Close</span>
         </button>
 
-        <FormContainer onSubmit={handleSubmit(onSubmit as any)}>
+        <FormContainer onSubmit={handleSubmit(onSubmit)}>
           <FormHeader
             title="Tạo mới đặt chỗ"
             description="Đặt trước vị trí đỗ xe để được giữ chỗ."
@@ -99,7 +98,7 @@ export function BookingModal({
                   "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
                   errors.vehicleId && "border-destructive focus-visible:ring-destructive"
                 )}
-                {...register("vehicleId")}
+                {...register("vehicleId", { valueAsNumber: true })}
               />
               {errors.vehicleId && (
                 <p className="text-sm text-destructive">
@@ -120,7 +119,7 @@ export function BookingModal({
                   "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
                   errors.parkingSlotId && "border-destructive focus-visible:ring-destructive"
                 )}
-                {...register("parkingSlotId")}
+                {...register("parkingSlotId", { valueAsNumber: true })}
               />
               {errors.parkingSlotId && (
                 <p className="text-sm text-destructive">

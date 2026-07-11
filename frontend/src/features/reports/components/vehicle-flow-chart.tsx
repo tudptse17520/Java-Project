@@ -4,7 +4,8 @@ import { LoadingSpinner } from "@/components/common/loading-spinner";
 import { EmptyState } from "@/components/common/empty-state";
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, Legend } from "recharts";
 import { Activity } from "lucide-react";
-import type { ReportFilter } from "../types/report.type";
+import { Button } from "@/components/ui/button";
+import type { ReportFilter, ReportDetail } from "../types/report.type";
 
 interface VehicleFlowChartProps {
   filter?: ReportFilter;
@@ -38,8 +39,11 @@ export function VehicleFlowChart({ filter }: VehicleFlowChartProps) {
              icon={Activity}
              title="Lỗi tải dữ liệu"
              description="Không thể tải thống kê lưu lượng xe lúc này."
-             actionLabel="Thử lại"
-             onAction={() => window.location.reload()}
+             action={
+               <Button variant="outline" onClick={() => window.location.reload()}>
+                 Thử lại
+               </Button>
+             }
           />
         </CardContent>
       </Card>
@@ -47,7 +51,7 @@ export function VehicleFlowChart({ filter }: VehicleFlowChartProps) {
   }
 
   // Assuming details has { name/date, entries, exits }
-  const chartData = data.details?.length > 0 ? data.details.map((d: any) => ({
+  const chartData = data.details?.length > 0 ? data.details.map((d: ReportDetail) => ({
     name: d.name || d.date || "Unknown",
     entries: d.entries || d.vao || 0,
     exits: d.exits || d.ra || 0,

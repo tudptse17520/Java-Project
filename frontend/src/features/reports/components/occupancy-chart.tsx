@@ -4,6 +4,7 @@ import { LoadingSpinner } from "@/components/common/loading-spinner";
 import { EmptyState } from "@/components/common/empty-state";
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Legend } from "recharts";
 import { Layers } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import type { ReportFilter } from "../types/report.type";
 
 interface OccupancyChartProps {
@@ -38,8 +39,11 @@ export function OccupancyChart({ filter }: OccupancyChartProps) {
              icon={Layers}
              title="Lỗi tải dữ liệu"
              description="Không thể tải thống kê tỷ lệ lấp đầy lúc này."
-             actionLabel="Thử lại"
-             onAction={() => window.location.reload()}
+             action={
+               <Button variant="outline" onClick={() => window.location.reload()}>
+                 Thử lại
+               </Button>
+             }
           />
         </CardContent>
       </Card>
@@ -80,7 +84,7 @@ export function OccupancyChart({ filter }: OccupancyChartProps) {
                   <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                 ))}
               </Pie>
-              <Tooltip formatter={(value: number) => [`${value.toFixed(1)}%`, "Tỷ lệ"]} />
+              <Tooltip formatter={(value: number | string | readonly (number | string)[] | undefined) => [`${Number(value || 0).toFixed(1)}%`, "Tỷ lệ"]} />
               <Legend verticalAlign="bottom" height={36} />
             </PieChart>
           </ResponsiveContainer>

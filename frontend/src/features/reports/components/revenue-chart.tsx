@@ -5,7 +5,8 @@ import { LoadingSpinner } from "@/components/common/loading-spinner";
 import { EmptyState } from "@/components/common/empty-state";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
 import { BarChart3 } from "lucide-react";
-import type { ReportFilter } from "../types/report.type";
+import { Button } from "@/components/ui/button";
+import type { ReportFilter, ReportDetail } from "../types/report.type";
 
 interface RevenueChartProps {
   filter?: ReportFilter;
@@ -39,15 +40,18 @@ export function RevenueChart({ filter }: RevenueChartProps) {
              icon={BarChart3}
              title="Lỗi tải dữ liệu"
              description="Không thể tải dữ liệu doanh thu lúc này."
-             actionLabel="Thử lại"
-             onAction={() => window.location.reload()}
+             action={
+               <Button variant="outline" onClick={() => window.location.reload()}>
+                 Thử lại
+               </Button>
+             }
           />
         </CardContent>
       </Card>
     );
   }
 
-  const chartData = data.details?.map((d: any) => ({
+  const chartData = data.details?.map((d: ReportDetail) => ({
     name: d.name || d.date || "Unknown",
     value: d.value || d.amount || d.revenue || 0,
   })) || [];
@@ -80,7 +84,7 @@ export function RevenueChart({ filter }: RevenueChartProps) {
                    tickFormatter={(value) => formatCompactCurrency(value)}
                 />
                 <Tooltip 
-                   formatter={(value: number) => [formatCurrency(value), "Doanh thu"]}
+                   formatter={(value: number | string | readonly (number | string)[] | undefined) => [formatCurrency(Number(value || 0)), "Doanh thu"]}
                    cursor={{ fill: 'var(--muted)' }}
                 />
                 <Bar dataKey="value" fill="var(--color-primary, #16a34a)" radius={[4, 4, 0, 0]} />

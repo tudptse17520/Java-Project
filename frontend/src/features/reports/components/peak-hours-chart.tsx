@@ -3,6 +3,7 @@ import { usePeakHourReport } from "../hooks/use-report";
 import { LoadingSpinner } from "@/components/common/loading-spinner";
 import { EmptyState } from "@/components/common/empty-state";
 import { Clock } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import type { ReportFilter } from "../types/report.type";
 
 interface PeakHoursChartProps {
@@ -37,8 +38,11 @@ export function PeakHoursChart({ filter }: PeakHoursChartProps) {
              icon={Clock}
              title="Lỗi tải dữ liệu"
              description="Không thể tải thống kê giờ cao điểm lúc này."
-             actionLabel="Thử lại"
-             onAction={() => window.location.reload()}
+             action={
+               <Button variant="outline" onClick={() => window.location.reload()}>
+                 Thử lại
+               </Button>
+             }
           />
         </CardContent>
       </Card>

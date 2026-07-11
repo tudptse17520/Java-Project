@@ -3,12 +3,15 @@ import { ParkingSlot, CreateSlotDto } from '@/features/slots/types/slot.type';
 
 export const slotService = {
   getSlots: async (floorId?: number, status?: string) => {
-    return axiosClient.get<ParkingSlot[]>('/slots', { params: { floor_id: floorId, status } });
+    const response = await axiosClient.get<{ totalAvailable: number; data: ParkingSlot[] }>('/slots', { params: { floor_id: floorId, status } });
+    return response.data;
   },
   createSlot: async (data: CreateSlotDto) => {
-    return axiosClient.post('/slots', data);
+    const response = await axiosClient.post('/slots', data);
+    return response.data;
   },
   updateSlotStatus: async (id: number, status: string) => {
-    return axiosClient.patch(`/slots/${id}/status`, { status });
+    const response = await axiosClient.patch(`/slots/${id}/status`, { status });
+    return response.data;
   }
 };

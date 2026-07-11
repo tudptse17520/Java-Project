@@ -58,10 +58,12 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/users/**").authenticated()
                         // Quản lý tòa nhà
                         .requestMatchers("/api/v1/buildings/**").hasAnyRole("ADMIN", "MANAGER")
+                        // Quản lý tầng
+                        .requestMatchers("/api/v1/floors/**").hasAnyRole("ADMIN", "MANAGER")
                         // Yêu cầu quyền ADMIN hoặc MANAGER cho các API Báo cáo & Thống kê
                         .requestMatchers("/api/v1/reports/**").hasAnyRole("ADMIN", "MANAGER")
-                        // Tạm thời cho phép tất cả các endpoint khác
-                        .anyRequest().permitAll())
+                        // Tạm thời cho phép tất cả các endpoint khác, đổi thành bắt buộc authenticated
+                        .anyRequest().authenticated())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();

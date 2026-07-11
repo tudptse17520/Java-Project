@@ -8,6 +8,7 @@
 import { useEffect } from "react";
 import { useAuthStore } from "@/stores/auth.store";
 import { getCookie } from "@/utils/storage";
+import { jwtDecode } from "jwt-decode";
 
 interface AuthProviderProps {
   children: React.ReactNode;
@@ -22,9 +23,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
     if (token) {
       try {
-        // Decode JWT payload (base64) để lấy thông tin user
-        // JWT chỉ chứa: sub (username), role, iat, exp
-        const payload = JSON.parse(atob(token.split(".")[1]));
+        // Decode JWT payload an toàn bằng jwt-decode
+        interface DecodedPayload { sub?: string; role?: string }
+        const payload = jwtDecode<DecodedPayload>(token);
         setUser({
           username: payload.sub || "",
           role: payload.role || "USER",

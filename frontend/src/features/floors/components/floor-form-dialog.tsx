@@ -11,7 +11,7 @@ import { FormContainer, FormHeader, FormFields, FormActions } from "@/components
 import { useBuildings } from "@/features/buildings/hooks/use-buildings";
 // import useVehicleTypes from features if needed, wait, I need to know if vehicle type hook exists
 import { useQuery } from "@tanstack/react-query";
-import { vehicleTypeService } from "@/services/vehicle-type.service";
+import { getVehicleTypes } from "@/services/vehicle-type.service";
 
 interface FloorFormDialogProps {
   open: boolean;
@@ -31,13 +31,14 @@ export function FloorFormDialog({
   const isEditing = !!initialData;
 
   const { data: buildingsData } = useBuildings();
-  const buildings = buildingsData || [];
+  const buildings = buildingsData?.data || [];
 
   // TODO: Refactor this to use feature hook when it's implemented correctly
   const { data: vehicleTypes } = useQuery({
     queryKey: ['vehicle-types'],
-    queryFn: () => vehicleTypeService.getAll(),
+    queryFn: () => getVehicleTypes(),
   });
+
 
   const {
     register,
@@ -45,7 +46,7 @@ export function FloorFormDialog({
     reset,
     formState: { errors },
   } = useForm<FloorFormValues>({
-    resolver: zodResolver(floorSchema),
+    resolver: zodResolver(floorSchema) as any,
     defaultValues: {
       floorName: "",
       floorLevel: 1,

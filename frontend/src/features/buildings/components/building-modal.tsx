@@ -24,7 +24,7 @@ export function BuildingModal({ open, onClose, building }: BuildingModalProps) {
   const isPending = isCreating || isUpdating;
 
   const form = useForm<BuildingCreateForm | BuildingUpdateForm>({
-    resolver: zodResolver(isEditMode ? buildingUpdateSchema : buildingCreateSchema),
+    resolver: zodResolver(isEditMode ? buildingUpdateSchema : buildingCreateSchema) as any,
     defaultValues: {
       building_name: '',
       address: '',

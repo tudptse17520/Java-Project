@@ -74,7 +74,7 @@ export default function FloorsPage() {
       <PageHeader
         title="Quản lý tầng đỗ xe"
         description="Xem và quản lý danh sách các tầng trong bãi đỗ xe."
-        action={
+        actions={
           <Button onClick={handleOpenCreate}>
             <Plus className="mr-2 h-4 w-4" />
             Thêm tầng đỗ xe

@@ -15,6 +15,7 @@ import {
   getPaymentById,
   getRemainingDebt,
   getSessionByPlate,
+  getSessionById,
   createPayment,
   updatePaymentStatus,
   cancelPayment,
@@ -27,6 +28,7 @@ export const paymentKeys = {
   detail: (id: number) => [...paymentKeys.all, "detail", id] as const,
   debt: (id: number) => [...paymentKeys.all, "debt", id] as const,
   sessionByPlate: (plate: string) => [...paymentKeys.all, "session-by-plate", plate] as const,
+  sessionById: (id: number) => [...paymentKeys.all, "session-by-id", id] as const,
 };
 
 /**
@@ -71,6 +73,17 @@ export function useSessionByPlate(plate: string) {
     queryKey: paymentKeys.sessionByPlate(plate),
     queryFn: () => getSessionByPlate(plate),
     enabled: !!plate && plate.length >= 3, // Only fetch if plate has at least 3 chars
+  });
+}
+
+/**
+ * Hook lấy session theo id
+ */
+export function useSessionById(id: number | null) {
+  return useQuery({
+    queryKey: paymentKeys.sessionById(id!),
+    queryFn: () => getSessionById(id!),
+    enabled: id != null,
   });
 }
 

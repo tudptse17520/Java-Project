@@ -70,6 +70,15 @@ export const getSessionByPlate = async (plate: string): Promise<ParkingSessionMi
   return null;
 };
 
+export const getSessionById = async (id: number): Promise<any | null> => {
+  const response = await axiosClient.get(`/sessions`);
+  const data = response.data?.data;
+  if (Array.isArray(data)) {
+    return data.find((s: any) => s.id === id) || null;
+  }
+  return null;
+};
+
 /**
  * Tạo thanh toán mới
  */

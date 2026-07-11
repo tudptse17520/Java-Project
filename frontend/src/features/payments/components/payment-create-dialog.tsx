@@ -171,18 +171,6 @@ export function PaymentCreateDialog({
               </div>
             </div>
 
-            {/* Mã đặt chỗ - Ẩn bớt hoặc cho phép nhập nếu cần thiết, nhưng theo yêu cầu chỉ xếp theo thứ tự, tạm thời để khóa giống form */}
-            <div className="flex flex-col gap-2 hidden">
-              <label className="text-sm font-medium">
-                Mã đặt chỗ (booking_id)
-              </label>
-              <input
-                type="number"
-                placeholder="Nhập mã đặt chỗ..."
-                className="h-9 rounded-md border border-input bg-background px-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
-                {...register("booking_id", { valueAsNumber: true })}
-              />
-            </div>
 
             {/* 3. Loại phí */}
             <div className="flex flex-col gap-2">

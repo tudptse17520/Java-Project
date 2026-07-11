@@ -48,11 +48,39 @@ function getStatusVariant(status: string): "success" | "warning" | "danger" | "i
 }
 
 
+import { useSessionById, usePaymentDebt } from "@/features/payments/hooks/use-payments";
+
+/**
+ * Format chuỗi thời gian ISO
+ */
+function formatDateTime(dateStr?: string) {
+  if (!dateStr) return "—";
+  try {
+    return new Date(dateStr).toLocaleString("vi-VN", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  } catch {
+    return dateStr;
+  }
+}
+
 export function PaymentDetailDialog({
   open,
   onClose,
   payment,
 }: PaymentDetailDialogProps) {
+  const { data: sessionData, isLoading: isSessionLoading } = useSessionById(
+    payment?.parking_session_id ?? null
+  );
+
+  const { data: debtInfo, isLoading: isDebtLoading } = usePaymentDebt(
+    payment?.parking_session_id ?? null
+  );
+
   if (!open || !payment) return null;
 
   const statusLabel =
@@ -84,14 +112,55 @@ export function PaymentDetailDialog({
                 : "—"
             }
           />
+
+          {/* Session Details */}
+          {payment.parking_session_id != null && (
+            <div className="rounded-md bg-muted p-3 space-y-2 mt-2 mb-2">
+              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">
+                Thông tin lượt gửi xe
+              </p>
+              {isSessionLoading ? (
+                <p className="text-sm text-muted-foreground">Đang tải thông tin xe...</p>
+              ) : sessionData ? (
+                <>
+                  <DetailRow label="Biển số xe" value={sessionData.plate || "—"} />
+                  <DetailRow label="Giờ vào" value={formatDateTime(sessionData.time_in)} />
+                  <DetailRow label="Giờ ra" value={sessionData.time_out ? formatDateTime(sessionData.time_out) : "Chưa ra"} />
+                </>
+              ) : (
+                <p className="text-sm text-muted-foreground">Không tìm thấy thông tin lượt gửi xe.</p>
+              )}
+
+              {/* Debt Info inside Session block */}
+              {isDebtLoading ? (
+                <p className="text-sm text-muted-foreground">Đang tải thông tin phí...</p>
+              ) : debtInfo ? (
+                <div className="mt-2 border-t border-dashed border-gray-300 pt-2 space-y-1">
+                  <div className="flex justify-between items-center text-xs">
+                    <span className="text-muted-foreground">Tổng phí đỗ xe:</span>
+                    <span>{formatVND(debtInfo.total_fee)}</span>
+                  </div>
+                  <div className="flex justify-between items-center text-xs">
+                    <span className="text-muted-foreground">Đã thanh toán:</span>
+                    <span className="text-green-600">{formatVND(debtInfo.paid_fee)}</span>
+                  </div>
+                  <div className="flex justify-between items-center text-xs font-semibold">
+                    <span className="text-slate-700">Nợ còn lại:</span>
+                    <span className="text-destructive">{formatVND(debtInfo.remaining_fee)}</span>
+                  </div>
+                </div>
+              ) : (
+                sessionData && sessionData.total_fee != null && (
+                  <div className="mt-2 border-t border-dashed border-gray-300 pt-2">
+                    <DetailRow label="Tổng phí đỗ xe" value={formatVND(sessionData.total_fee)} />
+                  </div>
+                )
+              )}
+            </div>
+          )}
+
           <DetailRow
-            label="Mã đặt chỗ"
-            value={
-              payment.booking_id != null ? `#${payment.booking_id}` : "—"
-            }
-          />
-          <DetailRow
-            label="Số tiền"
+            label="Số tiền thanh toán"
             value={formatVND(payment.amount)}
             className="font-semibold text-primary"
           />

@@ -6,6 +6,12 @@
 
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { jwtDecode } from "jwt-decode";
+
+interface JwtPayload {
+  role?: string;
+  exp?: number;
+}
 
 // =============================================
 // Route Definitions
@@ -43,20 +49,10 @@ function isPublicRoute(pathname: string): boolean {
   );
 }
 
-import { jwtDecode } from "jwt-decode";
-
-interface JwtPayload {
-  role?: string;
-  exp?: number;
-}
-
 /**
- * Decode JWT payload từ token string
- * Sử dụng jwt-decode để xử lý an toàn
+ * Decode JWT payload từ token string an toàn bằng jwt-decode
  */
-function decodeJwtPayload(
-  token: string
-): JwtPayload | null {
+function decodeJwtPayload(token: string): JwtPayload | null {
   try {
     return jwtDecode<JwtPayload>(token);
   } catch {

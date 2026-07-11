@@ -15,10 +15,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class OverrideCheckoutRequest {
 
-    @NotNull(message = "Mã nhân viên không được để trống.")
-    @JsonProperty("staff_id")
-    private Long staffId;
-
     @NotBlank(message = "Lý do ghi đè/bỏ qua không được để trống.")
     @JsonProperty("override_reason")
     private String overrideReason;

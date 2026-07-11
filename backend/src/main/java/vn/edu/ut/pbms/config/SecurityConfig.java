@@ -1,9 +1,12 @@
 package vn.edu.ut.pbms.config;
 
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -12,6 +15,9 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import vn.edu.ut.pbms.security.JwtAuthenticationFilter;
 
 import java.util.List;
 
@@ -24,7 +30,11 @@ import java.util.List;
  */
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
+
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -42,8 +52,15 @@ public class SecurityConfig {
                                 "/swagger-ui.html",
                                 "/v3/api-docs/**"
                         ).permitAll()
-                        // Tạm thời cho phép tất cả (sẽ siết lại khi triển khai JWT Filter)
-                        .anyRequest().permitAll());
+                        // Yêu cầu xác thực cho các thao tác check-out, override, calculate-fee...
+                        .requestMatchers("/api/v1/sessions/**").authenticated()
+                        // Quản lý người dùng
+                        .requestMatchers("/api/v1/users/**").authenticated()
+                        // Yêu cầu quyền ADMIN hoặc MANAGER cho các API Báo cáo & Thống kê
+                        .requestMatchers("/api/v1/reports/**").hasAnyRole("ADMIN", "MANAGER")
+                        // Tạm thời cho phép tất cả các endpoint khác
+                        .anyRequest().permitAll())
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

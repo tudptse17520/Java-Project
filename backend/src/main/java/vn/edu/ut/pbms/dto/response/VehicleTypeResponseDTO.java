@@ -18,7 +18,6 @@ public class VehicleTypeResponseDTO {
 
     private Long id;
 
-    @JsonProperty("type_name")
     private String typeName;
 
     @JsonProperty("description")

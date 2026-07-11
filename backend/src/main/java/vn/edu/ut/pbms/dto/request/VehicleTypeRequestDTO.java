@@ -17,7 +17,6 @@ import vn.edu.ut.pbms.constant.VehicleTypeStatus;
 @AllArgsConstructor
 public class VehicleTypeRequestDTO {
 
-    @JsonProperty("type_name")
     @NotBlank(message = "Tên loại phương tiện không được để trống.")
     @Size(max = 100, message = "Tên loại phương tiện không được vượt quá 100 ký tự.")
     private String typeName;

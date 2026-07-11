@@ -22,7 +22,11 @@ export interface BuildingResponse {
 }
 
 export interface BuildingListResponse {
-  total_items: number;
   data: BuildingResponse[];
+  message: string;
+}
+
+export interface BuildingActionResponse {
+  id: number;
   message: string;
 }

@@ -69,10 +69,11 @@ export default function PaymentPage() {
         return { ...payment, plate: session?.plate || "" };
       })
       .filter(payment => {
+        if (filter.fee_type && payment.fee_type !== filter.fee_type) return false;
         if (!filter.plate) return true;
         return payment.plate.includes(filter.plate.toUpperCase());
       });
-  }, [payments, allSessions, filter.plate]);
+  }, [payments, allSessions, filter.plate, filter.fee_type]);
 
   return (
     <PageContainer>

@@ -8,7 +8,7 @@
 import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { PaymentFilter as PaymentFilterType } from "@/features/payments/types/payment.type";
-import { PAYMENT_METHODS } from "@/features/payments/constants/payment.constants";
+import { PAYMENT_METHODS, FEE_TYPES } from "@/features/payments/constants/payment.constants";
 import { PaymentStatus, PAYMENT_STATUS_LABELS } from "@/constants/payment-status";
 
 interface PaymentFilterProps {
@@ -43,7 +43,7 @@ export function PaymentFilter({
   onClearFilters,
 }: PaymentFilterProps) {
   const hasFilters =
-    filter.payment_method || filter.status || filter.from_date || filter.plate;
+    filter.payment_method || filter.status || filter.from_date || filter.plate || filter.fee_type;
 
   return (
     <div className="flex flex-wrap items-end gap-3">
@@ -61,6 +61,25 @@ export function PaymentFilter({
           {PAYMENT_METHODS.map((method) => (
             <option key={method.value} value={method.value}>
               {method.label}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {/* Loại phí */}
+      <div className="flex flex-col gap-1">
+        <label className="text-xs font-medium text-muted-foreground">
+          Loại phí
+        </label>
+        <select
+          className="h-9 rounded-md border border-input bg-background px-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+          value={filter.fee_type || ""}
+          onChange={(e) => onFilterChange("fee_type", e.target.value)}
+        >
+          <option value="">Tất cả</option>
+          {FEE_TYPES.map((feeType) => (
+            <option key={feeType.value} value={feeType.value}>
+              {feeType.label}
             </option>
           ))}
         </select>

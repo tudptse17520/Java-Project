@@ -18,18 +18,31 @@ const BASE_PATH = "/payments";
  * Lấy danh sách giao dịch (có thể lọc theo payment_method, status, from_date)
  * Backend trả về wrapper: { total_items, message, data: [...] }
  */
+const mapPaymentMethodToBackend = (method: string): string => {
+  const map: Record<string, string> = {
+    "CASH": "Cash",
+    "MOMO": "Momo",
+    "VNPAY": "Vnpay",
+    "CREDIT_CARD": "Credit_Card"
+  };
+  return map[method.toUpperCase()] || method;
+};
+
 export const getPayments = async (
   filter?: PaymentFilter
 ): Promise<Payment[]> => {
   const params: Record<string, string> = {};
-  if (filter?.payment_method) params.payment_method = filter.payment_method;
+  if (filter?.payment_method) params.payment_method = mapPaymentMethodToBackend(filter.payment_method);
   if (filter?.status) params.status = filter.status;
   if (filter?.from_date) params.from_date = filter.from_date;
 
   const response = await axiosClient.get<PaymentListResponse>(BASE_PATH, {
     params,
   });
-  return response.data.data;
+  return response.data.data.map(p => ({
+    ...p,
+    payment_method: p.payment_method ? p.payment_method.toUpperCase() : p.payment_method
+  }));
 };
 
 /**
@@ -37,7 +50,11 @@ export const getPayments = async (
  */
 export const getPaymentById = async (id: number): Promise<Payment> => {
   const response = await axiosClient.get<Payment>(`${BASE_PATH}/${id}`);
-  return response.data;
+  const payment = response.data;
+  if (payment && payment.payment_method) {
+    payment.payment_method = payment.payment_method.toUpperCase();
+  }
+  return payment;
 };
 
 export const getRemainingDebt = async (sessionId: number): Promise<{
@@ -105,8 +122,16 @@ export const getBookingById = async (id: number): Promise<any | null> => {
 export const createPayment = async (
   data: PaymentRequest
 ): Promise<Payment> => {
-  const response = await axiosClient.post<Payment>(BASE_PATH, data);
-  return response.data;
+  const payload = {
+    ...data,
+    payment_method: data.payment_method ? mapPaymentMethodToBackend(data.payment_method) : data.payment_method
+  };
+  const response = await axiosClient.post<Payment>(BASE_PATH, payload);
+  const payment = response.data;
+  if (payment && payment.payment_method) {
+    payment.payment_method = payment.payment_method.toUpperCase();
+  }
+  return payment;
 };
 
 /**
@@ -120,7 +145,11 @@ export const updatePaymentStatus = async (
     `${BASE_PATH}/${id}/status`,
     data
   );
-  return response.data;
+  const payment = response.data;
+  if (payment && payment.payment_method) {
+    payment.payment_method = payment.payment_method.toUpperCase();
+  }
+  return payment;
 };
 
 /**

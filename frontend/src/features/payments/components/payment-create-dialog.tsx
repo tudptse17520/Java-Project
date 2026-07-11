@@ -56,6 +56,7 @@ export function PaymentCreateDialog({
   const parkingSessionId = watch("parking_session_id");
   const feeType = watch("fee_type");
   const paymentMethod = watch("payment_method");
+  const amount = watch("amount");
 
   // State for debounced plate searching
   const [searchPlate, setSearchPlate] = useState("");
@@ -85,12 +86,12 @@ export function PaymentCreateDialog({
 
   // Auto-fill amount based on fee_type and debtInfo
   useEffect(() => {
-    if (feeType === "Parking_Fee" && debtInfo) {
-      setValue("amount", debtInfo.remaining_fee);
-    } else if (feeType === "Lost_Ticket_Fine") {
-      setValue("amount", 200000);
+    if (feeType === "PARKING_FEE" && debtInfo) {
+      setValue("amount", debtInfo.remaining_fee, { shouldValidate: true });
+    } else if (feeType === "LOST_TICKET_FINE") {
+      setValue("amount", 200000, { shouldValidate: true });
     } else {
-      setValue("amount", NaN);
+      setValue("amount", NaN, { shouldValidate: true });
     }
   }, [feeType, debtInfo, setValue]);
 
@@ -184,7 +185,7 @@ export function PaymentCreateDialog({
                 {...register("fee_type")}
               >
                 <option value="">-- Chọn loại phí --</option>
-                {FEE_TYPES.filter(type => type.value !== "Booking_Deposit").map((type) => (
+                {FEE_TYPES.filter(type => type.value !== "BOOKING_DEPOSIT").map((type) => (
                   <option key={type.value} value={type.value}>
                     {type.label}
                   </option>
@@ -214,7 +215,7 @@ export function PaymentCreateDialog({
                   </option>
                 ))}
               </select>
-              {paymentMethod === "Momo" && (
+              {paymentMethod === "MOMO" && (
                 <p className="text-xs text-orange-500 font-medium italic mt-1">
                   * Tính năng thanh toán qua MoMo hiện đang được phát triển.
                 </p>
@@ -231,42 +232,51 @@ export function PaymentCreateDialog({
               <label className="text-sm font-medium">
                 Số tiền (VND) <span className="text-destructive">*</span>
               </label>
-              <input
-                type="number"
-                readOnly
-                placeholder="Số tiền sẽ được tự động tính..."
-                className="h-9 rounded-md border border-input bg-muted opacity-70 px-3 text-sm font-bold text-primary focus:outline-none"
-                {...register("amount", { valueAsNumber: true })}
-              />
-              {errors.amount && (
-                <p className="text-xs text-destructive">
-                  {errors.amount.message}
-                </p>
-              )}
 
-              {/* Hiển thị chi tiết thông tin dư nợ cho Staff giải thích */}
-              {feeType === "Parking_Fee" && parkingSessionId && (
-                <div className="mt-2 rounded-md bg-slate-50 border p-3 text-sm">
-                  {isDebtLoading ? (
-                    <p className="text-muted-foreground text-xs">Đang tải thông tin phí từ hệ thống...</p>
-                  ) : debtInfo ? (
-                    <div className="flex flex-col gap-1.5">
-                      <div className="flex justify-between items-center text-xs">
-                        <span className="text-muted-foreground">Tổng phí phải thu:</span>
-                        <span className="font-medium">{debtInfo.total_fee.toLocaleString()} VND</span>
+              {!(feeType === "PARKING_FEE" && parkingSessionId) ? (
+                <>
+                  <input
+                    type="number"
+                    readOnly
+                    placeholder="Số tiền sẽ được tự động tính..."
+                    className="h-9 rounded-md border border-input bg-muted opacity-70 px-3 text-sm font-bold text-primary focus:outline-none"
+                    {...register("amount", { valueAsNumber: true })}
+                  />
+                </>
+              ) : (
+                <>
+                  <input type="hidden" {...register("amount", { valueAsNumber: true })} />
+                  {/* Hiển thị chi tiết thông tin dư nợ cho Staff giải thích */}
+                  <div className="mt-1 rounded-md bg-slate-50 border p-3 text-sm">
+                    {isDebtLoading ? (
+                      <p className="text-muted-foreground text-xs italic">Đang tải thông tin phí từ hệ thống...</p>
+                    ) : debtInfo ? (
+                      <div className="flex flex-col gap-1.5">
+                        <div className="flex justify-between items-center text-xs">
+                          <span className="text-muted-foreground">Tổng phí phải thu:</span>
+                          <span className="font-medium">{debtInfo.total_fee.toLocaleString()} VND</span>
+                        </div>
+                        <div className="flex justify-between items-center text-xs">
+                          <span className="text-muted-foreground">Đã thanh toán trước đó:</span>
+                          <span className="font-medium text-green-600">{debtInfo.paid_fee.toLocaleString()} VND</span>
+                        </div>
+                        <div className="flex justify-between items-center border-t border-dashed pt-2 mt-1">
+                          <span className="font-semibold text-slate-700">Cần thu thêm lúc này:</span>
+                          <span className="font-bold text-destructive text-base">{debtInfo.remaining_fee.toLocaleString()} VND</span>
+                        </div>
                       </div>
-                      <div className="flex justify-between items-center text-xs">
-                        <span className="text-muted-foreground">Đã thanh toán trước đó:</span>
-                        <span className="font-medium text-green-600">{debtInfo.paid_fee.toLocaleString()} VND</span>
-                      </div>
-                      <div className="flex justify-between items-center border-t border-dashed pt-2 mt-1">
-                        <span className="font-semibold text-slate-700">Cần thu thêm lúc này:</span>
-                        <span className="font-bold text-destructive text-base">{debtInfo.remaining_fee.toLocaleString()} VND</span>
-                      </div>
-                    </div>
-                  ) : (
-                    <p className="text-muted-foreground text-xs">Không thể lấy thông tin nợ.</p>
-                  )}
+                    ) : (
+                      <p className="text-muted-foreground text-xs">Không thể lấy thông tin nợ.</p>
+                    )}
+                  </div>
+                </>
+              )}
+              
+              {/* Thông báo khi không phát sinh phí (Số tiền = 0) */}
+              {amount === 0 && feeType === "PARKING_FEE" && (
+                <div className="mt-1 p-2 bg-green-50 text-green-700 border border-green-200 rounded text-xs font-medium flex gap-2 items-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                  Giao dịch đã hoàn tất hoặc không phát sinh phí mới.
                 </div>
               )}
             </div>
@@ -283,7 +293,7 @@ export function PaymentCreateDialog({
             >
               Hủy
             </Button>
-            <Button type="submit" disabled={isLoading || !hasValidSession || !feeType || isDebtLoading || paymentMethod === "Momo"}>
+            <Button type="submit" disabled={isLoading || !hasValidSession || !feeType || isDebtLoading || paymentMethod === "MOMO" || amount === 0}>
               {isLoading ? "Đang xử lý..." : "Tạo thanh toán"}
             </Button>
           </FormActions>

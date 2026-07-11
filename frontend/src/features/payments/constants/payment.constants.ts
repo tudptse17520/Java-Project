@@ -7,9 +7,9 @@
  * Danh sách phương thức thanh toán (kèm label tiếng Việt)
  */
 export const PAYMENT_METHODS = [
-  { value: "Cash", label: "Tiền mặt" },
-  { value: "Momo", label: "Ví MoMo" },
-  { value: "Vnpay", label: "VNPay" },
+  { value: "CASH", label: "Tiền mặt" },
+  { value: "MOMO", label: "Ví MoMo" },
+  { value: "VNPAY", label: "VNPay" },
 ] as const;
 
 /**
@@ -33,9 +33,9 @@ export const MANUAL_STATUS_OPTIONS = [
  * Label mapping cho phương thức thanh toán
  */
 export const PAYMENT_METHOD_LABELS: Record<string, string> = {
-  Cash: "Tiền mặt",
-  Momo: "Ví MoMo",
-  Vnpay: "VNPay",
+  CASH: "Tiền mặt",
+  MOMO: "Ví MoMo",
+  VNPAY: "VNPay",
 };
 
 /**

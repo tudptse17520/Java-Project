@@ -58,4 +58,5 @@ export interface PaymentFilter {
   status?: string;
   from_date?: string;
   plate?: string;
+  fee_type?: string;
 }

@@ -60,8 +60,8 @@ export function PaymentQrDialog({
             >
               Mở trang thanh toán <ExternalLink className="h-4 w-4" />
             </Button>
-            <Button variant="secondary" className="w-full" onClick={onClose}>
-              Đóng (Đợi Callback)
+            <Button variant="secondary" className="w-full text-destructive hover:bg-destructive/10" onClick={onClose}>
+              Hủy giao dịch (Đóng QR)
             </Button>
           </div>
         </div>

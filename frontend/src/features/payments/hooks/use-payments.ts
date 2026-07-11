@@ -47,13 +47,14 @@ export function usePayments(filter?: PaymentFilter) {
 
 /**
  * Hook lấy chi tiết 1 giao dịch.
- * Chỉ gọi API khi có id (enabled).
+ * Có thể truyền options để cấu hình thêm (ví dụ: refetchInterval để polling).
  */
-export function usePaymentDetail(id: number | null) {
+export function usePaymentDetail(id: number | null, options?: { refetchInterval?: number }) {
   return useQuery({
     queryKey: paymentKeys.detail(id!),
     queryFn: () => getPaymentById(id!),
     enabled: id != null,
+    refetchInterval: options?.refetchInterval,
   });
 }
 

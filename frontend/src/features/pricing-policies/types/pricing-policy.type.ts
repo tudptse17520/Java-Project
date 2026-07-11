@@ -13,6 +13,7 @@ export interface PricingPolicy {
   base_price: number;
   extra_fee_per_hour: number;
   effective_date: string; // Format: DD-MM-YYYY
+  status?: string;
 }
 
 /**

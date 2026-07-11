@@ -1,7 +1,7 @@
 import axiosClient from "@/lib/axios-client";
 import { VehicleType, VehicleTypeRequest } from "@/features/vehicle-types/types/vehicle-type.type";
 
-const BASE_PATH = "/vehicle-type";
+const BASE_PATH = "/vehicle-types";
 
 export const getVehicleTypes = async (): Promise<VehicleType[]> => {
   const response = await axiosClient.get<VehicleType[]>(BASE_PATH);

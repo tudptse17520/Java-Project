@@ -78,6 +78,15 @@ export function PricingPolicyTable({
         ),
       },
       {
+        accessorKey: "status",
+        header: "Trạng thái",
+        cell: ({ row }) => (
+          <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold ${row.original.status === 'ACTIVE' ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-600'}`}>
+            {row.original.status === 'ACTIVE' ? 'Đang áp dụng' : 'Không áp dụng'}
+          </span>
+        ),
+      },
+      {
         id: "actions",
         header: "Thao tác",
         cell: ({ row }) => {
@@ -111,5 +120,5 @@ export function PricingPolicyTable({
     [onEdit, onDelete]
   );
 
-  return <DataTable columns={columns} data={data} isLoading={isLoading} />;
+  return <DataTable columns={columns} data={data} isLoading={isLoading} pageSize={50} />;
 }

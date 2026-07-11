@@ -40,6 +40,7 @@ public class JwtUtil {
 
         return Jwts.builder()
                 .subject(username)
+                .issuer("pbms-auth-server")
                 .claim("role", role)
                 .issuedAt(now)
                 .expiration(expiryDate)

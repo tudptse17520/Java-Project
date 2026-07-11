@@ -43,7 +43,7 @@ export function PaymentFilter({
   onClearFilters,
 }: PaymentFilterProps) {
   const hasFilters =
-    filter.payment_method || filter.status || filter.from_date;
+    filter.payment_method || filter.status || filter.from_date || filter.plate;
 
   return (
     <div className="flex flex-wrap items-end gap-3">
@@ -83,6 +83,20 @@ export function PaymentFilter({
             </option>
           ))}
         </select>
+      </div>
+
+      {/* Biển số xe */}
+      <div className="flex flex-col gap-1">
+        <label className="text-xs font-medium text-muted-foreground">
+          Biển số xe
+        </label>
+        <input
+          type="text"
+          placeholder="Nhập biển số..."
+          className="h-9 w-32 rounded-md border border-input bg-background px-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring uppercase"
+          value={filter.plate || ""}
+          onChange={(e) => onFilterChange("plate", e.target.value.toUpperCase())}
+        />
       </div>
 
       {/* Từ ngày */}

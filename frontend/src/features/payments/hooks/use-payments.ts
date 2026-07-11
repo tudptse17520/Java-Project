@@ -16,6 +16,8 @@ import {
   getRemainingDebt,
   getSessionByPlate,
   getSessionById,
+  getAllSessions,
+  getBookingById,
   createPayment,
   updatePaymentStatus,
   cancelPayment,
@@ -29,6 +31,7 @@ export const paymentKeys = {
   debt: (id: number) => [...paymentKeys.all, "debt", id] as const,
   sessionByPlate: (plate: string) => [...paymentKeys.all, "session-by-plate", plate] as const,
   sessionById: (id: number) => [...paymentKeys.all, "session-by-id", id] as const,
+  bookingById: (id: number) => [...paymentKeys.all, "booking-by-id", id] as const,
 };
 
 /**
@@ -84,6 +87,27 @@ export function useSessionById(id: number | null) {
     queryKey: paymentKeys.sessionById(id!),
     queryFn: () => getSessionById(id!),
     enabled: id != null,
+  });
+}
+
+/**
+ * Hook lấy booking theo id
+ */
+export function useBookingById(id: number | null) {
+  return useQuery({
+    queryKey: paymentKeys.bookingById(id!),
+    queryFn: () => getBookingById(id!),
+    enabled: id != null,
+  });
+}
+
+/**
+ * Hook lấy tất cả sessions
+ */
+export function useAllSessions() {
+  return useQuery({
+    queryKey: [...paymentKeys.all, "all-sessions"],
+    queryFn: () => getAllSessions(),
   });
 }
 

@@ -70,6 +70,12 @@ export const getSessionByPlate = async (plate: string): Promise<ParkingSessionMi
   return null;
 };
 
+export const getAllSessions = async (): Promise<any[]> => {
+  const response = await axiosClient.get(`/sessions`);
+  const data = response.data?.data;
+  return Array.isArray(data) ? data : [];
+};
+
 export const getSessionById = async (id: number): Promise<any | null> => {
   const response = await axiosClient.get(`/sessions`);
   const data = response.data?.data;
@@ -77,6 +83,20 @@ export const getSessionById = async (id: number): Promise<any | null> => {
     return data.find((s: any) => s.id === id) || null;
   }
   return null;
+};
+
+export const getAllBookings = async (): Promise<any[]> => {
+  const response = await axiosClient.get(`/bookings`);
+  // The API returns the list directly or inside data? Let's check BookingController
+  // `ResponseEntity.ok(response)` which means it returns a List directly, NOT wrapped in { data: ... }
+  // Wait, let's verify. Usually Spring Boot returns the list directly if not wrapped in a custom response object.
+  // I'll just check if it's an array.
+  return Array.isArray(response.data) ? response.data : [];
+};
+
+export const getBookingById = async (id: number): Promise<any | null> => {
+  const bookings = await getAllBookings();
+  return bookings.find((b: any) => b.booking_id === id) || null;
 };
 
 /**

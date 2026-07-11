@@ -48,7 +48,7 @@ function getStatusVariant(status: string): "success" | "warning" | "danger" | "i
 }
 
 
-import { useSessionById, usePaymentDebt } from "@/features/payments/hooks/use-payments";
+import { useSessionById, usePaymentDebt, useBookingById } from "@/features/payments/hooks/use-payments";
 
 /**
  * Format chuỗi thời gian ISO
@@ -77,6 +77,10 @@ export function PaymentDetailDialog({
     payment?.parking_session_id ?? null
   );
 
+  const { data: bookingData, isLoading: isBookingLoading } = useBookingById(
+    payment?.booking_id ?? null
+  );
+
   const { data: debtInfo, isLoading: isDebtLoading } = usePaymentDebt(
     payment?.parking_session_id ?? null
   );
@@ -101,14 +105,62 @@ export function PaymentDetailDialog({
 
         <div className="mt-4 space-y-3">
           <DetailRow label="Mã giao dịch" value={`#${payment.id}`} />
+          {payment.parking_session_id != null && (
+            <DetailRow label="Mã lượt gửi xe" value={`#${payment.parking_session_id}`} />
+          )}
+          {payment.booking_id != null && (
+            <DetailRow label="Mã đặt chỗ" value={`#${payment.booking_id}`} />
+          )}
           <DetailRow
-            label="Mã lượt gửi xe"
+            label="Số tiền thanh toán"
+            value={formatVND(payment.amount)}
+            className="font-semibold text-primary"
+          />
+          <DetailRow
+            label="Phương thức"
             value={
-              payment.parking_session_id != null
-                ? `#${payment.parking_session_id}`
-                : "—"
+              PAYMENT_METHOD_LABELS[payment.payment_method] ||
+              payment.payment_method
             }
           />
+          <DetailRow
+            label="Loại phí"
+            value={
+              FEE_TYPE_LABELS[payment.fee_type] || payment.fee_type
+            }
+          />
+          <DetailRow
+            label="Thời gian"
+            value={payment.payment_time ? formatDateTime(payment.payment_time) : "Chưa ghi nhận"}
+          />
+          <div className="flex items-center justify-between border-t pt-3">
+            <span className="text-sm text-muted-foreground">Trạng thái</span>
+            <StatusBadge variant={getStatusVariant(payment.status)}>
+              {statusLabel}
+            </StatusBadge>
+          </div>
+
+          {/* Booking Details */}
+          {payment.parking_session_id == null && payment.booking_id != null && (
+            <div className="rounded-md bg-muted p-3 space-y-2 mt-2 mb-2">
+              <div className="flex flex-col mb-2">
+                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                  Thông tin cọc đặt chỗ
+                </p>
+              </div>
+              {isBookingLoading ? (
+                <p className="text-sm text-muted-foreground">Đang tải thông tin đặt chỗ...</p>
+              ) : bookingData ? (
+                <>
+                  <DetailRow label="Mã vị trí đỗ" value={bookingData.parking_slot_id ? `#${bookingData.parking_slot_id}` : "—"} />
+                  <DetailRow label="Giờ vào dự kiến" value={formatDateTime(bookingData.expected_time_in)} />
+                  <DetailRow label="Trạng thái" value={bookingData.status || "—"} />
+                </>
+              ) : (
+                <p className="text-sm text-muted-foreground">Không tìm thấy thông tin đặt chỗ.</p>
+              )}
+            </div>
+          )}
 
           {/* Session Details */}
           {payment.parking_session_id != null && (
@@ -160,35 +212,6 @@ export function PaymentDetailDialog({
               )}
             </div>
           )}
-
-          <DetailRow
-            label="Số tiền thanh toán"
-            value={formatVND(payment.amount)}
-            className="font-semibold text-primary"
-          />
-          <DetailRow
-            label="Phương thức"
-            value={
-              PAYMENT_METHOD_LABELS[payment.payment_method] ||
-              payment.payment_method
-            }
-          />
-          <DetailRow
-            label="Loại phí"
-            value={
-              FEE_TYPE_LABELS[payment.fee_type] || payment.fee_type
-            }
-          />
-          <DetailRow
-            label="Thời gian"
-            value={payment.payment_time ? formatDateTime(payment.payment_time) : "Chưa ghi nhận"}
-          />
-          <div className="flex items-center justify-between border-t pt-3">
-            <span className="text-sm text-muted-foreground">Trạng thái</span>
-            <StatusBadge variant={getStatusVariant(payment.status)}>
-              {statusLabel}
-            </StatusBadge>
-          </div>
         </div>
 
         <div className="mt-6 flex justify-end">

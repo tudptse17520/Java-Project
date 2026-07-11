@@ -57,4 +57,5 @@ export interface PaymentFilter {
   payment_method?: string;
   status?: string;
   from_date?: string;
+  plate?: string;
 }

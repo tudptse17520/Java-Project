@@ -16,7 +16,7 @@ export interface UserResponse {
 }
 
 export interface UserListResponse {
-  total_items: number;
+  totalItems: number;
   data: UserResponse[];
   message: string;
 }

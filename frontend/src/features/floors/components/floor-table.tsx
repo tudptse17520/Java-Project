@@ -19,11 +19,11 @@ export function FloorTable({ data, isLoading, onEdit, onDelete }: FloorTableProp
   const columns = useMemo<ColumnDef<Floor>[]>(
     () => [
       {
-        accessorKey: "floor_name",
+        accessorKey: "floorName",
         header: "Tên tầng",
       },
       {
-        accessorKey: "floor_level",
+        accessorKey: "floorLevel",
         header: "Cấp độ",
       },
       {
@@ -31,16 +31,16 @@ export function FloorTable({ data, isLoading, onEdit, onDelete }: FloorTableProp
         header: "Sức chứa",
         cell: ({ row }) => {
           const capacity = row.original.capacity;
-          const available = row.original.available_slots;
+          const available = row.original.availableSlots;
           return `${available}/${capacity} trống`;
         },
       },
       {
-        accessorKey: "building_name",
+        accessorKey: "buildingName",
         header: "Tòa nhà",
       },
       {
-        accessorKey: "vehicle_type_name",
+        accessorKey: "vehicleTypeName",
         header: "Loại xe",
       },
       {

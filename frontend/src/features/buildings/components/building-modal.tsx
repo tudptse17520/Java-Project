@@ -24,11 +24,11 @@ export function BuildingModal({ open, onClose, building }: BuildingModalProps) {
   const isPending = isCreating || isUpdating;
 
   const form = useForm<BuildingCreateForm | BuildingUpdateForm>({
-    resolver: zodResolver(isEditMode ? buildingUpdateSchema : buildingCreateSchema),
+    resolver: zodResolver(isEditMode ? buildingUpdateSchema as any : buildingCreateSchema as any),
     defaultValues: {
-      building_name: '',
+      buildingName: '',
       address: '',
-      number_of_floors: 1,
+      numberOfFloors: 1,
       status: 'ACTIVE',
     },
   });
@@ -37,16 +37,16 @@ export function BuildingModal({ open, onClose, building }: BuildingModalProps) {
     if (open) {
       if (building) {
         form.reset({
-          building_name: building.building_name,
+          buildingName: building.buildingName,
           address: building.address,
-          number_of_floors: building.number_of_floors,
+          numberOfFloors: building.numberOfFloors,
           status: building.status,
         });
       } else {
         form.reset({
-          building_name: '',
+          buildingName: '',
           address: '',
-          number_of_floors: 1,
+          numberOfFloors: 1,
           status: 'ACTIVE',
         });
       }
@@ -97,35 +97,35 @@ export function BuildingModal({ open, onClose, building }: BuildingModalProps) {
 
           <FormFields>
             <div className="space-y-2">
-              <label htmlFor="building_name" className="text-sm font-medium">
+              <label htmlFor="buildingName" className="text-sm font-medium">
                 Tên Tòa Nhà <span className="text-red-500">*</span>
               </label>
               <input
-                id="building_name"
-                {...form.register('building_name')}
+                id="buildingName"
+                {...form.register('buildingName')}
                 className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                 placeholder="Nhập tên tòa nhà"
                 disabled={isPending}
               />
-              {form.formState.errors.building_name && (
-                <p className="text-xs text-red-500">{form.formState.errors.building_name.message}</p>
+              {form.formState.errors.buildingName && (
+                <p className="text-xs text-red-500">{form.formState.errors.buildingName.message}</p>
               )}
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="number_of_floors" className="text-sm font-medium">
+              <label htmlFor="numberOfFloors" className="text-sm font-medium">
                 Số Tầng <span className="text-red-500">*</span>
               </label>
               <input
-                id="number_of_floors"
+                id="numberOfFloors"
                 type="number"
-                {...form.register('number_of_floors')}
+                {...form.register('numberOfFloors')}
                 className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                 placeholder="Nhập số tầng"
                 disabled={isPending}
               />
-              {form.formState.errors.number_of_floors && (
-                <p className="text-xs text-red-500">{form.formState.errors.number_of_floors.message}</p>
+              {form.formState.errors.numberOfFloors && (
+                <p className="text-xs text-red-500">{form.formState.errors.numberOfFloors.message}</p>
               )}
             </div>
 

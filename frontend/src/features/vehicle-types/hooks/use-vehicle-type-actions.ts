@@ -78,7 +78,7 @@ export function useVehicleTypeActions() {
   // --- Deactivate Handlers ---
 
   const handleOpenDeactivate = (vehicleType: VehicleType) => {
-    if ((vehicleType.active_sessions_count || 0) > 0) {
+    if ((vehicleType.activeSessionsCount || 0) > 0) {
       toast.error("Không thể ngừng áp dụng loại xe này vì đang có xe gửi trong bãi!");
       return;
     }

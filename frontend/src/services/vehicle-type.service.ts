@@ -17,15 +17,15 @@ export const getVehicleTypes = async (): Promise<VehicleType[]> => {
   // Tạo map tra cứu số chỗ đang bị chiếm dụng theo tên tầng
   const occupiedMap = new Map<string, number>();
   occupancyDetails.forEach((d: any) => {
-    if (d.floor_name && d.occupied_slots !== undefined) {
-      occupiedMap.set(d.floor_name, d.occupied_slots);
+    if (d.floorName && d.occupiedSlots !== undefined) {
+      occupiedMap.set(d.floorName, d.occupiedSlots);
     }
   });
 
   return vehicleTypes.map(vt => {
     const activeSessionsCount = floors
-      .filter(f => f.vehicle_type_id === vt.id)
-      .reduce((sum, f) => sum + (occupiedMap.get(f.floor_name) || 0), 0);
+      .filter(f => f.vehicleTypeId === vt.id)
+      .reduce((sum, f) => sum + (occupiedMap.get(f.floorName) || 0), 0);
     
     return {
       ...vt,

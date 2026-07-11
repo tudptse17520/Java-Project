@@ -1,22 +1,22 @@
 export interface FloorResponse {
   id: number;
-  floor_name: string;
-  floor_level: number;
+  floorName: string;
+  floorLevel: number;
   capacity: number;
   status: 'ACTIVE' | 'INACTIVE' | 'MAINTENANCE';
-  available_slots: number;
-  building_id: number;
-  building_name: string;
-  vehicle_type_id: number;
-  vehicle_type_name: string;
+  availableSlots: number;
+  buildingId: number;
+  buildingName: string;
+  vehicleTypeId: number;
+  vehicleTypeName: string;
 }
 
 export interface BuildingResponse {
   id: number;
-  building_name: string;
+  buildingName: string;
   address: string;
-  number_of_floors: number;
-  total_available_slots: number;
+  numberOfFloors: number;
+  totalAvailableSlots: number;
   status: 'ACTIVE' | 'INACTIVE' | 'MAINTENANCE';
   floors?: FloorResponse[];
 }

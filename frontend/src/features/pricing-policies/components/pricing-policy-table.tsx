@@ -32,21 +32,28 @@ export function PricingPolicyTable({
       {
         accessorKey: "id",
         header: "ID",
+        cell: ({ row }) => (
+          <span className="text-muted-foreground/70 font-mono text-xs font-semibold">
+            #{row.original.id}
+          </span>
+        ),
       },
       {
         accessorKey: "vehicle_type_name",
         header: "Loại phương tiện",
         cell: ({ row }) => (
-          <span className="font-medium">
-            {row.original.vehicle_type_name || `ID: ${row.original.vehicle_type_id}`}
-          </span>
+          <div className="flex items-center gap-2">
+            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary border border-primary/20 shadow-sm transition-all hover:bg-primary/20">
+              {row.original.vehicle_type_name || `ID: ${row.original.vehicle_type_id}`}
+            </span>
+          </div>
         ),
       },
       {
         accessorKey: "base_price",
         header: "Giá cơ bản",
         cell: ({ row }) => (
-          <span className="font-semibold text-primary">
+          <span className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-emerald-500 to-teal-600 drop-shadow-sm">
             {formatCurrency(row.original.base_price)}
           </span>
         ),
@@ -55,7 +62,7 @@ export function PricingPolicyTable({
         accessorKey: "extra_fee_per_hour",
         header: "Phụ thu / giờ",
         cell: ({ row }) => (
-          <span className="text-muted-foreground">
+          <span className="font-medium text-amber-600/90 bg-amber-50 px-2 py-1 rounded-md border border-amber-100/50">
             {formatCurrency(row.original.extra_fee_per_hour)}
           </span>
         ),
@@ -64,7 +71,10 @@ export function PricingPolicyTable({
         accessorKey: "effective_date",
         header: "Ngày hiệu lực",
         cell: ({ row }) => (
-          <span>{row.original.effective_date.replace(/-/g, "/")}</span>
+          <span className="text-sm font-medium text-slate-600 flex items-center gap-1.5">
+            <div className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse"></div>
+            {row.original.effective_date.replace(/-/g, "/")}
+          </span>
         ),
       },
       {
@@ -78,7 +88,7 @@ export function PricingPolicyTable({
               <Button
                 variant="outline"
                 size="sm"
-                className="h-8 px-2 text-primary"
+                className="h-8 w-8 p-0 text-blue-600 border-blue-200 bg-blue-50/50 hover:bg-blue-100 hover:text-blue-700 hover:border-blue-300 transition-all duration-300 shadow-sm"
                 onClick={() => onEdit(policy)}
                 title="Cập nhật"
               >
@@ -87,7 +97,7 @@ export function PricingPolicyTable({
               <Button
                 variant="outline"
                 size="sm"
-                className="h-8 px-2 text-destructive hover:bg-destructive hover:text-destructive-foreground"
+                className="h-8 w-8 p-0 text-red-600 border-red-200 bg-red-50/50 hover:bg-red-500 hover:text-white hover:border-red-500 transition-all duration-300 shadow-sm hover:scale-105"
                 onClick={() => onDelete(policy)}
                 title="Xóa"
               >

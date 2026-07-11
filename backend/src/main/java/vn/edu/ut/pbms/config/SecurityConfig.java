@@ -1,5 +1,7 @@
 package vn.edu.ut.pbms.config;
 
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -13,6 +15,9 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import vn.edu.ut.pbms.security.JwtAuthenticationFilter;
+
 import java.util.List;
 
 /**
@@ -24,7 +29,10 @@ import java.util.List;
  */
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
+
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -42,8 +50,11 @@ public class SecurityConfig {
                                 "/swagger-ui.html",
                                 "/v3/api-docs/**"
                         ).permitAll()
-                        // Tạm thời cho phép tất cả (sẽ siết lại khi triển khai JWT Filter)
-                        .anyRequest().permitAll());
+                        // Yêu cầu xác thực cho các thao tác check-out, override, calculate-fee...
+                        .requestMatchers("/api/v1/sessions/**").authenticated()
+                        // Tạm thời cho phép tất cả các endpoint khác
+                        .anyRequest().permitAll())
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

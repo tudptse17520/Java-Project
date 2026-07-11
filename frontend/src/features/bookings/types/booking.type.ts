@@ -22,8 +22,9 @@ export interface BookingListResponse {
 export const BOOKING_STATUS = {
   PENDING: "PENDING",
   CONFIRMED: "CONFIRMED",
+  CHECKED_IN: "CHECKED_IN",
   CANCELLED: "CANCELLED",
-  COMPLETED: "COMPLETED",
+  EXPIRED: "EXPIRED",
 } as const;
 
 export type BookingStatus = typeof BOOKING_STATUS[keyof typeof BOOKING_STATUS];

@@ -8,13 +8,14 @@ interface BookingStatusBadgeProps {
 const STATUS_LABELS: Record<string, string> = {
   PENDING: "Đang chờ",
   CONFIRMED: "Đã xác nhận",
+  CHECKED_IN: "Đã vào bãi",
   CANCELLED: "Đã hủy",
-  COMPLETED: "Đã hoàn thành",
+  EXPIRED: "Đã hết hạn",
 };
 
 export function BookingStatusBadge({ status }: BookingStatusBadgeProps) {
   const variant =
-    status === "COMPLETED" || status === "CONFIRMED"
+    status === "CHECKED_IN" || status === "CONFIRMED"
       ? "success"
       : status === "PENDING"
       ? "warning"

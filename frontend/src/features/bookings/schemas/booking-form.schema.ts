@@ -1,8 +1,8 @@
 import { z } from "zod";
 
 export const bookingFormSchema = z.object({
-  vehicleId: z.string().min(1, { message: "Vui lòng nhập xe." }),
-  parkingSlotId: z.string().min(1, { message: "Vui lòng nhập vị trí đỗ." }),
+  vehicleId: z.coerce.number().min(1, { message: "Vui lòng nhập xe hợp lệ." }),
+  parkingSlotId: z.coerce.number().min(1, { message: "Vui lòng nhập vị trí đỗ hợp lệ." }),
   expectedTimeIn: z.string().min(1, { message: "Vui lòng chọn thời gian dự kiến vào." }),
   expectedTimeOut: z.string().min(1, { message: "Vui lòng chọn thời gian dự kiến ra." }),
 }).refine((data) => {

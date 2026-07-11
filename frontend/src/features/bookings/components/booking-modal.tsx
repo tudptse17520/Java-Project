@@ -36,10 +36,11 @@ export function BookingModal({
     reset,
     formState: { errors },
   } = useForm<BookingFormValues>({
+    // @ts-expect-error: Zod coerce number with refine causes Resolver type mismatch in RHF
     resolver: zodResolver(bookingFormSchema),
     defaultValues: {
-      vehicleId: "",
-      parkingSlotId: "",
+      vehicleId: 0,
+      parkingSlotId: 0,
       expectedTimeIn: "",
       expectedTimeOut: "",
     },
@@ -48,8 +49,8 @@ export function BookingModal({
   useEffect(() => {
     if (open) {
       reset({
-        vehicleId: "",
-        parkingSlotId: "",
+        vehicleId: 0,
+        parkingSlotId: 0,
         expectedTimeIn: "",
         expectedTimeOut: "",
       });
@@ -79,7 +80,7 @@ export function BookingModal({
           <span className="sr-only">Close</span>
         </button>
 
-        <FormContainer onSubmit={handleSubmit(onSubmit)}>
+        <FormContainer onSubmit={handleSubmit(onSubmit as any)}>
           <FormHeader
             title="Tạo mới đặt chỗ"
             description="Đặt trước vị trí đỗ xe để được giữ chỗ."

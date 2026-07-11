@@ -24,6 +24,7 @@ export function BuildingModal({ open, onClose, building }: BuildingModalProps) {
   const isPending = isCreating || isUpdating;
 
   const form = useForm<BuildingCreateForm | BuildingUpdateForm>({
+    // @ts-expect-error: Zod coerce causes resolver mismatch
     resolver: zodResolver(isEditMode ? buildingUpdateSchema : buildingCreateSchema),
     defaultValues: {
       building_name: '',
@@ -89,7 +90,7 @@ export function BuildingModal({ open, onClose, building }: BuildingModalProps) {
           <span className="sr-only">Đóng</span>
         </button>
 
-        <FormContainer onSubmit={form.handleSubmit(onSubmit)}>
+        <FormContainer onSubmit={form.handleSubmit(onSubmit as any)}>
           <FormHeader 
             title={isEditMode ? 'Cập nhật Tòa Nhà' : 'Thêm Tòa Nhà Mới'} 
             description={isEditMode ? 'Thay đổi thông tin của tòa nhà hiện tại.' : 'Nhập thông tin cho tòa nhà mới.'}

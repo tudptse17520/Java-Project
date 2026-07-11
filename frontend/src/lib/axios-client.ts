@@ -13,7 +13,7 @@ import { getCookie, removeCookie } from "@/utils/storage";
 
 // Sử dụng biến môi trường trực tiếp để tránh lỗi khi env.ts validate fail
 const BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080/api";
+  process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080/api/v1";
 
 /**
  * Axios instance chính cho toàn bộ ứng dụng

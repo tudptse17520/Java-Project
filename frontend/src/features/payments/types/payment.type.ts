@@ -16,6 +16,7 @@ export interface Payment {
   fee_type: string;
   payment_time: string;
   status: string;
+  payment_url?: string;
 }
 
 /**

@@ -40,6 +40,36 @@ export const getPaymentById = async (id: number): Promise<Payment> => {
   return response.data;
 };
 
+export const getRemainingDebt = async (sessionId: number): Promise<{
+  session_id: number;
+  total_fee: number;
+  paid_fee: number;
+  remaining_fee: number;
+}> => {
+  const response = await axiosClient.get(`${BASE_PATH}/sessions/${sessionId}/debt`);
+  return response.data;
+};
+
+
+
+export interface ParkingSessionMinimal {
+  id: number;
+  plate: string;
+  ticket_code: string;
+  status: string;
+}
+
+export const getSessionByPlate = async (plate: string): Promise<ParkingSessionMinimal | null> => {
+  if (!plate || plate.trim() === "") return null;
+  const response = await axiosClient.get(`/sessions?plate=${encodeURIComponent(plate)}&status=IN_PROGRESS`);
+  const data = response.data?.data;
+  if (Array.isArray(data) && data.length > 0) {
+    // Return the latest one
+    return data[0] as ParkingSessionMinimal;
+  }
+  return null;
+};
+
 /**
  * Tạo thanh toán mới
  */

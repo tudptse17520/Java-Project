@@ -45,6 +45,12 @@ export function usePaymentActions() {
   // Create Payment Dialog State
   // =============================================
   const [isCreateOpen, setIsCreateOpen] = useState(false);
+  
+  // QR Dialog State
+  const [isQrOpen, setIsQrOpen] = useState(false);
+  const [qrUrl, setQrUrl] = useState<string | null>(null);
+  const [qrAmount, setQrAmount] = useState<number | null>(null);
+
   const createMutation = useCreatePayment();
 
   const handleOpenCreate = useCallback(() => {
@@ -66,9 +72,14 @@ export function usePaymentActions() {
           fee_type: values.fee_type,
         },
         {
-          onSuccess: () => {
+          onSuccess: (data: any) => {
             toast.success("Tạo giao dịch thành công!");
             setIsCreateOpen(false);
+            if (data?.payment_url) {
+              setQrUrl(data.payment_url);
+              setQrAmount(values.amount);
+              setIsQrOpen(true);
+            }
           },
           onError: (error) => {
             const axiosError = error as AxiosError<ApiErrorResponse>;
@@ -187,6 +198,16 @@ export function usePaymentActions() {
     handleCloseCreate,
     handleCreateSubmit,
     isCreating: createMutation.isPending,
+
+    // QR Dialog
+    isQrOpen,
+    qrUrl,
+    qrAmount,
+    handleCloseQr: () => {
+      setIsQrOpen(false);
+      setQrUrl(null);
+      setQrAmount(null);
+    },
 
     // Detail Dialog
     isDetailOpen,

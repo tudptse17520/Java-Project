@@ -13,16 +13,20 @@ import type {
 import {
   getPayments,
   getPaymentById,
+  getRemainingDebt,
+  getSessionByPlate,
   createPayment,
   updatePaymentStatus,
   cancelPayment,
 } from "@/services/payment.service";
 
 /** Query key factory cho Payment */
-const paymentKeys = {
+export const paymentKeys = {
   all: ["payments"] as const,
   list: (filter?: PaymentFilter) => [...paymentKeys.all, "list", filter] as const,
   detail: (id: number) => [...paymentKeys.all, "detail", id] as const,
+  debt: (id: number) => [...paymentKeys.all, "debt", id] as const,
+  sessionByPlate: (plate: string) => [...paymentKeys.all, "session-by-plate", plate] as const,
 };
 
 /**
@@ -45,6 +49,28 @@ export function usePaymentDetail(id: number | null) {
     queryKey: paymentKeys.detail(id!),
     queryFn: () => getPaymentById(id!),
     enabled: id != null,
+  });
+}
+
+/**
+ * Hook lấy dư nợ còn lại của phiên đỗ xe.
+ */
+export function usePaymentDebt(sessionId: number | null) {
+  return useQuery({
+    queryKey: paymentKeys.debt(sessionId!),
+    queryFn: () => getRemainingDebt(sessionId!),
+    enabled: sessionId != null,
+  });
+}
+
+/**
+ * Hook lấy session theo biển số xe
+ */
+export function useSessionByPlate(plate: string) {
+  return useQuery({
+    queryKey: paymentKeys.sessionByPlate(plate),
+    queryFn: () => getSessionByPlate(plate),
+    enabled: !!plate && plate.length >= 3, // Only fetch if plate has at least 3 chars
   });
 }
 

@@ -18,7 +18,6 @@ export const PAYMENT_METHODS = [
  */
 export const FEE_TYPES = [
   { value: "Parking_Fee", label: "Phí gửi xe" },
-  { value: "Booking_Deposit", label: "Cọc đặt chỗ" },
   { value: "Lost_Ticket_Fine", label: "Phạt mất vé" },
 ] as const;
 
@@ -45,6 +44,5 @@ export const PAYMENT_METHOD_LABELS: Record<string, string> = {
  */
 export const FEE_TYPE_LABELS: Record<string, string> = {
   Parking_Fee: "Phí gửi xe",
-  Booking_Deposit: "Cọc đặt chỗ",
   Lost_Ticket_Fine: "Phạt mất vé",
 };

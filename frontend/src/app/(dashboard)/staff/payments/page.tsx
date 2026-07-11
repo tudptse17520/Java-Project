@@ -19,6 +19,7 @@ import { PaymentFilter } from "@/features/payments/components/payment-filter";
 import { PaymentCreateDialog } from "@/features/payments/components/payment-create-dialog";
 import { PaymentDetailDialog } from "@/features/payments/components/payment-detail-dialog";
 import { PaymentManualStatusDialog } from "@/features/payments/components/payment-manual-status-dialog";
+import { PaymentQrDialog } from "@/features/payments/components/payment-qr-dialog";
 
 export default function PaymentPage() {
   // Hook Action: quản lý trạng thái UI
@@ -31,6 +32,10 @@ export default function PaymentPage() {
     handleCloseCreate,
     handleCreateSubmit,
     isCreating,
+    isQrOpen,
+    qrUrl,
+    qrAmount,
+    handleCloseQr,
     isDetailOpen,
     selectedPayment,
     handleOpenDetail,
@@ -90,6 +95,14 @@ export default function PaymentPage() {
         onClose={handleCloseCreate}
         onSubmit={handleCreateSubmit}
         isLoading={isCreating}
+      />
+
+      {/* Dialog hiển thị QR Code */}
+      <PaymentQrDialog
+        open={isQrOpen}
+        onClose={handleCloseQr}
+        paymentUrl={qrUrl}
+        amount={qrAmount}
       />
 
       {/* Dialog chi tiết biên lai */}

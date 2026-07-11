@@ -12,6 +12,7 @@ import { z } from "zod";
  */
 export const createPaymentSchema = z
   .object({
+    plate: z.string().optional(),
     parking_session_id: z
       .union([z.number().int().positive(), z.nan()])
       .nullable(),

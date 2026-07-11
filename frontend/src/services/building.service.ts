@@ -28,3 +28,8 @@ export const updateBuilding = async (id: number, data: BuildingUpdateForm): Prom
   const response = await axiosClient.put<BuildingResponse>(`${BUILDING_API_URL}/${id}`, data);
   return response.data;
 };
+
+export const updateBuildingStatus = async (id: number, status: string): Promise<BuildingResponse> => {
+  const response = await axiosClient.patch<BuildingResponse>(`${BUILDING_API_URL}/${id}/status`, { status });
+  return response.data;
+};

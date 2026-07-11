@@ -4,6 +4,7 @@ import {
   getBuildingDetail,
   createBuilding,
   updateBuilding,
+  updateBuildingStatus,
 } from '@/services/building.service';
 import type { BuildingCreateForm, BuildingUpdateForm } from '../schemas/building-form.schema';
 
@@ -38,6 +39,17 @@ export const useUpdateBuilding = () => {
 
   return useMutation({
     mutationFn: ({ id, data }: { id: number; data: BuildingUpdateForm }) => updateBuilding(id, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['buildings'] });
+    },
+  });
+};
+
+export const useUpdateBuildingStatus = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ id, status }: { id: number; status: string }) => updateBuildingStatus(id, status),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['buildings'] });
     },

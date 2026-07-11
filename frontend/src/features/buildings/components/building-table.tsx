@@ -8,7 +8,7 @@ import { BuildingStatusBadge } from './building-status-badge';
 import type { BuildingResponse } from '@/types/building.type';
 import { Button } from '@/components/ui/button';
 import { Edit2, Trash2 } from 'lucide-react';
-import { useUpdateBuilding } from '../hooks/use-buildings';
+import { useUpdateBuildingStatus } from '../hooks/use-buildings';
 
 interface BuildingTableProps {
   buildings: BuildingResponse[];
@@ -20,7 +20,7 @@ export function BuildingTable({ buildings, onEdit, isLoading }: BuildingTablePro
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
   const [selectedBuilding, setSelectedBuilding] = useState<BuildingResponse | null>(null);
 
-  const { mutate: updateBuilding, isPending: isUpdating } = useUpdateBuilding();
+  const { mutate: updateBuildingStatus, isPending: isUpdating } = useUpdateBuildingStatus();
 
   const handleDeleteClick = (building: BuildingResponse) => {
     setSelectedBuilding(building);
@@ -30,14 +30,9 @@ export function BuildingTable({ buildings, onEdit, isLoading }: BuildingTablePro
   const handleConfirmDelete = () => {
     if (!selectedBuilding) return;
     
-    updateBuilding({
+    updateBuildingStatus({
       id: selectedBuilding.id,
-      data: {
-        building_name: selectedBuilding.building_name,
-        address: selectedBuilding.address,
-        number_of_floors: selectedBuilding.number_of_floors,
-        status: 'INACTIVE',
-      },
+      status: 'INACTIVE',
     }, {
       onSuccess: () => {
         setDeleteConfirmOpen(false);

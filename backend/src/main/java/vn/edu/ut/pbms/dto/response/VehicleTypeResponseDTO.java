@@ -1,6 +1,5 @@
 package vn.edu.ut.pbms.dto.response;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,10 +18,6 @@ public class VehicleTypeResponseDTO {
     private Long id;
 
     private String typeName;
-
-    @JsonProperty("description")
     private String description;
-
-    @JsonProperty("status")
     private VehicleTypeStatus status;
 }

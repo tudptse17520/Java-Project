@@ -17,8 +17,7 @@ import {
   useVehicleTypesForFilter,
 } from "@/features/pricing-policies/hooks/use-pricing-policies";
 import { usePricingPolicyActions } from "@/features/pricing-policies/hooks/use-pricing-policy-actions";
-import { PageContainer } from "@/components/common/page-container";
-import { Toolbar } from "@/components/common/toolbar";
+
 import { PricingPolicyTable } from "@/features/pricing-policies/components/pricing-policy-table";
 import { PricingPolicyFormDialog } from "@/features/pricing-policies/components/pricing-policy-form-dialog";
 import { PricingPolicyFilter } from "@/features/pricing-policies/components/pricing-policy-filter";

@@ -1,8 +1,32 @@
-﻿export default function Page() {
+﻿"use client";
+
+import { PageContainer } from '@/components/common/page-container';
+import { PageHeader } from '@/components/common/page-header';
+import { Toolbar } from '@/components/common/toolbar';
+import { DataTable } from '@/components/common/data-table';
+import { useSlots } from '@/features/slots/hooks/use-slots';
+
+export default function ManageSlotsPage() {
+  const { data, isLoading } = useSlots();
+
   return (
-    <div>
-      <h1 className="text-2xl font-bold">Quan ly vi tri do</h1>
-      <p className="mt-2 text-muted-foreground">Trang dang duoc phat trien.</p>
-    </div>
+    <PageContainer>
+      <PageHeader 
+        title="Quản lý vị trí đỗ" 
+        description="Danh sách và trạng thái các vị trí đỗ xe trong bãi"
+      />
+      <Toolbar>
+        {/* Các thành phần Tìm kiếm / Bộ lọc đặt ở đây */}
+        <div></div> 
+      </Toolbar>
+      <DataTable 
+        data={data?.data ?? []} 
+        columns={[
+          { header: 'Mã vị trí', accessorKey: 'slotName' },
+          { header: 'Trạng thái', accessorKey: 'status' }
+        ]} 
+        isLoading={isLoading} 
+      />
+    </PageContainer>
   );
 }

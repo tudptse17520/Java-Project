@@ -64,6 +64,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/slots/**").hasAnyRole("ADMIN", "MANAGER")
                         // Yêu cầu quyền ADMIN hoặc MANAGER cho các API Báo cáo & Thống kê
                         .requestMatchers("/api/v1/reports/**").hasAnyRole("ADMIN", "MANAGER")
+                        // Đặt chỗ
+                        .requestMatchers("/api/v1/bookings/**").authenticated()
                         // Tạm thời cho phép tất cả các endpoint khác, đổi thành bắt buộc authenticated
                         .anyRequest().authenticated())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

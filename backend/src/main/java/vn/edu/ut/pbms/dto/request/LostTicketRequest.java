@@ -14,9 +14,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class LostTicketRequest {
 
-    @NotNull(message = "Mã nhân viên xác nhận không được để trống.")
-    @JsonProperty("staff_id")
-    private Long staffId;
-
     private String note;
 }

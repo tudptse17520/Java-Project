@@ -1,8 +1,18 @@
-﻿export default function Page() {
-  return (
-    <div>
-      <h1 className="text-2xl font-bold">Admin Dashboard</h1>
-      <p className="mt-2 text-muted-foreground">Trang dang duoc phat trien.</p>
-    </div>
-  );
+﻿import { ReportDashboard } from "@/features/reports/components/report-dashboard";
+
+export default function Page() {
+
+    return (
+
+        <div className="space-y-6">
+
+            <h1 className="text-3xl font-bold">
+                Reports & Dashboard
+            </h1>
+
+            <ReportDashboard />
+
+        </div>
+
+    );
 }

@@ -5,7 +5,7 @@ import type {
   BookingListResponse,
 } from "@/features/bookings/types/booking.type";
 
-const BASE_PATH = "/v1";
+const BASE_PATH = "/api/v1";
 
 export const createBooking = async (
   request: BookingRequest

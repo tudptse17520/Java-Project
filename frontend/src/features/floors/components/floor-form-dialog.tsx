@@ -11,7 +11,7 @@ import { FormContainer, FormHeader, FormFields, FormActions } from "@/components
 import { useBuildings } from "@/features/buildings/hooks/use-buildings";
 // import useVehicleTypes from features if needed, wait, I need to know if vehicle type hook exists
 import { useQuery } from "@tanstack/react-query";
-import { vehicleTypeService } from "@/services/vehicle-type.service";
+import { getVehicleTypes } from "@/services/vehicle-type.service";
 
 interface FloorFormDialogProps {
   open: boolean;
@@ -31,12 +31,12 @@ export function FloorFormDialog({
   const isEditing = !!initialData;
 
   const { data: buildingsData } = useBuildings();
-  const buildings = buildingsData || [];
+  const buildings = buildingsData?.data || [];
 
   // TODO: Refactor this to use feature hook when it's implemented correctly
   const { data: vehicleTypes } = useQuery({
     queryKey: ['vehicle-types'],
-    queryFn: () => vehicleTypeService.getAll(),
+    queryFn: () => getVehicleTypes(),
   });
 
   const {
@@ -120,7 +120,7 @@ export function FloorFormDialog({
                     errors.floorLevel && "border-destructive focus-visible:ring-destructive"
                   )}
                   placeholder="VD: -1, 1, 2"
-                  {...register("floorLevel")}
+                  {...register("floorLevel", { valueAsNumber: true })}
                 />
                 {errors.floorLevel && <p className="text-sm text-destructive">{errors.floorLevel.message}</p>}
               </div>
@@ -138,7 +138,7 @@ export function FloorFormDialog({
                     errors.capacity && "border-destructive focus-visible:ring-destructive"
                   )}
                   placeholder="VD: 50"
-                  {...register("capacity")}
+                  {...register("capacity", { valueAsNumber: true })}
                 />
                 {errors.capacity && <p className="text-sm text-destructive">{errors.capacity.message}</p>}
               </div>
@@ -154,7 +154,7 @@ export function FloorFormDialog({
                   "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm",
                   errors.buildingId && "border-destructive focus-visible:ring-destructive"
                 )}
-                {...register("buildingId")}
+                {...register("buildingId", { valueAsNumber: true })}
               >
                 <option value={0} disabled>-- Chọn tòa nhà --</option>
                 {buildings.map((b: any) => (
@@ -174,7 +174,7 @@ export function FloorFormDialog({
                   "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm",
                   errors.vehicleTypeId && "border-destructive focus-visible:ring-destructive"
                 )}
-                {...register("vehicleTypeId")}
+                {...register("vehicleTypeId", { valueAsNumber: true })}
               >
                 <option value={0} disabled>-- Chọn loại phương tiện --</option>
                 {vehicleTypes?.map((vt: any) => (

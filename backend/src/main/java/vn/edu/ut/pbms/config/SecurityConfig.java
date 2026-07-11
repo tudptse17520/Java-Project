@@ -60,6 +60,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/buildings/**").hasAnyRole("ADMIN", "MANAGER")
                         // Quản lý tầng
                         .requestMatchers("/api/v1/floors/**").hasAnyRole("ADMIN", "MANAGER")
+                        // Quản lý ô đỗ
+                        .requestMatchers("/api/v1/slots/**").hasAnyRole("ADMIN", "MANAGER")
                         // Yêu cầu quyền ADMIN hoặc MANAGER cho các API Báo cáo & Thống kê
                         .requestMatchers("/api/v1/reports/**").hasAnyRole("ADMIN", "MANAGER")
                         // Tạm thời cho phép tất cả các endpoint khác, đổi thành bắt buộc authenticated

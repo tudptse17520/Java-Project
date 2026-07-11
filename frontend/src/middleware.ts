@@ -43,20 +43,22 @@ function isPublicRoute(pathname: string): boolean {
   );
 }
 
+import { jwtDecode } from "jwt-decode";
+
+interface JwtPayload {
+  role?: string;
+  exp?: number;
+}
+
 /**
  * Decode JWT payload từ token string
- * Placeholder - chỉ decode base64, không verify signature
+ * Sử dụng jwt-decode để xử lý an toàn
  */
 function decodeJwtPayload(
   token: string
-): { role?: string; exp?: number } | null {
+): JwtPayload | null {
   try {
-    const parts = token.split(".");
-    if (parts.length !== 3) return null;
-    const payload = JSON.parse(
-      Buffer.from(parts[1], "base64").toString("utf-8")
-    );
-    return payload;
+    return jwtDecode<JwtPayload>(token);
   } catch {
     return null;
   }

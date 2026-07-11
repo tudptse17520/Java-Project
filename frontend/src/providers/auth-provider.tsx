@@ -24,7 +24,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
       try {
         // Decode JWT payload (base64) để lấy thông tin user
         // JWT chỉ chứa: sub (username), role, iat, exp
-        const payload = JSON.parse(atob(token.split(".")[1]));
+        const base64Url = token.split(".")[1];
+        const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+        const payload = JSON.parse(atob(base64));
         setUser({
           username: payload.sub || "",
           role: payload.role || "USER",

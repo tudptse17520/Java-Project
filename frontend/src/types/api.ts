@@ -15,9 +15,10 @@ export interface ApiResponse<T = unknown> {
 
 /**
  * Response lỗi từ Backend
+ * Matching Spring Boot ErrorResponse: { status, error, message }
  */
 export interface ApiErrorResponse {
   status: number;
+  error: string;
   message: string;
-  errors?: Record<string, string>;
 }

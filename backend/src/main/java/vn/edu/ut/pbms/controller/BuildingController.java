@@ -58,14 +58,15 @@ public class BuildingController {
     /**
      * Retrieve list of buildings filtered by status.
      *
-     * @param status  the status of the building
+     * @param status the status of the building
      * @return HTTP 200 with the list of buildings
      */
     @GetMapping
     public ResponseEntity<BuildingListResponseDTO> getBuildings(
+            @RequestParam(required = false) String keyword,
             @RequestParam(required = false) BuildingStatus status) {
         
-        BuildingListResponseDTO response = buildingService.getBuildings(status);
+        BuildingListResponseDTO response = buildingService.getBuildings(keyword, status);
         return ResponseEntity.ok(response);
     }
 
@@ -123,6 +124,7 @@ public class BuildingController {
     /**
      * Delete an existing building.
      * * @param id the building ID from path
+     * 
      * @return HTTP 200 with building ID and success message
      */
     @DeleteMapping("/{id}")

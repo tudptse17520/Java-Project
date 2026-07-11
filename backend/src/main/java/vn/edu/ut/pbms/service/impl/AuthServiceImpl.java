@@ -3,9 +3,12 @@ package vn.edu.ut.pbms.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import vn.edu.ut.pbms.constant.UserStatus;
 import vn.edu.ut.pbms.dto.request.LoginRequest;
 import vn.edu.ut.pbms.dto.response.LoginResponse;
+import vn.edu.ut.pbms.dto.response.UserResponse;
 import vn.edu.ut.pbms.entity.User;
 import vn.edu.ut.pbms.exception.AuthenticationException;
 import vn.edu.ut.pbms.exception.ResourceNotFoundException;
@@ -49,6 +52,27 @@ public class AuthServiceImpl implements AuthService {
                 .token(token)
                 .message("Đăng nhập thành công.")
                 .role(user.getRole().name())
+                .build();
+    }
+
+    @Override
+    public UserResponse getMe() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated() || "anonymousUser".equals(authentication.getName())) {
+            throw new AuthenticationException("Vui lòng đăng nhập để thực hiện chức năng này.");
+        }
+
+        String username = authentication.getName();
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new ResourceNotFoundException("Tài khoản không tồn tại."));
+
+        return UserResponse.builder()
+                .id(user.getId())
+                .username(user.getUsername())
+                .fullName(user.getFullName())
+                .phoneNumber(user.getPhoneNumber())
+                .role(user.getRole().name())
+                .status(user.getStatus().name())
                 .build();
     }
 }

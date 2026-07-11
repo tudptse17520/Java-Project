@@ -1,6 +1,5 @@
 package vn.edu.ut.pbms.dto.response;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,13 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PaymentListResponseDTO {
-
-    @JsonProperty("total_items")
     private int totalItems;
-
-    @JsonProperty("message")
     private String message;
-
-    @JsonProperty("data")
     private List<PaymentResponseDTO> data;
 }

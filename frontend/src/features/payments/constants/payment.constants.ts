@@ -10,7 +10,6 @@ export const PAYMENT_METHODS = [
   { value: "Cash", label: "Tiền mặt" },
   { value: "Momo", label: "Ví MoMo" },
   { value: "Vnpay", label: "VNPay" },
-  { value: "Credit_Card", label: "Thẻ tín dụng" },
 ] as const;
 
 /**
@@ -45,4 +44,6 @@ export const PAYMENT_METHOD_LABELS: Record<string, string> = {
 export const FEE_TYPE_LABELS: Record<string, string> = {
   Parking_Fee: "Phí gửi xe",
   Lost_Ticket_Fine: "Phạt mất vé",
+  PARKING_FEE: "Phí gửi xe",
+  LOST_TICKET_FINE: "Phạt mất vé",
 };

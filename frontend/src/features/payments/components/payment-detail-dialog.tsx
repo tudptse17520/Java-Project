@@ -98,9 +98,6 @@ export function PaymentDetailDialog({
       {/* Dialog */}
       <div className="relative z-50 w-full max-w-md rounded-lg border bg-background p-6 shadow-lg">
         <h2 className="text-lg font-semibold">Chi tiết biên lai</h2>
-        <p className="mt-1 text-sm text-muted-foreground">
-          Thông tin giao dịch #{payment.id}
-        </p>
 
         <div className="mt-4 space-y-3">
           <DetailRow label="Mã giao dịch" value={`#${payment.id}`} />
@@ -116,9 +113,14 @@ export function PaymentDetailDialog({
           {/* Session Details */}
           {payment.parking_session_id != null && (
             <div className="rounded-md bg-muted p-3 space-y-2 mt-2 mb-2">
-              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">
-                Thông tin lượt gửi xe
-              </p>
+              <div className="flex flex-col mb-2">
+                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                  Thông tin lượt gửi xe
+                </p>
+                <p className="text-[10px] text-orange-500/80 italic mt-0.5">
+                  * Trạng thái và dư nợ tại thời điểm hiện tại
+                </p>
+              </div>
               {isSessionLoading ? (
                 <p className="text-sm text-muted-foreground">Đang tải thông tin xe...</p>
               ) : sessionData ? (
@@ -179,7 +181,7 @@ export function PaymentDetailDialog({
           />
           <DetailRow
             label="Thời gian"
-            value={payment.payment_time || "Chưa ghi nhận"}
+            value={payment.payment_time ? formatDateTime(payment.payment_time) : "Chưa ghi nhận"}
           />
           <div className="flex items-center justify-between border-t pt-3">
             <span className="text-sm text-muted-foreground">Trạng thái</span>

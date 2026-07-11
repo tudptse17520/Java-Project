@@ -55,6 +55,7 @@ export function PaymentCreateDialog({
   const plateValue = watch("plate");
   const parkingSessionId = watch("parking_session_id");
   const feeType = watch("fee_type");
+  const paymentMethod = watch("payment_method");
 
   // State for debounced plate searching
   const [searchPlate, setSearchPlate] = useState("");
@@ -183,7 +184,7 @@ export function PaymentCreateDialog({
                 {...register("fee_type")}
               >
                 <option value="">-- Chọn loại phí --</option>
-                {FEE_TYPES.map((type) => (
+                {FEE_TYPES.filter(type => type.value !== "Booking_Deposit").map((type) => (
                   <option key={type.value} value={type.value}>
                     {type.label}
                   </option>
@@ -213,6 +214,11 @@ export function PaymentCreateDialog({
                   </option>
                 ))}
               </select>
+              {paymentMethod === "Momo" && (
+                <p className="text-xs text-orange-500 font-medium italic mt-1">
+                  * Tính năng thanh toán qua MoMo hiện đang được phát triển.
+                </p>
+              )}
               {errors.payment_method && (
                 <p className="text-xs text-destructive">
                   {errors.payment_method.message}
@@ -277,7 +283,7 @@ export function PaymentCreateDialog({
             >
               Hủy
             </Button>
-            <Button type="submit" disabled={isLoading || !hasValidSession || !feeType || isDebtLoading}>
+            <Button type="submit" disabled={isLoading || !hasValidSession || !feeType || isDebtLoading || paymentMethod === "Momo"}>
               {isLoading ? "Đang xử lý..." : "Tạo thanh toán"}
             </Button>
           </FormActions>

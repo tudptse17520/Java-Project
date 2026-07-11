@@ -1,6 +1,5 @@
 package vn.edu.ut.pbms.dto.response;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,8 +18,6 @@ import java.time.LocalDateTime;
 public class PaymentResponse {
 
     private Long id;
-
-    @JsonProperty("payment_time")
     private LocalDateTime paymentTime;
 
     private PaymentStatus status;

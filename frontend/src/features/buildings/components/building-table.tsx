@@ -47,7 +47,7 @@ export function BuildingTable({ buildings, onEdit, isLoading }: BuildingTablePro
       header: 'ID',
     },
     {
-      accessorKey: 'building_name',
+      accessorKey: 'buildingName',
       header: 'Tên Tòa Nhà',
     },
     {
@@ -55,11 +55,11 @@ export function BuildingTable({ buildings, onEdit, isLoading }: BuildingTablePro
       header: 'Địa Chỉ',
     },
     {
-      accessorKey: 'number_of_floors',
+      accessorKey: 'numberOfFloors',
       header: 'Số Tầng',
     },
     {
-      accessorKey: 'total_available_slots',
+      accessorKey: 'totalAvailableSlots',
       header: 'Số Chỗ Trống',
     },
     {
@@ -110,7 +110,7 @@ export function BuildingTable({ buildings, onEdit, isLoading }: BuildingTablePro
         onClose={() => setDeleteConfirmOpen(false)}
         onConfirm={handleConfirmDelete}
         title="Ngừng hoạt động tòa nhà"
-        description={`Bạn có chắc chắn muốn chuyển trạng thái tòa nhà ${selectedBuilding?.building_name} sang Ngừng hoạt động?`}
+        description={`Bạn có chắc chắn muốn chuyển trạng thái tòa nhà ${selectedBuilding?.buildingName} sang Ngừng hoạt động?`}
         confirmText="Ngừng hoạt động"
         cancelText="Hủy"
         variant="danger"

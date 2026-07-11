@@ -4,9 +4,14 @@ import { LoadingSpinner } from "@/components/common/loading-spinner";
 import { EmptyState } from "@/components/common/empty-state";
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Legend } from "recharts";
 import { Layers } from "lucide-react";
+import type { ReportFilter } from "../types/report.type";
 
-export function OccupancyChart() {
-  const { data, isLoading, isError } = useOccupancyReport();
+interface OccupancyChartProps {
+  filter?: ReportFilter;
+}
+
+export function OccupancyChart({ filter }: OccupancyChartProps) {
+  const { data, isLoading, isError } = useOccupancyReport(filter);
 
   if (isLoading) {
     return (

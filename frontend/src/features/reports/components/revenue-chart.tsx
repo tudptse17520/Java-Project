@@ -5,9 +5,14 @@ import { LoadingSpinner } from "@/components/common/loading-spinner";
 import { EmptyState } from "@/components/common/empty-state";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
 import { BarChart3 } from "lucide-react";
+import type { ReportFilter } from "../types/report.type";
 
-export function RevenueChart() {
-  const { data, isLoading, isError } = useRevenueReport();
+interface RevenueChartProps {
+  filter?: ReportFilter;
+}
+
+export function RevenueChart({ filter }: RevenueChartProps) {
+  const { data, isLoading, isError } = useRevenueReport(filter);
 
   if (isLoading) {
     return (

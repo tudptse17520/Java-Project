@@ -33,10 +33,10 @@ export function VehicleTypeTable({
         header: "ID",
       },
       {
-        accessorKey: "type_name",
+        accessorKey: "typeName",
         header: "Tên loại",
         cell: ({ row }) => (
-          <span className="font-medium">{row.original.type_name}</span>
+          <span className="font-medium">{row.original.typeName}</span>
         ),
       },
       {
@@ -52,10 +52,10 @@ export function VehicleTypeTable({
         },
       },
       {
-        accessorKey: "active_sessions_count",
+        accessorKey: "activeSessionsCount",
         header: "Đang đỗ (xe)",
         cell: ({ row }) => {
-          const count = row.original.active_sessions_count || 0;
+          const count = row.original.activeSessionsCount || 0;
           return (
             <span className={cn("font-medium", count > 0 ? "text-blue-500" : "text-muted-foreground")}>
               {count}

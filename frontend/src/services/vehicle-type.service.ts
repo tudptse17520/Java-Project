@@ -23,13 +23,13 @@ export const getVehicleTypes = async (): Promise<VehicleType[]> => {
   });
 
   return vehicleTypes.map(vt => {
-    const active_sessions_count = floors
+    const activeSessionsCount = floors
       .filter(f => f.vehicle_type_id === vt.id)
       .reduce((sum, f) => sum + (occupiedMap.get(f.floor_name) || 0), 0);
     
     return {
       ...vt,
-      active_sessions_count
+      activeSessionsCount
     };
   });
 };

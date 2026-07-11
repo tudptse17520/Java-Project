@@ -59,11 +59,11 @@ export function usePaymentActions() {
     (values: CreatePaymentFormValues) => {
       createMutation.mutate(
         {
-          parking_session_id: values.parking_session_id ?? null,
-          booking_id: values.booking_id ?? null,
+          parkingSessionId: values.parkingSessionId ?? null,
+          bookingId: values.bookingId ?? null,
           amount: values.amount,
-          payment_method: values.payment_method,
-          fee_type: values.fee_type,
+          paymentMethod: values.paymentMethod,
+          feeType: values.feeType,
         },
         {
           onSuccess: () => {

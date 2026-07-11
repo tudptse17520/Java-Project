@@ -8,4 +8,10 @@ export const floorSchema = z.object({
   vehicleTypeId: z.coerce.number().min(1, "Vui lòng chọn loại xe"),
 });
 
-export type FloorFormValues = z.infer<typeof floorSchema>;
+export interface FloorFormValues {
+  floorName: string;
+  floorLevel: number;
+  capacity: number;
+  buildingId: number;
+  vehicleTypeId: number;
+}

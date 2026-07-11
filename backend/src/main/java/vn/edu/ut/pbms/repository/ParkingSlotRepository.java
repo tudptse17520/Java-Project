@@ -18,4 +18,7 @@ public interface ParkingSlotRepository extends JpaRepository<ParkingSlot, Long> 
     List<ParkingSlot> findByFloorIdAndStatus(Long floorId, ParkingSlotStatus status);
     List<ParkingSlot> findByFloor_Id(Long floorId);
     boolean existsByFloorIdAndSlotName(Long floorId, String slotName);
+    
+    // Đếm số lượng ô đỗ xe theo tầng và trạng thái
+    long countByFloorIdAndStatus(Long floorId, ParkingSlotStatus status);
 }

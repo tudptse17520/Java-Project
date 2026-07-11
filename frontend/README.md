@@ -1,36 +1,82 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Frontend Structure
 
-## Getting Started
-
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+```text
+pbms-frontend/
+├── public/              # Public static files (logos, global images, icons)
+├── src/
+│   ├── app/             # App Router (pages, layouts, route groups, middleware)
+│   ├── components/      # Reusable UI components (ui/, common/, layouts/)
+│   ├── config/          # Environment, permissions, navigation menus
+│   ├── constants/       # Roles, statuses, and domain enums
+│   ├── features/        # Business logic modules (UI local state & components)
+│   ├── hooks/           # Global custom hooks
+│   ├── lib/             # Third-party clients (Axios client, Query client)
+│   ├── mocks/           # Mock data for frontend independent development
+│   ├── providers/       # Global state providers (Query, Theme, Toast, Auth)
+│   ├── services/        # Centralized API layer (Axios endpoints)
+│   ├── stores/          # Global client state (Zustand stores)
+│   ├── types/           # TypeScript types/interfaces matching Backend Entities
+│   └── utils/           # Global helper functions (formatters)
+└── middleware.ts        # Global Route Guard (placed at /src root)
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Routing Structure 
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```text
+app/
+├── (auth)
+│   └── login
+│
+├── (dashboard)
+│   ├── forbidden (403 Error Page)
+│   │
+│   ├── admin
+│   │   ├── dashboard
+│   │   ├── users
+│   │   └── settings
+│   │
+│   ├── manager
+│   │   ├── dashboard
+│   │   ├── buildings
+│   │   ├── floors
+│   │   ├── slots
+│   │   ├── pricing
+│   │   ├── feedbacks
+│   │   └── reports
+│   │
+│   └── staff
+│       ├── dashboard
+│       ├── check-in
+│       ├── check-out
+│       ├── sessions
+│       └── payments
+│
+└── (driver)
+    ├── browse
+    ├── reservations
+    ├── vehicles
+    └── profile
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Prerequisites
+- Node.js (v18 or newer recommended)
+- npm, yarn, or pnpm
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Setup & Run
+1. Navigate to the frontend directory:
+   ```bash
+   cd frontend
+   ```
+2. Install dependencies:
+   ```bash
+   npm install
+   # or yarn install / pnpm install
+   ```
+3. Set up environment variables:
+   Copy `.env.example` to `.env.local` and update the values.
+4. Start the development server:
+   ```bash
+   npm run dev
+   # or yarn dev / pnpm dev
+   ```
+The frontend application will start on `http://localhost:3000`.

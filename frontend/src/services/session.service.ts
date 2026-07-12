@@ -6,8 +6,8 @@ const SESSION_API_URL = "/api/v1/sessions";
 export const getSessions = async (params?: SessionFilterParams): Promise<SessionListResponse> => {
   let formattedDate = undefined;
   if (params?.fromDate) {
-    const [year, month, day] = params.fromDate.split("-");
-    formattedDate = `${day}-${month}-${year}`;
+    // Assuming params.fromDate is YYYY-MM-DD from <input type="date">
+    formattedDate = `${params.fromDate}T00:00:00`;
   }
 
   const response = await axiosClient.get<SessionListResponse>(SESSION_API_URL, {

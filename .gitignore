@@ -111,7 +111,7 @@ pnpm-debug.log*
 # ==================================================
 
 coverage/
-reports/
+/reports/
 frontend/coverage/
 backend/coverage/
 

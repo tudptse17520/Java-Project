@@ -1,4 +1,4 @@
-import axiosClient from "@/lib/axios-client";
+﻿import axiosClient from "@/lib/axios-client";
 import { ApiResponse } from "@/types/api";
 
 import {
@@ -9,9 +9,37 @@ import {
   OverrideCheckoutRequest,
   ParkingSession,
   PlateValidationRequest,
+  SessionListResponse,
+  SessionResponse,
 } from "@/features/sessions/types/session.type";
 
+const SESSION_API = '/api/v1/sessions';
+
 export const sessionService = {
+  getSessions: async (keyword?: string, status?: string): Promise<SessionListResponse> => {
+    const params = new URLSearchParams();
+    if (keyword) params.append('plate', keyword);
+    if (status && status !== 'ALL') params.append('status', status);
+    
+    const response = await axiosClient.get<SessionListResponse>(SESSION_API, { params });
+    return response.data;
+  },
+
+  checkInVehicle: async (data: { plate: string; vehicleId?: number | null; parkingSlotId?: number | null }): Promise<SessionResponse> => {
+    const response = await axiosClient.post<SessionResponse>(${SESSION_API}/check-in, data);
+    return response.data;
+  },
+
+  updateSession: async (id: number, data: { plate: string; vehicleId?: number | null; parkingSlotId?: number | null }): Promise<SessionResponse> => {
+    const response = await axiosClient.put<SessionResponse>(${SESSION_API}/, data);
+    return response.data;
+  },
+
+  updateSessionStatus: async (id: number, status: string): Promise<SessionResponse> => {
+    const response = await axiosClient.patch<SessionResponse>(${SESSION_API}//status, { status });
+    return response.data;
+  },
+
   getParkingSessions: async (params?: {
     plate?: string;
     status?: string;
@@ -28,7 +56,7 @@ export const sessionService = {
     request: PlateValidationRequest
   ): Promise<{ message: string }> => {
     const { data } = await axiosClient.post<{ message: string }>(
-      `/sessions/${sessionId}/validate-plate`,
+      /sessions//validate-plate,
       request
     );
     return data;
@@ -39,7 +67,7 @@ export const sessionService = {
     request: OverrideCheckoutRequest
   ): Promise<CheckOutResponse> => {
     const { data } = await axiosClient.post<CheckOutResponse>(
-      `/sessions/${sessionId}/override-checkout`,
+      /sessions//override-checkout,
       request
     );
     return data;
@@ -50,7 +78,7 @@ export const sessionService = {
     request: LostTicketRequest
   ): Promise<FeeCalculationResponse> => {
     const { data } = await axiosClient.post<FeeCalculationResponse>(
-      `/sessions/${sessionId}/lost-ticket`,
+      /sessions//lost-ticket,
       request
     );
     return data;
@@ -58,14 +86,14 @@ export const sessionService = {
 
   calculateFee: async (sessionId: number): Promise<FeeCalculationResponse> => {
     const { data } = await axiosClient.post<FeeCalculationResponse>(
-      `/sessions/${sessionId}/calculate-fee`
+      /sessions//calculate-fee
     );
     return data;
   },
 
   checkExitGate: async (sessionId: number): Promise<{ message: string }> => {
     const { data } = await axiosClient.post<{ message: string }>(
-      `/sessions/${sessionId}/exit-gate`
+      /sessions//exit-gate
     );
     return data;
   },
@@ -75,7 +103,7 @@ export const sessionService = {
     request: CheckOutRequest
   ): Promise<CheckOutResponse> => {
     const { data } = await axiosClient.put<CheckOutResponse>(
-      `/sessions/${sessionId}/check-out`,
+      /sessions//check-out,
       request
     );
     return data;

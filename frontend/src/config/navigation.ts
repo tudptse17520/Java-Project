@@ -107,6 +107,12 @@ export const MANAGER_NAV: NavGroup[] = [
         icon: DollarSign,
         roles: [Role.MANAGER],
       },
+      {
+        title: "Đặt chỗ",
+        href: "/manager/bookings",
+        icon: CalendarCheck,
+        roles: [Role.MANAGER],
+      },
     ],
   },
   {
@@ -180,7 +186,7 @@ export const DRIVER_NAV: NavItem[] = [
   },
   {
     title: "Đặt chỗ",
-    href: "/reservations",
+    href: "/user/bookings",
     icon: CalendarCheck,
     roles: [Role.USER],
   },

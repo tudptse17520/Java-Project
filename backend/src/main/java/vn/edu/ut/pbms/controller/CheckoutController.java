@@ -22,11 +22,9 @@ import lombok.RequiredArgsConstructor;
 import vn.edu.ut.pbms.dto.request.CheckOutRequest;
 import vn.edu.ut.pbms.dto.request.LostTicketRequest;
 import vn.edu.ut.pbms.dto.request.OverrideCheckoutRequest;
-import vn.edu.ut.pbms.dto.request.PaymentRequest;
 import vn.edu.ut.pbms.dto.request.PlateValidationRequest;
 import vn.edu.ut.pbms.dto.response.CheckOutResponse;
 import vn.edu.ut.pbms.dto.response.FeeCalculationResponse;
-import vn.edu.ut.pbms.dto.response.PaymentResponse;
 import vn.edu.ut.pbms.exception.ErrorResponse;
 import vn.edu.ut.pbms.service.CheckoutService;
 

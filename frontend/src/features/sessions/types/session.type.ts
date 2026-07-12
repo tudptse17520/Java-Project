@@ -1,4 +1,4 @@
-import { SessionStatus } from "@/constants/session-status";
+﻿import { SessionStatus } from "@/constants/session-status";
 
 export interface ParkingSession {
   id: number;
@@ -7,6 +7,25 @@ export interface ParkingSession {
   timeOut: string | null;
   totalFee: number | null;
   status?: SessionStatus;
+}
+
+export interface SessionResponse {
+  id: number;
+  plate: string;
+  timeIn: string; 
+  timeOut?: string; 
+  totalFee?: number; 
+}
+
+export interface SessionListResponse {
+  totalItems: number;
+  data: SessionResponse[];
+}
+
+export interface SessionFilterParams {
+  plate?: string;
+  status?: string; 
+  fromDate?: string; 
 }
 
 export interface PlateValidationRequest {

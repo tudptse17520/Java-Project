@@ -18,7 +18,7 @@ export default function StaffSessionsPage() {
   const [filterParams, setFilterParams] = useState({
     plate: "",
     status: "ALL",
-    from_date: "",
+    fromDate: "",
   });
 
   const { data, isLoading, isError } = useSessions(filterParams);
@@ -40,10 +40,10 @@ export default function StaffSessionsPage() {
         <SessionFilter
           plate={filterParams.plate}
           status={filterParams.status}
-          fromDate={filterParams.from_date}
+          fromDate={filterParams.fromDate}
           onPlateChange={(val) => handleFilterChange("plate", val)}
           onStatusChange={(val) => handleFilterChange("status", val)}
-          onFromDateChange={(val) => handleFilterChange("from_date", val)}
+          onFromDateChange={(val) => handleFilterChange("fromDate", val)}
         />
       </Toolbar>
 

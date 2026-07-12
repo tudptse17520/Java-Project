@@ -28,31 +28,31 @@ export function SessionTable({ sessions, isLoading }: SessionTableProps) {
         ),
       },
       {
-        accessorKey: "time_in",
+        accessorKey: "timeIn",
         header: "Thời gian vào",
-        cell: ({ row }) => formatDateTime(row.original.time_in),
+        cell: ({ row }) => formatDateTime(row.original.timeIn),
       },
       {
-        accessorKey: "time_out",
+        accessorKey: "timeOut",
         header: "Thời gian ra",
         cell: ({ row }) =>
-          row.original.time_out
-            ? formatDateTime(row.original.time_out)
+          row.original.timeOut
+            ? formatDateTime(row.original.timeOut)
             : "—",
       },
       {
         id: "status",
         header: "Trạng thái",
         cell: ({ row }) => (
-          <SessionStatusBadge timeOut={row.original.time_out} />
+          <SessionStatusBadge timeOut={row.original.timeOut} />
         ),
       },
       {
-        accessorKey: "total_fee",
+        accessorKey: "totalFee",
         header: "Tổng phí (VNĐ)",
         cell: ({ row }) =>
-          row.original.total_fee != null
-            ? formatCurrency(row.original.total_fee)
+          row.original.totalFee != null
+            ? formatCurrency(row.original.totalFee)
             : "—",
       },
     ],

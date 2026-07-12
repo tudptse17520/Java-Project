@@ -53,8 +53,8 @@ export default function PricingPolicyPage() {
 
   // Ánh xạ tên loại xe vào danh sách bảng giá
   const pricingPolicies = React.useMemo(() => {
-    return rawPricingPolicies.map(policy => {
-      const vt = vehicleTypes.find(v => v.id === policy.vehicle_type_id);
+    return rawPricingPolicies.map((policy: any) => {
+      const vt = vehicleTypes.find((v: any) => v.id === policy.vehicle_type_id);
       return {
         ...policy,
         vehicle_type_name: vt ? vt.typeName : policy.vehicle_type_name

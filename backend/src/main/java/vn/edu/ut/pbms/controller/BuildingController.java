@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import vn.edu.ut.pbms.constant.BuildingStatus;
 import vn.edu.ut.pbms.dto.request.BuildingRequestDTO;
@@ -27,6 +28,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @RestController
 @RequestMapping("/api/v1/buildings")
 @RequiredArgsConstructor
+@PreAuthorize("hasAnyRole('USER', 'STAFF', 'MANAGER', 'ADMIN')")
 @Tag(name = "Building")
 public class BuildingController {
 
@@ -79,6 +81,7 @@ public class BuildingController {
      * @return HTTP 201 with the created building ID and message
      */
     @PostMapping
+    @PreAuthorize("hasAnyRole('MANAGER', 'ADMIN')")
     public ResponseEntity<BuildingResponseDTO> createBuilding(
             @Valid @RequestBody BuildingRequestDTO requestDTO) {
         BuildingResponseDTO createdBuilding = buildingService.createBuilding(requestDTO);
@@ -95,6 +98,7 @@ public class BuildingController {
      * @return HTTP 200 with the updated building ID and success message
      */
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('MANAGER', 'ADMIN')")
     public ResponseEntity<BuildingResponseDTO> updateBuilding(
             @PathVariable Long id,
             @Valid @RequestBody BuildingRequestDTO requestDTO) {
@@ -112,6 +116,7 @@ public class BuildingController {
      * @return HTTP 200 with building ID and success message
      */
     @PatchMapping("/{id}/status")
+    @PreAuthorize("hasAnyRole('MANAGER', 'ADMIN')")
     public ResponseEntity<BuildingResponseDTO> updateBuildingStatus(
             @PathVariable Long id,
             @Valid @RequestBody BuildingStatusRequestDTO requestDTO) {
@@ -128,6 +133,7 @@ public class BuildingController {
      * @return HTTP 200 with building ID and success message
      */
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('MANAGER', 'ADMIN')")
     public ResponseEntity<BuildingResponseDTO> deleteBuilding(@PathVariable Long id) {
         BuildingResponseDTO deletedBuilding = buildingService.deleteBuilding(id);
         return ResponseEntity.ok(deletedBuilding);

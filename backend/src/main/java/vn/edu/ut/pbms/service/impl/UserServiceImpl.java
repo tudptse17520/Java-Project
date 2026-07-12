@@ -147,6 +147,19 @@ public class UserServiceImpl implements UserService {
                 .status(user.getStatus())
                 .build();
     }
-
-
+    /**
+     * Parse a role String to the Role enum, returning null if blank/null.
+     * Used for optional filter parameters.
+     */
+    private Role parseRoleOrNull(String role) {
+        if (role == null || role.isBlank()) {
+            return null;
+        }
+        try {
+            return Role.valueOf(role.toUpperCase().trim());
+        } catch (IllegalArgumentException e) {
+            throw new vn.edu.ut.pbms.exception.BusinessRuleViolationException(
+                    "Vai trò không hợp lệ: '" + role + "'. Giá trị hợp lệ: ADMIN, MANAGER, STAFF, USER.");
+        }
+    }
 }

@@ -1,5 +1,7 @@
 package vn.edu.ut.pbms.dto.response;
 
+import vn.edu.ut.pbms.constant.BookingStatus;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,5 +16,5 @@ public class BookingListResponseDTO {
     private Long parkingSlotId;
     private String expectedTimeIn;
 
-    private String status;
+    private BookingStatus status;
 }

@@ -1,5 +1,7 @@
 package vn.edu.ut.pbms.dto.response;
 
+import vn.edu.ut.pbms.constant.BuildingStatus;
+
 import lombok.Data;
 
 @Data
@@ -8,6 +10,6 @@ public class BuildingBrowseResponseDTO {
     private String buildingName;
     private String address;
     private Integer numberOfFloors;
-    private String status;
+    private BuildingStatus status;
     private Long availableSlots;
 }

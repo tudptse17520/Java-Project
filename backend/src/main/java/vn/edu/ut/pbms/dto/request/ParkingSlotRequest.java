@@ -1,5 +1,7 @@
 package vn.edu.ut.pbms.dto.request;
 
+import vn.edu.ut.pbms.constant.ParkingSlotStatus;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -19,5 +21,5 @@ public class ParkingSlotRequest {
     @NotBlank(message = "Tên vị trí đỗ không được để trống")
     private String slotName;
 
-    private String status;
+    private ParkingSlotStatus status;
 }

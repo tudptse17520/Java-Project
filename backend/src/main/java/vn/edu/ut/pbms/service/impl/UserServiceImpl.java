@@ -68,8 +68,8 @@ public class UserServiceImpl implements UserService {
                     "Số điện thoại '" + request.getPhoneNumber() + "' đã được sử dụng.");
         }
 
-        // Parse role from String to Enum
-        Role roleEnum = parseRole(request.getRole());
+        // Use enum directly
+        Role roleEnum = request.getRole();
 
         // Build entity with hashed password and default ACTIVE status
         User user = User.builder()
@@ -100,8 +100,8 @@ public class UserServiceImpl implements UserService {
                     "Số điện thoại '" + request.getPhoneNumber() + "' đã được sử dụng bởi tài khoản khác.");
         }
 
-        // Parse role from String to Enum
-        Role roleEnum = parseRole(request.getRole());
+        // Use enum directly
+        Role roleEnum = request.getRole();
 
         // Update fields
         user.setFullName(request.getFullName());
@@ -121,8 +121,8 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Không tìm thấy người dùng với ID: " + id));
 
-        // Safely parse status String to Enum
-        UserStatus statusEnum = parseStatus(request.getStatus());
+        // Safely use status enum
+        UserStatus statusEnum = request.getStatus();
 
         // Update status
         user.setStatus(statusEnum);
@@ -143,8 +143,8 @@ public class UserServiceImpl implements UserService {
                 .username(user.getUsername())
                 .fullName(user.getFullName())
                 .phoneNumber(user.getPhoneNumber())
-                .role(user.getRole().name())
-                .status(user.getStatus().name())
+                .role(user.getRole())
+                .status(user.getStatus())
                 .build();
     }
 

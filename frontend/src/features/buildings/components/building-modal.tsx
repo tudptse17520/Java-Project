@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormContainer, FormHeader, FormFields, FormActions } from '@/components/common/form-container';
 import { Button } from '@/components/ui/button';
+import { BuildingStatus } from '@/constants/building-status';
 import { buildingCreateSchema, buildingUpdateSchema, type BuildingCreateForm, type BuildingUpdateForm } from '../schemas/building-form.schema';
 import type { BuildingResponse } from '@/types/building.type';
 import { X } from 'lucide-react';
@@ -29,7 +30,7 @@ export function BuildingModal({ open, onClose, building }: BuildingModalProps) {
       buildingName: '',
       address: '',
       numberOfFloors: 1,
-      status: 'ACTIVE',
+      status: BuildingStatus.ACTIVE,
     },
   });
 
@@ -47,7 +48,7 @@ export function BuildingModal({ open, onClose, building }: BuildingModalProps) {
           buildingName: '',
           address: '',
           numberOfFloors: 1,
-          status: 'ACTIVE',
+          status: BuildingStatus.ACTIVE,
         });
       }
     }

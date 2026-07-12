@@ -3,7 +3,7 @@ import { ParkingSlot, CreateSlotDto } from '@/features/slots/types/slot.type';
 
 export const slotService = {
   getSlots: async (floorId?: number, status?: string) => {
-    const response = await axiosClient.get<{ totalAvailable: number; data: ParkingSlot[] }>('/slots', { params: { floorId: floorId, status } });
+    const response = await axiosClient.get<{ totalAvailable: number; data: ParkingSlot[] }>('/slots', { params: { floorId, status } });
     return response.data;
   },
   createSlot: async (data: CreateSlotDto) => {

@@ -3,6 +3,7 @@ package vn.edu.ut.pbms.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -13,6 +14,7 @@ import vn.edu.ut.pbms.service.ReportService;
 @RequestMapping("/api/v1/reports")
 @RequiredArgsConstructor
 @CrossOrigin
+@PreAuthorize("hasAnyRole('MANAGER', 'ADMIN')")
 @Tag(name = "Reports & Dashboard", description = "API kết xuất các báo cáo và chỉ số Dashboard")
 public class ReportController {
 

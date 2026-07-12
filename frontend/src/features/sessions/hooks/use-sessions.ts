@@ -1,9 +1,26 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+﻿import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { sessionService } from '@/services/session.service';
 import toast from 'react-hot-toast';
 import { AxiosError } from 'axios';
+import { SESSION_QUERY_KEYS } from "../constants/session.constants";
+import { SessionStatus } from "@/constants/session-status";
 
-export const useSessions = (keyword?: string, status?: string) => {
+interface UseSessionsParams {
+  plate?: string;
+  status?: SessionStatus;
+  from_date?: string;
+  enabled?: boolean;
+}
+
+export const useSessions = ({ plate, status, from_date, enabled = true }: UseSessionsParams = {}) => {
+  return useQuery({
+    queryKey: SESSION_QUERY_KEYS.list({ plate, status, from_date }),
+    queryFn: () => sessionService.getParkingSessions({ plate, status, from_date }),
+    enabled: enabled && (!!plate || !!status || !!from_date),
+  });
+};
+
+export const useSessionsList = (keyword?: string, status?: string) => {
   return useQuery({
     queryKey: ['sessions', keyword, status],
     queryFn: () => sessionService.getSessions(keyword, status),
@@ -17,10 +34,10 @@ export const useCheckInVehicle = () => {
     mutationFn: sessionService.checkInVehicle,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['sessions'] });
-      toast.success('Check-in xe thành công');
+      toast.success('Check-in xe thAnh cA''ng');
     },
     onError: (error: AxiosError<{ message: string }>) => {
-      toast.error(error?.response?.data?.message || 'Có lỗi xảy ra khi check-in');
+      toast.error(error?.response?.data?.message || 'CA3 l-i xy ra khi check-in');
     },
   });
 };
@@ -33,10 +50,10 @@ export const useUpdateSession = () => {
       sessionService.updateSession(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['sessions'] });
-      toast.success('Cập nhật lượt gửi xe thành công');
+      toast.success('C-p nh-t lt g-i xe thAnh cA''ng');
     },
     onError: (error: AxiosError<{ message: string }>) => {
-      toast.error(error?.response?.data?.message || 'Có lỗi xảy ra khi cập nhật');
+      toast.error(error?.response?.data?.message || 'CA3 l-i xy ra khi c-p nh-t');
     },
   });
 };
@@ -49,10 +66,10 @@ export const useUpdateSessionStatus = () => {
       sessionService.updateSessionStatus(id, status),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['sessions'] });
-      toast.success('Cập nhật trạng thái thành công');
+      toast.success('C-p nh-t trng thAi thAnh cA''ng');
     },
     onError: (error: AxiosError<{ message: string }>) => {
-      toast.error(error?.response?.data?.message || 'Có lỗi xảy ra khi cập nhật trạng thái');
+      toast.error(error?.response?.data?.message || 'CA3 l-i xy ra khi c-p nh-t trng thAi');
     },
   });
 };

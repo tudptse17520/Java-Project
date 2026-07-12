@@ -16,8 +16,8 @@ export const sessionService = {
     plate?: string;
     status?: string;
     from_date?: string;
-  }): Promise<{ total_items: number; data: ParkingSession[] }> => {
-    const { data } = await axiosClient.get<{ total_items: number; data: ParkingSession[] }>("/sessions", {
+  }): Promise<{ totalItems: number; data: ParkingSession[] }> => {
+    const { data } = await axiosClient.get<{ totalItems: number; data: ParkingSession[] }>("/sessions", {
       params,
     });
     return data;

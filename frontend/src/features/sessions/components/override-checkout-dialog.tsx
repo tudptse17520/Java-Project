@@ -28,7 +28,7 @@ export function OverrideCheckoutDialog({
 
   const { register, handleSubmit, formState: { errors } } = useForm<OverrideCheckoutFormValues>({
     resolver: zodResolver(overrideCheckoutSchema),
-    defaultValues: { override_reason: "" },
+    defaultValues: { overrideReason: "" },
   });
 
   const onSubmit = (values: OverrideCheckoutFormValues) => {
@@ -36,7 +36,7 @@ export function OverrideCheckoutDialog({
       {
         sessionId,
         request: {
-          override_reason: values.override_reason,
+          overrideReason: values.overrideReason,
         },
       },
       {
@@ -72,13 +72,13 @@ export function OverrideCheckoutDialog({
                 type="text"
                 className={cn(
                   "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
-                  errors.override_reason && "border-destructive focus-visible:ring-destructive"
+                  errors.overrideReason && "border-destructive focus-visible:ring-destructive"
                 )}
                 placeholder="VD: Đã kiểm tra giấy tờ xe hợp lệ"
-                {...register("override_reason")}
+                {...register("overrideReason")}
               />
-              {errors.override_reason && (
-                <p className="text-sm text-destructive">{errors.override_reason.message}</p>
+              {errors.overrideReason && (
+                <p className="text-sm text-destructive">{errors.overrideReason.message}</p>
               )}
             </div>
           </FormFields>

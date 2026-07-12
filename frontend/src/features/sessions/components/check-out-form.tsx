@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { StatusBadge } from "@/components/common/status-badge";
 import { formatCurrency } from "@/utils/format-currency";
 import { formatDate } from "@/utils/format-date";
+import dayjs from "dayjs";
 
 import { useSessions } from "../hooks/use-sessions";
 import { useCheckoutActions } from "../hooks/use-checkout-actions";
@@ -45,7 +46,7 @@ export function CheckOutForm() {
 
   const validateForm = useForm<ValidatePlateFormValues>({
     resolver: zodResolver(validatePlateSchema),
-    defaultValues: { plate_out: "" },
+    defaultValues: { plateOut: "" },
   });
 
   const handleSearch = () => {
@@ -65,8 +66,8 @@ export function CheckOutForm() {
       {
         sessionId: selectedSession.id,
         request: {
-          plate_out: values.plate_out,
-          plate_out_image: "dummy_image_url_base64",
+          plateOut: values.plateOut,
+          plateOutImage: "dummy_image_url_base64",
         },
       },
       {
@@ -97,7 +98,9 @@ export function CheckOutForm() {
     checkOutMutation.mutate(
       {
         sessionId: selectedSession.id,
-        request: {},
+        request: {
+          timeOut: dayjs().format("YYYY-MM-DDTHH:mm:ss")
+        },
       },
       {
         onSuccess: () => {
@@ -154,14 +157,14 @@ export function CheckOutForm() {
                   <input
                     className={cn(
                       "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
-                      validateForm.formState.errors.plate_out && "border-destructive focus-visible:ring-destructive"
+                      validateForm.formState.errors.plateOut && "border-destructive focus-visible:ring-destructive"
                     )}
                     placeholder="Quét biển số..."
-                    {...validateForm.register("plate_out")}
+                    {...validateForm.register("plateOut")}
                   />
-                  {validateForm.formState.errors.plate_out && (
+                  {validateForm.formState.errors.plateOut && (
                     <p className="text-sm text-destructive">
-                      {validateForm.formState.errors.plate_out.message}
+                      {validateForm.formState.errors.plateOut.message}
                     </p>
                   )}
                 </div>
@@ -203,7 +206,7 @@ export function CheckOutForm() {
                 </div>
                 <div>
                   <p className="text-muted-foreground">Thời gian vào</p>
-                  <p className="font-medium">{formatDate(selectedSession.time_in)}</p>
+                  <p className="font-medium">{formatDate(selectedSession.timeIn)}</p>
                 </div>
                 <div>
                   <p className="text-muted-foreground">Trạng thái</p>
@@ -217,23 +220,23 @@ export function CheckOutForm() {
                   <div className="space-y-2 text-sm">
                     <div className="flex justify-between">
                       <span className="text-muted-foreground">Phí cơ bản:</span>
-                      <span>{formatCurrency(feeData.base_fee)}</span>
+                      <span>{formatCurrency(feeData.baseFee)}</span>
                     </div>
-                    {feeData.overtime_fee > 0 && (
+                    {feeData.overtimeFee > 0 && (
                       <div className="flex justify-between text-warning">
                         <span>Phụ thu quá giờ:</span>
-                        <span>{formatCurrency(feeData.overtime_fee)}</span>
+                        <span>{formatCurrency(feeData.overtimeFee)}</span>
                       </div>
                     )}
-                    {feeData.penalty_fee > 0 && (
+                    {feeData.penaltyFee > 0 && (
                       <div className="flex justify-between text-destructive">
                         <span>Phạt mất vé:</span>
-                        <span>{formatCurrency(feeData.penalty_fee)}</span>
+                        <span>{formatCurrency(feeData.penaltyFee)}</span>
                       </div>
                     )}
                     <div className="flex justify-between font-bold text-lg pt-2 border-t">
                       <span>Tổng cộng:</span>
-                      <span className="text-primary">{formatCurrency(feeData.total_fee)}</span>
+                      <span className="text-primary">{formatCurrency(feeData.totalFee)}</span>
                     </div>
                   </div>
 

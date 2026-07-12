@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import vn.edu.ut.pbms.dto.request.CheckinRequest;
@@ -34,6 +35,7 @@ public class ParkingSessionController {
      * @return HTTP 200 với total_items và mảng data chi tiết [cite: 144]
      */
     @GetMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'STAFF')")
     public ResponseEntity<ParkingSessionListResponseDTO> getParkingSessions(
             @RequestParam(required = false) String plate,
             @RequestParam(required = false) String status,

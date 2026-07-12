@@ -1,7 +1,7 @@
 import axiosClient from "@/lib/axios-client";
 import type { SessionListResponse, SessionFilterParams } from "@/features/sessions/types/session.type";
 
-const SESSION_API_URL = "/api/v1/sessions";
+const SESSION_API_URL = "/sessions";
 
 export const getSessions = async (params?: SessionFilterParams): Promise<SessionListResponse> => {
   let formattedDate = undefined;

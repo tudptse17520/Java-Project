@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 import vn.edu.ut.pbms.dto.request.VehicleTypeRequestDTO;
 import vn.edu.ut.pbms.dto.response.VehicleTypeResponseDTO;
 import vn.edu.ut.pbms.service.VehicleTypeService;
@@ -26,6 +27,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @RestController
 @RequestMapping("/api/v1/vehicle-types")
 @RequiredArgsConstructor
+@PreAuthorize("hasAnyRole('USER', 'STAFF', 'MANAGER', 'ADMIN')")
 @Tag(name = "Vehicle Type")
 public class VehicleTypeController {
 
@@ -55,6 +57,7 @@ public class VehicleTypeController {
      * @return HTTP 201 with the created vehicle type
      */
     @PostMapping
+    @PreAuthorize("hasAnyRole('MANAGER', 'ADMIN')")
     public ResponseEntity<VehicleTypeResponseDTO> createVehicleType(
             @Valid @RequestBody VehicleTypeRequestDTO requestDTO) {
         VehicleTypeResponseDTO createdVehicleType = vehicleTypeService.createVehicleType(requestDTO);
@@ -73,6 +76,7 @@ public class VehicleTypeController {
      * @return HTTP 200 with the updated vehicle type
      */
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('MANAGER', 'ADMIN')")
     public ResponseEntity<VehicleTypeResponseDTO> updateVehicleType(
             @PathVariable Long id,
             @Valid @RequestBody VehicleTypeRequestDTO requestDTO) {
@@ -90,6 +94,7 @@ public class VehicleTypeController {
      * @return HTTP 200 with the deactivated vehicle type
      */
     @PatchMapping("/{id}/deactivate")
+    @PreAuthorize("hasAnyRole('MANAGER', 'ADMIN')")
     public ResponseEntity<VehicleTypeResponseDTO> deactivateVehicleType(@PathVariable Long id) {
         VehicleTypeResponseDTO deactivatedVehicleType = vehicleTypeService.deactivateVehicleType(id);
         return ResponseEntity.ok(deactivatedVehicleType);

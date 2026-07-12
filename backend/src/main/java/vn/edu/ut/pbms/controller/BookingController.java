@@ -19,6 +19,7 @@ import vn.edu.ut.pbms.service.BookingService;
 @RestController
 @RequestMapping("/api/v1")
 @RequiredArgsConstructor
+@PreAuthorize("hasAnyRole('USER', 'STAFF', 'MANAGER', 'ADMIN')")
 @Tag(name = "Booking", description = "API quản lý đặt chỗ đỗ xe trước từ xa")
 public class BookingController {
 

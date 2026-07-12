@@ -19,6 +19,7 @@ import vn.edu.ut.pbms.service.VehicleService;
 @RestController
 @RequestMapping("/api/v1/vehicles")
 @RequiredArgsConstructor
+@PreAuthorize("hasAnyRole('USER', 'STAFF', 'MANAGER', 'ADMIN')")
 @Tag(name = "Vehicle", description = "API quản lý phương tiện cá nhân")
 public class VehicleController {
 

@@ -83,11 +83,16 @@ public class ParkingSessionServiceImpl implements ParkingSessionService {
                 parsedFromDate = LocalDateTime.parse(trimmed);
             } catch (DateTimeParseException e1) {
                 try {
-                    // Fallback: chuỗi có múi giờ → chuyển đổi sang LocalDateTime (bỏ offset)
-                    parsedFromDate = ZonedDateTime.parse(trimmed).toLocalDateTime();
+                    // Fallback 1: chuỗi chỉ có ngày (VD: 2026-07-12)
+                    parsedFromDate = java.time.LocalDate.parse(trimmed).atStartOfDay();
                 } catch (DateTimeParseException e2) {
-                    throw new BusinessRuleViolationException(
-                            "Định dạng ngày '" + fromDate + "' không hợp lệ. Vui lòng dùng định dạng: yyyy-MM-ddTHH:mm:ss");
+                    try {
+                        // Fallback 2: chuỗi có múi giờ
+                        parsedFromDate = ZonedDateTime.parse(trimmed).toLocalDateTime();
+                    } catch (DateTimeParseException e3) {
+                        throw new BusinessRuleViolationException(
+                                "Định dạng ngày '" + fromDate + "' không hợp lệ. Vui lòng dùng định dạng ISO-8601 (yyyy-MM-ddTHH:mm:ss hoặc yyyy-MM-dd)");
+                    }
                 }
             }
         }

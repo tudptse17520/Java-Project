@@ -32,12 +32,13 @@ public interface BuildingService {
     BuildingDetailResponseDTO getBuildingDetail(Long id);
 
     /**
-     * Retrieve a list of buildings filtered by status.
+     * Retrieve a list of buildings filtered by keyword and status.
      *
+     * @param keyword the keyword to search (optional)
      * @param status  the status to filter by (optional)
      * @return a response containing a message and list of building details
      */
-    BuildingListResponseDTO getBuildings(BuildingStatus status);
+    BuildingListResponseDTO getBuildings(String keyword, BuildingStatus status);
 
     /**
      * Create a new building.

@@ -26,22 +26,22 @@ export const feedbackService = {
     if (issueType && issueType !== "ALL" as any) params.append("issue_type", issueType);
     if (status && status !== "ALL" as any) params.append("status", status);
 
-    const response = await axiosClient.get(`/api/v1/feedbacks?${params.toString()}`);
+    const response = await axiosClient.get(`/feedbacks?${params.toString()}`);
     return response.data;
   },
 
   getFeedbackById: async (id: number): Promise<Feedback> => {
-    const response = await axiosClient.get(`/api/v1/feedbacks/${id}`);
+    const response = await axiosClient.get(`/feedbacks/${id}`);
     return response.data;
   },
 
   createFeedback: async (request: FeedbackRequest): Promise<Feedback> => {
-    const response = await axiosClient.post("/api/v1/feedbacks", request);
+    const response = await axiosClient.post("/feedbacks", request);
     return response.data;
   },
 
   updateFeedback: async (id: number, request: FeedbackRequest): Promise<Feedback> => {
-    const response = await axiosClient.put(`/api/v1/feedbacks/${id}`, request);
+    const response = await axiosClient.put(`/feedbacks/${id}`, request);
     return response.data;
   },
 };

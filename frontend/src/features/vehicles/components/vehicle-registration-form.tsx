@@ -33,7 +33,6 @@ export function VehicleRegistrationForm() {
   } = useForm<VehicleRegistrationFormValues>({
     resolver: zodResolver(vehicleRegistrationSchema),
     defaultValues: {
-      userId: user?.id || 0,
       vehicleTypeId: 0,
       plate: "",
       brand: "",

@@ -1,5 +1,4 @@
 export interface VehicleRegistrationDTO {
-  userId: number;
   vehicleTypeId: number;
   plate: string;
   brand?: string;
@@ -10,6 +9,7 @@ export interface Vehicle {
   id: number;
   userId: number;
   vehicleTypeId: number;
+  vehicleTypeName?: string;
   plate: string;
   brand?: string;
   color?: string;

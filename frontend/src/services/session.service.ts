@@ -1,4 +1,4 @@
-﻿import axiosClient from "@/lib/axios-client";
+import axiosClient from "@/lib/axios-client";
 import { ApiResponse } from "@/types/api";
 
 import {
@@ -26,17 +26,17 @@ export const sessionService = {
   },
 
   checkInVehicle: async (data: { plate: string; vehicleId?: number | null; parkingSlotId?: number | null }): Promise<SessionResponse> => {
-    const response = await axiosClient.post<SessionResponse>(${SESSION_API}/check-in, data);
+    const response = await axiosClient.post<SessionResponse>(`${SESSION_API}/check-in`, data);
     return response.data;
   },
 
   updateSession: async (id: number, data: { plate: string; vehicleId?: number | null; parkingSlotId?: number | null }): Promise<SessionResponse> => {
-    const response = await axiosClient.put<SessionResponse>(${SESSION_API}/, data);
+    const response = await axiosClient.put<SessionResponse>(`${SESSION_API}/${id}`, data);
     return response.data;
   },
 
   updateSessionStatus: async (id: number, status: string): Promise<SessionResponse> => {
-    const response = await axiosClient.patch<SessionResponse>(${SESSION_API}//status, { status });
+    const response = await axiosClient.patch<SessionResponse>(`${SESSION_API}/${id}/status`, { status });
     return response.data;
   },
 
@@ -56,7 +56,7 @@ export const sessionService = {
     request: PlateValidationRequest
   ): Promise<{ message: string }> => {
     const { data } = await axiosClient.post<{ message: string }>(
-      /sessions//validate-plate,
+      `/sessions/${sessionId}/validate-plate`,
       request
     );
     return data;
@@ -67,7 +67,7 @@ export const sessionService = {
     request: OverrideCheckoutRequest
   ): Promise<CheckOutResponse> => {
     const { data } = await axiosClient.post<CheckOutResponse>(
-      /sessions//override-checkout,
+      `/sessions/${sessionId}/override-checkout`,
       request
     );
     return data;
@@ -78,7 +78,7 @@ export const sessionService = {
     request: LostTicketRequest
   ): Promise<FeeCalculationResponse> => {
     const { data } = await axiosClient.post<FeeCalculationResponse>(
-      /sessions//lost-ticket,
+      `/sessions/${sessionId}/lost-ticket`,
       request
     );
     return data;
@@ -86,14 +86,14 @@ export const sessionService = {
 
   calculateFee: async (sessionId: number): Promise<FeeCalculationResponse> => {
     const { data } = await axiosClient.post<FeeCalculationResponse>(
-      /sessions//calculate-fee
+      `/sessions/${sessionId}/calculate-fee`
     );
     return data;
   },
 
   checkExitGate: async (sessionId: number): Promise<{ message: string }> => {
     const { data } = await axiosClient.post<{ message: string }>(
-      /sessions//exit-gate
+      `/sessions/${sessionId}/exit-gate`
     );
     return data;
   },
@@ -103,7 +103,7 @@ export const sessionService = {
     request: CheckOutRequest
   ): Promise<CheckOutResponse> => {
     const { data } = await axiosClient.put<CheckOutResponse>(
-      /sessions//check-out,
+      `/sessions/${sessionId}/check-out`,
       request
     );
     return data;

@@ -12,14 +12,14 @@ import { Button } from '@/components/ui/button';
 import { SessionFilter } from '@/features/sessions/components/session-filter';
 import { SessionTable } from '@/features/sessions/components/session-table';
 import { CheckInModal } from '@/features/sessions/components/check-in-modal';
-import { useSessions } from '@/features/sessions/hooks/use-sessions';
+import { useSessionsList } from '@/features/sessions/hooks/use-sessions';
 
 export default function SessionsPage() {
   const [keyword, setKeyword] = useState('');
   const [status, setStatus] = useState('ALL');
   const [isCheckInModalOpen, setIsCheckInModalOpen] = useState(false);
 
-  const { data, isLoading } = useSessions(keyword, status);
+  const { data, isLoading } = useSessionsList(keyword, status);
 
   return (
     <PageContainer>

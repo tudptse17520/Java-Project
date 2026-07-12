@@ -33,7 +33,7 @@ export function VehicleRegistrationForm() {
   } = useForm<VehicleRegistrationFormValues>({
     resolver: zodResolver(vehicleRegistrationSchema),
     defaultValues: {
-      userId: user?.id ? parseInt(user.id) : 0,
+      userId: user?.id || 0,
       vehicleTypeId: 0,
       plate: "",
       brand: "",
@@ -91,7 +91,7 @@ export function VehicleRegistrationForm() {
             </option>
             {vehicleTypes?.map((vt) => (
               <option key={vt.id} value={vt.id}>
-                {vt.type_name}
+                {vt.typeName}
               </option>
             ))}
           </select>

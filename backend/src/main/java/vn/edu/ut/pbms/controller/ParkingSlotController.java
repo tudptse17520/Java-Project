@@ -28,10 +28,10 @@ public class ParkingSlotController {
 
     @GetMapping
     public ResponseEntity<ParkingSlotListResponse> getSlots(
-            @RequestParam(required = false) Long floor_id,
+            @RequestParam(required = false) Long floorId,
             @RequestParam(required = false) ParkingSlotStatus status) {
         
-        List<ParkingSlot> slots = parkingSlotService.findSlots(floor_id, status);
+        List<ParkingSlot> slots = parkingSlotService.findSlots(floorId, status);
         
         List<ParkingSlotResponse> data = slots.stream().map(s -> ParkingSlotResponse.builder()
                 .id(s.getId())

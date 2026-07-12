@@ -3,7 +3,8 @@
 // Kiểu dữ liệu TypeScript khớp Backend DTOs
 // ---------------------------------------------
 
-export type UserRole = "ADMIN" | "MANAGER" | "STAFF" | "USER";
+import { Role } from "@/constants/role";
+export type UserRole = Role;
 export type UserStatus = "ACTIVE" | "INACTIVE";
 
 export interface UserResponse {
@@ -26,15 +27,15 @@ export interface UserCreatePayload {
   password: string;
   fullName: string;
   phoneNumber: string;
-  role: string;
+  role: UserRole;
 }
 
 export interface UserUpdatePayload {
   fullName: string;
   phoneNumber: string;
-  role: string;
+  role: UserRole;
 }
 
 export interface UserStatusPayload {
-  status: string;
+  status: UserStatus;
 }

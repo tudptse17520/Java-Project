@@ -67,9 +67,9 @@ public class ParkingSlotServiceImpl implements ParkingSlotService {
 
         // 4. Xác định trạng thái ban đầu (Mặc định: AVAILABLE)
         ParkingSlotStatus initialStatus = ParkingSlotStatus.AVAILABLE;
-        if (request.getStatus() != null && !request.getStatus().trim().isEmpty()) {
+        if (request.getStatus() != null) {
             try {
-                initialStatus = ParkingSlotStatus.valueOf(request.getStatus().trim().toUpperCase());
+                initialStatus = request.getStatus();
             } catch (IllegalArgumentException e) {
                 throw new BusinessRuleViolationException("Trạng thái ô đỗ '" + request.getStatus() + "' không hợp lệ.");
             }

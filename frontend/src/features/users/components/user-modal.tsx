@@ -47,7 +47,7 @@ function CreateUserForm({
       password: "",
       fullName: "",
       phoneNumber: "",
-      role: "",
+      role: Role.USER,
     },
   });
 
@@ -58,7 +58,7 @@ function CreateUserForm({
         password: "",
         fullName: "",
         phoneNumber: "",
-        role: "",
+        role: Role.USER,
       });
     }
   }, [isOpen, reset]);

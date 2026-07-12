@@ -7,7 +7,7 @@ import vn.edu.ut.pbms.constant.*;
 import vn.edu.ut.pbms.dto.request.*;
 import vn.edu.ut.pbms.dto.response.CheckOutResponse;
 import vn.edu.ut.pbms.dto.response.FeeCalculationResponse;
-import vn.edu.ut.pbms.dto.response.PaymentResponse;
+
 import vn.edu.ut.pbms.entity.*;
 import vn.edu.ut.pbms.exception.*;
 import vn.edu.ut.pbms.repository.*;
@@ -26,8 +26,7 @@ import java.time.LocalDateTime;
 public class CheckoutServiceImpl implements CheckoutService {
 
     private final ParkingSessionRepository parkingSessionRepository;
-    private final ParkingSlotRepository parkingSlotRepository;
-    private final PaymentRepository paymentRepository;
+
     private final PricingPolicyRepository pricingPolicyRepository;
     private final FeedbackRepository feedbackRepository;
     private final UserRepository userRepository;

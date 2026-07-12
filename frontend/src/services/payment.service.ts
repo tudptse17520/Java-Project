@@ -18,6 +18,7 @@ const BASE_PATH = "/payments";
  * Lấy danh sách giao dịch (có thể lọc theo paymentMethod, status, fromDate)
  * Backend trả về wrapper: { totalItems, message, data: [...] }
  */
+
 export const getPayments = async (
   filter?: PaymentFilter
 ): Promise<Payment[]> => {
@@ -40,13 +41,75 @@ export const getPaymentById = async (id: number): Promise<Payment> => {
   return response.data;
 };
 
+export const getRemainingDebt = async (sessionId: number): Promise<{
+  session_id: number;
+  total_fee: number;
+  paid_fee: number;
+  remaining_fee: number;
+}> => {
+  const response = await axiosClient.get(`${BASE_PATH}/sessions/${sessionId}/debt`);
+  return response.data;
+};
+
+
+
+export interface ParkingSessionMinimal {
+  id: number;
+  plate: string;
+  ticket_code: string;
+  status: string;
+}
+
+export const getSessionByPlate = async (plate: string): Promise<ParkingSessionMinimal | null> => {
+  if (!plate || plate.trim() === "") return null;
+  const response = await axiosClient.get(`/sessions?plate=${encodeURIComponent(plate)}&status=IN_PROGRESS`);
+  const data = response.data?.data;
+  if (Array.isArray(data) && data.length > 0) {
+    // Return the latest one
+    return data[0] as ParkingSessionMinimal;
+  }
+  return null;
+};
+
+export const getAllSessions = async (): Promise<any[]> => {
+  const response = await axiosClient.get(`/sessions`);
+  const data = response.data?.data;
+  return Array.isArray(data) ? data : [];
+};
+
+export const getSessionById = async (id: number): Promise<any | null> => {
+  const response = await axiosClient.get(`/sessions`);
+  const data = response.data?.data;
+  if (Array.isArray(data)) {
+    return data.find((s: any) => s.id === id) || null;
+  }
+  return null;
+};
+
+export const getAllBookings = async (): Promise<any[]> => {
+  const response = await axiosClient.get(`/bookings`);
+  // The API returns the list directly or inside data? Let's check BookingController
+  // `ResponseEntity.ok(response)` which means it returns a List directly, NOT wrapped in { data: ... }
+  // Wait, let's verify. Usually Spring Boot returns the list directly if not wrapped in a custom response object.
+  // I'll just check if it's an array.
+  return Array.isArray(response.data) ? response.data : [];
+};
+
+export const getBookingById = async (id: number): Promise<any | null> => {
+  const bookings = await getAllBookings();
+  return bookings.find((b: any) => b.booking_id === id) || null;
+};
+
 /**
  * Tạo thanh toán mới
  */
 export const createPayment = async (
   data: PaymentRequest
 ): Promise<Payment> => {
-  const response = await axiosClient.post<Payment>(BASE_PATH, data);
+  const payload = {
+    ...data,
+  };
+  const response = await axiosClient.post<Payment>(BASE_PATH, payload);
   return response.data;
 };
 

@@ -16,6 +16,7 @@ export interface Payment {
   feeType: string;
   paymentTime: string;
   status: string;
+  payment_url?: string;
 }
 
 /**
@@ -56,4 +57,6 @@ export interface PaymentFilter {
   paymentMethod?: string;
   status?: string;
   fromDate?: string;
+  plate?: string;
+  feeType?: string;
 }

@@ -20,7 +20,7 @@ import {
 import { cn } from "@/lib/utils";
 
 interface PaymentTableProps {
-  data: Payment[];
+  data: (Payment & { plate?: string })[];
   isLoading: boolean;
   onViewDetail: (payment: Payment) => void;
   onManualStatus: (payment: Payment) => void;
@@ -61,13 +61,20 @@ export function PaymentTable({
   onManualStatus,
   onCancel,
 }: PaymentTableProps) {
-  const columns = useMemo<ColumnDef<Payment>[]>(
+  const columns = useMemo<ColumnDef<Payment & { plate?: string }>[]>(
     () => [
       {
         accessorKey: "id",
         header: "ID",
         cell: ({ row }) => (
           <span className="font-medium">#{row.original.id}</span>
+        ),
+      },
+      {
+        accessorKey: "plate",
+        header: "Biển số",
+        cell: ({ row }) => (
+          <span className="font-medium uppercase">{row.original.plate || "—"}</span>
         ),
       },
       {

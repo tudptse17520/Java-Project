@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.prepost.PreAuthorize;
+
 import vn.edu.ut.pbms.constant.FeedbackStatus;
 import vn.edu.ut.pbms.constant.IssueType;
 import vn.edu.ut.pbms.dto.request.FeedbackRequest;
@@ -17,6 +19,7 @@ import vn.edu.ut.pbms.service.FeedbackService;
 @RestController
 @RequestMapping("/api/v1/feedbacks")
 @RequiredArgsConstructor
+@PreAuthorize("hasAnyRole('STAFF', 'MANAGER', 'ADMIN')")
 @Tag(name = "Feedback & Exception", description = "API quản lý sự cố và phản hồi (mất thẻ, sai biển số, v.v.)")
 public class FeedbackController {
 

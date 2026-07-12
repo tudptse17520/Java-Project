@@ -7,19 +7,18 @@
  * Danh sách phương thức thanh toán (kèm label tiếng Việt)
  */
 export const PAYMENT_METHODS = [
-  { value: "Cash", label: "Tiền mặt" },
-  { value: "Momo", label: "Ví MoMo" },
-  { value: "Vnpay", label: "VNPay" },
-  { value: "Credit_Card", label: "Thẻ tín dụng" },
+  { value: "CASH", label: "Tiền mặt" },
+  { value: "MOMO", label: "Ví MoMo" },
+  { value: "VNPAY", label: "VNPay" },
 ] as const;
 
 /**
  * Danh sách loại phí (kèm label tiếng Việt)
  */
 export const FEE_TYPES = [
-  { value: "Parking_Fee", label: "Phí gửi xe" },
-  { value: "Booking_Deposit", label: "Cọc đặt chỗ" },
-  { value: "Lost_Ticket_Fine", label: "Phạt mất vé" },
+  { value: "PARKING_FEE", label: "Phí gửi xe" },
+  { value: "LOST_TICKET_FINE", label: "Phạt mất vé" },
+  { value: "BOOKING_DEPOSIT", label: "Cọc đặt chỗ" },
 ] as const;
 
 /**
@@ -34,17 +33,16 @@ export const MANUAL_STATUS_OPTIONS = [
  * Label mapping cho phương thức thanh toán
  */
 export const PAYMENT_METHOD_LABELS: Record<string, string> = {
-  Cash: "Tiền mặt",
-  Momo: "Ví MoMo",
-  Vnpay: "VNPay",
-  Credit_Card: "Thẻ tín dụng",
+  CASH: "Tiền mặt",
+  MOMO: "Ví MoMo",
+  VNPAY: "VNPay",
 };
 
 /**
  * Label mapping cho loại phí
  */
 export const FEE_TYPE_LABELS: Record<string, string> = {
-  Parking_Fee: "Phí gửi xe",
-  Booking_Deposit: "Cọc đặt chỗ",
-  Lost_Ticket_Fine: "Phạt mất vé",
+  PARKING_FEE: "Phí gửi xe",
+  LOST_TICKET_FINE: "Phạt mất vé",
+  BOOKING_DEPOSIT: "Cọc đặt chỗ",
 };

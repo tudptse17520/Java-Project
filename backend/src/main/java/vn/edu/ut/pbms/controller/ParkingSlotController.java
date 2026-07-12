@@ -38,7 +38,7 @@ public class ParkingSlotController {
                 // Lấy ID từ đối tượng Floor đã được map (xử lý null an toàn)
                 .floorId(s.getFloor() != null ? s.getFloor().getId() : null)
                 .slotName(s.getSlotName())
-                .status(s.getStatus() != null ? s.getStatus().name() : "UNKNOWN")
+                .status(s.getStatus())
                 .build()).toList();
                 
         long totalAvailable = slots.stream().filter(s -> s.getStatus() == ParkingSlotStatus.AVAILABLE).count();
@@ -54,14 +54,14 @@ public class ParkingSlotController {
             @PathVariable Long id,
             @Valid @RequestBody SlotUpdateRequest request) {
         
-        ParkingSlotStatus newStatus = ParkingSlotStatus.valueOf(request.getStatus().toUpperCase());
+        ParkingSlotStatus newStatus = request.getStatus();
         ParkingSlot updated = parkingSlotService.updateStatus(id, newStatus);
         
         return ResponseEntity.ok(ParkingSlotResponse.builder()
                 .id(updated.getId())
                 .floorId(updated.getFloor() != null ? updated.getFloor().getId() : null)
                 .slotName(updated.getSlotName())
-                .status(updated.getStatus().name())
+                .status(updated.getStatus())
                 .build());
     }
 

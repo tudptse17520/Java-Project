@@ -1,5 +1,8 @@
 package vn.edu.ut.pbms.dto.request;
 
+import jakarta.validation.constraints.NotNull;
+import vn.edu.ut.pbms.constant.PaymentStatus;
+
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,8 +16,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ManualStatusRequestDTO {
-    @NotBlank(message = "Trạng thái mới không được để trống.")
-    private String status;
+    @NotNull(message = "Trạng thái mới không được để trống.")
+    private PaymentStatus status;
     @NotBlank(message = "Nhân viên bắt buộc phải nhập lý do chi tiết khi thao tác cập nhật thủ công.")
     private String note;
 }

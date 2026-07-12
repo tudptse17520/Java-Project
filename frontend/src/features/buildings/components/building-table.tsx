@@ -8,6 +8,7 @@ import { BuildingStatusBadge } from './building-status-badge';
 import type { BuildingResponse } from '@/types/building.type';
 import { Button } from '@/components/ui/button';
 import { Edit2, Trash2 } from 'lucide-react';
+import Link from 'next/link';
 import { useUpdateBuildingStatus } from '../hooks/use-buildings';
 
 interface BuildingTableProps {
@@ -53,14 +54,42 @@ export function BuildingTable({ buildings, onEdit, isLoading }: BuildingTablePro
     {
       accessorKey: 'address',
       header: 'Địa Chỉ',
+      cell: ({ row }) => (
+        <div 
+          className="truncate max-w-[200px] text-muted-foreground hover:text-foreground transition-colors cursor-default" 
+          title={row.original.address}
+        >
+          {row.original.address}
+        </div>
+      )
     },
     {
       accessorKey: 'numberOfFloors',
       header: 'Số Tầng',
+      cell: ({ row }) => (
+        <Link 
+          href={`/manager/floors?buildingId=${row.original.id}`}
+          className="text-primary hover:underline font-medium inline-flex items-center gap-1"
+        >
+          {row.original.numberOfFloors} tầng <span className="text-xs">→</span>
+        </Link>
+      )
     },
     {
       accessorKey: 'totalAvailableSlots',
       header: 'Số Chỗ Trống',
+      cell: ({ row }) => {
+        const slots = row.original.totalAvailableSlots;
+        return (
+          <div className="font-medium">
+            {slots != null ? (
+              <span className="text-emerald-600 dark:text-emerald-400">{slots} trống</span>
+            ) : (
+              <span className="text-muted-foreground/50 italic">Đang cập nhật</span>
+            )}
+          </div>
+        );
+      }
     },
     {
       accessorKey: 'status',
@@ -83,13 +112,13 @@ export function BuildingTable({ buildings, onEdit, isLoading }: BuildingTablePro
             <Edit2 />
           </Button>
           <Button
-            variant="outline"
+            variant="ghost"
             size="icon-sm"
             onClick={() => handleDeleteClick(row.original)}
             title="Ngừng hoạt động"
-            className="text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-500/10"
+            className="text-muted-foreground hover:text-destructive hover:bg-destructive/20"
           >
-            <Trash2 />
+            <Trash2 className="h-4 w-4" />
           </Button>
         </div>
       ),

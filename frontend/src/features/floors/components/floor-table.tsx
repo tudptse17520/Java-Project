@@ -25,6 +25,12 @@ export function FloorTable({ data, isLoading, onEdit, onDelete }: FloorTableProp
       {
         accessorKey: "floorLevel",
         header: "Cấp độ",
+        cell: ({ row }) => {
+          const level = row.original.floorLevel;
+          if (level < 0) return `Hầm B${Math.abs(level)}`;
+          if (level > 0) return `Tầng ${level}`;
+          return "Trệt";
+        }
       },
       {
         accessorKey: "capacity",
@@ -32,7 +38,22 @@ export function FloorTable({ data, isLoading, onEdit, onDelete }: FloorTableProp
         cell: ({ row }) => {
           const capacity = row.original.capacity;
           const available = row.original.availableSlots;
-          return `${available}/${capacity} trống`;
+          const occupied = capacity - available;
+          const percent = capacity > 0 ? Math.round((occupied / capacity) * 100) : 0;
+          return (
+            <div className="flex flex-col gap-1.5 min-w-[140px]">
+              <div className="flex justify-between items-center text-xs">
+                <span className="font-medium">Đã lấp đầy: {occupied}/{capacity}</span>
+                <span className="text-muted-foreground">{percent}%</span>
+              </div>
+              <div className="h-1.5 w-full bg-muted rounded-full overflow-hidden">
+                <div 
+                  className={`h-full rounded-full ${percent > 90 ? 'bg-rose-500' : percent > 75 ? 'bg-amber-500' : 'bg-emerald-500'}`} 
+                  style={{ width: `${percent}%` }} 
+                />
+              </div>
+            </div>
+          );
         },
       },
       {
@@ -65,11 +86,11 @@ export function FloorTable({ data, isLoading, onEdit, onDelete }: FloorTableProp
                 <Pencil className="h-4 w-4" />
               </Button>
               <Button
-                variant="outline"
+                variant="ghost"
                 size="icon"
                 onClick={() => onDelete(floor)}
                 title="Xóa"
-                className="h-8 w-8 text-destructive hover:bg-destructive/10 hover:text-destructive"
+                className="h-8 w-8 text-muted-foreground hover:bg-destructive/20 hover:text-destructive"
               >
                 <Trash2 className="h-4 w-4" />
               </Button>

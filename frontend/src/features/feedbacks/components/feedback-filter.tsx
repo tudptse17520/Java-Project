@@ -2,14 +2,30 @@
 
 import { IssueType, FeedbackStatus } from "../types/feedback.type";
 
+import { Search } from "lucide-react";
+import { Input } from "@/components/ui/input";
+
 interface FeedbackFilterProps {
+  onSearchChange?: (value: string) => void;
   onIssueTypeChange: (value: IssueType | "ALL") => void;
   onStatusChange: (value: FeedbackStatus | "ALL") => void;
 }
 
-export function FeedbackFilter({ onIssueTypeChange, onStatusChange }: FeedbackFilterProps) {
+export function FeedbackFilter({ onSearchChange, onIssueTypeChange, onStatusChange }: FeedbackFilterProps) {
   return (
     <div className="flex flex-col sm:flex-row gap-4 mb-6 bg-card p-4 rounded-lg border">
+      <div className="flex-[2] space-y-2 relative">
+        <label className="text-sm font-medium text-muted-foreground">Tìm kiếm</label>
+        <div className="relative">
+          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+          <Input 
+            placeholder="Tìm theo ID Sự cố hoặc Biển số xe..." 
+            className="pl-9"
+            onChange={(e) => onSearchChange && onSearchChange(e.target.value)}
+          />
+        </div>
+      </div>
+
       <div className="flex-1 space-y-2">
         <label className="text-sm font-medium text-muted-foreground">Loại Sự Cố</label>
         <select 

@@ -1,8 +1,7 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Car, LogIn, LogOut, CreditCard } from "lucide-react";
+import { LogIn, LogOut, CreditCard } from "lucide-react";
 import { formatCurrency } from "@/utils/format-currency";
 
 const RECENT_ACTIVITIES = [
@@ -32,20 +31,24 @@ export function DashboardRecentActivity() {
                   <Icon className={`h-5 w-5 ${activity.color}`} />
                 </div>
                 <div className="flex-1 space-y-1">
-                  <p className="text-sm font-medium leading-none">
+                  <p className="text-sm font-semibold tracking-tight text-foreground">
                     Xe {activity.plate}
                   </p>
-                  <p className="text-xs text-muted-foreground">
+                  <p className={`text-xs ${
+                    activity.type === 'entry' ? 'text-blue-500/80 dark:text-blue-400/80' : 
+                    activity.type === 'exit' ? 'text-purple-500/80 dark:text-purple-400/80' : 
+                    'text-emerald-500/80 dark:text-emerald-400/80'
+                  }`}>
                     {activity.type === 'entry' ? 'Đã vào bãi đỗ' : activity.type === 'exit' ? 'Đã rời bãi đỗ' : 'Thanh toán phí đỗ xe'}
                   </p>
                 </div>
-                <div className="text-right">
+                <div className="flex flex-col items-end justify-center min-w-[80px]">
                   {activity.amount && (
-                    <p className="text-sm font-medium text-emerald-600 dark:text-emerald-400">
+                    <p className="text-sm font-semibold text-emerald-600 dark:text-emerald-400 mb-0.5 tabular-nums">
                       +{formatCurrency(activity.amount)}
                     </p>
                   )}
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-xs text-muted-foreground tabular-nums">
                     {activity.time}
                   </p>
                 </div>

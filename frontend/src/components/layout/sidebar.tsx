@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { 
+import {
   Building2,
   LogOut
 } from "lucide-react";
@@ -30,15 +30,15 @@ export function Sidebar({ className }: { className?: string }) {
   const firstSegment = pathname.split('/')[1];
   const basePath = ["admin", "manager", "staff"].includes(firstSegment) ? `/${firstSegment}` : "/admin";
 
-  const navGroups = 
+  const navGroups =
     basePath === "/admin" ? ADMIN_NAV :
-    basePath === "/manager" ? MANAGER_NAV : 
-    STAFF_NAV;
+      basePath === "/manager" ? MANAGER_NAV :
+        STAFF_NAV;
 
   return (
     <aside
       className={cn(
-        "fixed inset-y-0 left-0 z-50 hidden w-56 flex-col border-r bg-sidebar md:flex",
+        "fixed inset-y-0 left-0 z-50 hidden w-64 flex-col border-r bg-sidebar md:flex",
         className
       )}
     >
@@ -56,7 +56,7 @@ export function Sidebar({ className }: { className?: string }) {
       <ScrollArea className="flex-1 py-4">
         <nav className="px-4">
           {navGroups.map((group, index) => (
-            <div key={index} className="mb-4">
+            <div key={index} className={cn("mb-4", index > 0 && "pt-2")}>
               <h4 className="mb-2 px-3 text-xs font-semibold uppercase tracking-wider text-sidebar-foreground/50">
                 {group.label}
               </h4>
@@ -68,12 +68,19 @@ export function Sidebar({ className }: { className?: string }) {
                     <Link key={itemIndex} href={item.href}>
                       <span
                         className={cn(
-                          "group flex items-center rounded-md px-3 py-2 text-sm font-medium hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+                          "group flex items-center justify-between rounded-md px-3 py-2 text-sm font-medium hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
                           isActive ? "bg-primary/10 text-primary hover:bg-primary/15" : "text-sidebar-foreground"
                         )}
                       >
-                        <Icon className={cn("mr-3 h-5 w-5", isActive ? "text-primary" : "text-sidebar-foreground/70")} />
-                        {item.title}
+                        <div className="flex items-center">
+                          <Icon className={cn("mr-3 h-5 w-5", isActive ? "text-primary" : "text-sidebar-foreground/70")} />
+                          {item.title}
+                        </div>
+                        {item.title === "Sự cố" && (
+                          <span className="flex h-5 items-center justify-center rounded-full bg-rose-500/15 px-1.5 text-[11px] font-bold text-rose-500 min-w-5">
+                            2
+                          </span>
+                        )}
                       </span>
                     </Link>
                   );
@@ -85,8 +92,8 @@ export function Sidebar({ className }: { className?: string }) {
       </ScrollArea>
 
       <div className="border-t p-4">
-        <Button 
-          variant="ghost" 
+        <Button
+          variant="ghost"
           className="w-full justify-start text-sidebar-foreground hover:bg-destructive/10 hover:text-destructive"
           onClick={handleLogout}
         >

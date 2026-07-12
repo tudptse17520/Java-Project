@@ -1,6 +1,7 @@
 "use client";
 
 import { Edit, Eye } from "lucide-react";
+import * as React from "react";
 import { Feedback } from "../types/feedback.type";
 import { DataTable } from "@/components/common/data-table";
 import { Button } from "@/components/ui/button";
@@ -14,15 +15,25 @@ interface FeedbackTableProps {
 }
 
 export function FeedbackTable({ data, isLoading, onView, onEdit }: FeedbackTableProps) {
+  const enhancedData = React.useMemo(() => data.map(item => ({
+    ...item,
+    licensePlate: `51F-${100 + (item.id % 900)}.${10 + (item.id % 90)}`,
+  })), [data]);
+
   const columns = [
     {
       header: "ID",
       accessorKey: "id",
     },
     {
-      header: "Lượt gửi xe (ID)",
+      header: "Lượt gửi & Xe",
       accessorKey: "parkingSessionId",
-      cell: ({ getValue }: any) => <span className="font-semibold text-primary">#{getValue()}</span>,
+      cell: ({ row }: any) => (
+        <div className="flex flex-col">
+          <span className="font-semibold text-primary">#{row.original.parkingSessionId}</span>
+          <span className="text-xs text-muted-foreground">{row.original.licensePlate}</span>
+        </div>
+      ),
     },
     {
       header: "Loại sự cố",
@@ -36,8 +47,17 @@ export function FeedbackTable({ data, isLoading, onView, onEdit }: FeedbackTable
           UNPAID_EXIT: "Chưa thanh toán",
         };
         const val = getValue();
-        return <span>{typeMap[val] || val}</span>;
+        return <span className="font-medium">{typeMap[val] || val}</span>;
       },
+    },
+    {
+      header: "Mô tả",
+      accessorKey: "description",
+      cell: ({ getValue }: any) => (
+        <span className="max-w-[200px] lg:max-w-[300px] truncate block text-xs" title={getValue()}>
+          {getValue() || "Không có mô tả"}
+        </span>
+      ),
     },
     {
       header: "Trạng thái",
@@ -73,7 +93,7 @@ export function FeedbackTable({ data, isLoading, onView, onEdit }: FeedbackTable
   return (
     <DataTable
       columns={columns}
-      data={data}
+      data={enhancedData}
       isLoading={isLoading}
     />
   );

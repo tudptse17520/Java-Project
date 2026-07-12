@@ -68,7 +68,7 @@ export function DataTable<TData, TValue>({
         <div className="rounded-xl border border-border/60 bg-card shadow-sm overflow-hidden">
           <table className="w-full">
             <thead>
-              <tr className="border-b border-border/10 bg-muted/40">
+              <tr className="border-b border-border/50 bg-muted/40">
                 {columns.map((_, i) => (
                   <th key={i} className="px-4 py-3.5"><Skeleton className="h-4 w-20" /></th>
                 ))}
@@ -76,7 +76,7 @@ export function DataTable<TData, TValue>({
             </thead>
             <tbody>
               {Array.from({ length: 5 }).map((_, i) => (
-                <tr key={i} className="border-b border-border/10">
+                <tr key={i} className="border-b border-border/50">
                   {columns.map((_, j) => (
                     <td key={j} className="px-4 py-3"><Skeleton className="h-4 w-full" /></td>
                   ))}
@@ -98,7 +98,7 @@ export function DataTable<TData, TValue>({
             {table.getHeaderGroups().map((headerGroup) => (
               <tr
                 key={headerGroup.id}
-                className="border-b border-border/10 bg-transparent"
+                className="border-b border-border/50 bg-muted/30"
               >
                 {headerGroup.headers.map((header) => (
                   <th

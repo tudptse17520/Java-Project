@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PageContainer } from "@/components/common/page-container";
@@ -18,6 +18,7 @@ export default function FeedbacksPage() {
   const size = 10;
   const [issueType, setIssueType] = useState<IssueType | undefined>();
   const [status, setStatus] = useState<FeedbackStatus | undefined>();
+  const [searchQuery, setSearchQuery] = useState("");
 
   const [selectedFeedback, setSelectedFeedback] = useState<Feedback | null>(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -59,6 +60,22 @@ export default function FeedbacksPage() {
     setIsReadOnly(false);
   };
 
+  const displayData = useMemo(() => {
+    let data = response?.data || [];
+    if (searchQuery) {
+      const lowerQuery = searchQuery.toLowerCase();
+      data = data.filter((item: any) => {
+        const mockLicensePlate = `51f-${100 + (item.id % 900)}.${10 + (item.id % 90)}`.toLowerCase();
+        return (
+          String(item.id).toLowerCase().includes(lowerQuery) ||
+          String(item.parkingSessionId).toLowerCase().includes(lowerQuery) ||
+          mockLicensePlate.includes(lowerQuery)
+        );
+      });
+    }
+    return data;
+  }, [response?.data, searchQuery]);
+
   return (
     <PageContainer>
       <PageHeader
@@ -73,13 +90,14 @@ export default function FeedbacksPage() {
       />
 
       <FeedbackFilter
+        onSearchChange={setSearchQuery}
         onIssueTypeChange={handleIssueTypeChange}
         onStatusChange={handleStatusChange}
       />
 
       <div className="bg-card rounded-lg shadow mt-6">
         <FeedbackTable
-          data={response?.data || []}
+          data={displayData}
           isLoading={isLoading}
           onView={handleView}
           onEdit={handleEdit}

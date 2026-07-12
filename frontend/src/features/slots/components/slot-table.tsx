@@ -1,13 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { type ColumnDef } from "@tanstack/react-table";
 import { DataTable } from "@/components/common/data-table";
 import { Button } from "@/components/ui/button";
 import { SlotStatusBadge } from "./slot-status-badge";
 import { ParkingSlot } from "../types/slot.type";
-import { useUpdateSlotStatus } from "../hooks/use-slots";
+import { Pencil, Trash2, Eye } from "lucide-react";
 
 interface SlotTableProps {
   data: ParkingSlot[];
@@ -15,46 +14,73 @@ interface SlotTableProps {
 }
 
 export function SlotTable({ data, isLoading }: SlotTableProps) {
-  const updateMutation = useUpdateSlotStatus();
-
-  const handleStatusChange = (id: number, newStatus: string) => {
-    updateMutation.mutate({ id, status: newStatus });
-  };
-
   const columns = useMemo<ColumnDef<ParkingSlot>[]>(
     () => [
       {
         accessorKey: "slotName",
         header: "Tên vị trí",
+        cell: ({ row }) => <span className="font-semibold">{row.original.slotName}</span>,
+      },
+      {
+        accessorKey: "floorName",
+        header: "Tầng",
+        cell: ({ row }) => (
+          <span className="text-muted-foreground">
+            {row.original.floorName || "Hầm B1"}
+          </span>
+        ),
+      },
+      {
+        accessorKey: "vehicleTypeName",
+        header: "Loại xe",
+        cell: ({ row }) => (
+          <span className="text-muted-foreground">
+            {row.original.vehicleTypeName || "Ô tô"}
+          </span>
+        ),
       },
       {
         accessorKey: "status",
         header: "Trạng thái",
-        cell: ({ row }) => <SlotStatusBadge status={row.original.status} />,
+        cell: ({ row }) => <SlotStatusBadge slotId={row.original.id} status={row.original.status} />,
       },
       {
         id: "actions",
-        header: "Cập nhật trạng thái",
+        header: () => <div className="text-right">Thao tác</div>,
         cell: ({ row }) => {
           const slot = row.original;
           return (
-            <select
-              value={slot.status}
-              onChange={(e) => handleStatusChange(slot.id, e.target.value)}
-              className="h-8 w-36 rounded-md border border-input bg-background px-2 py-1 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50"
-              disabled={updateMutation.isPending}
-            >
-              <option value="AVAILABLE">Còn trống</option>
-              <option value="OCCUPIED">Đang đỗ</option>
-              <option value="RESERVED">Đã đặt trước</option>
-              <option value="MAINTENANCE">Bảo trì</option>
-              <option value="LOCKED">Đã khóa</option>
-            </select>
+            <div className="flex items-center justify-end gap-2">
+              <Button
+                variant="ghost"
+                size="icon"
+                title="Chi tiết"
+                className="h-8 w-8 text-muted-foreground hover:bg-primary/10 hover:text-primary"
+              >
+                <Eye className="h-4 w-4" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                title="Sửa"
+                className="h-8 w-8 text-muted-foreground hover:bg-blue-500/10 hover:text-blue-500"
+              >
+                <Pencil className="h-4 w-4" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                title="Xóa"
+                className="h-8 w-8 text-muted-foreground hover:bg-destructive/20 hover:text-destructive"
+              >
+                <Trash2 className="h-4 w-4" />
+              </Button>
+            </div>
           );
         },
       },
     ],
-    [updateMutation]
+    []
   );
 
   return <DataTable columns={columns} data={data} isLoading={isLoading} />;

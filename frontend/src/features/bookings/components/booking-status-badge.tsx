@@ -14,12 +14,27 @@ const STATUS_LABELS: Record<string, string> = {
 };
 
 export function BookingStatusBadge({ status }: BookingStatusBadgeProps) {
-  const variant =
-    status === "CHECKED_IN" || status === "CONFIRMED"
-      ? "success"
-      : status === "PENDING"
-      ? "warning"
-      : "danger";
+  let variant: "default" | "success" | "warning" | "danger" | "info" = "default";
+  
+  switch(status) {
+    case "PENDING":
+      variant = "warning";
+      break;
+    case "CONFIRMED":
+      variant = "info"; // Xanh dương
+      break;
+    case "CHECKED_IN":
+      variant = "success";
+      break;
+    case "CANCELLED":
+      variant = "danger";
+      break;
+    case "EXPIRED":
+      variant = "default"; // Màu xám
+      break;
+    default:
+      variant = "default";
+  }
 
   return (
     <StatusBadge variant={variant}>

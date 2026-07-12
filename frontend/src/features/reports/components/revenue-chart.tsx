@@ -4,6 +4,8 @@ import { useRevenueReport } from "../hooks/use-report";
 import { LoadingSpinner } from "@/components/common/loading-spinner";
 import { EmptyState } from "@/components/common/empty-state";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
+import { format, parseISO } from "date-fns";
+import { vi } from "date-fns/locale";
 import { BarChart3 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { ReportFilter, ReportDetail } from "../types/report.type";
@@ -51,10 +53,20 @@ export function RevenueChart({ filter }: RevenueChartProps) {
     );
   }
 
-  const chartData = data.details?.map((d: ReportDetail) => ({
-    name: d.name || d.date || "Unknown",
-    value: d.value || d.amount || d.revenue || 0,
-  })) || [];
+  const chartData = data.details?.map((d: ReportDetail) => {
+    let name = d.name || d.date;
+    if (name && name.includes("-")) {
+      try {
+        name = format(parseISO(name), "dd MMM", { locale: vi });
+      } catch (e) {
+        // Fallback if not ISO date
+      }
+    }
+    return {
+      name: name || "Chưa xác định",
+      value: d.value || d.amount || d.revenue || 0,
+    };
+  }) || [];
 
   return (
     <Card>
@@ -87,7 +99,7 @@ export function RevenueChart({ filter }: RevenueChartProps) {
                    formatter={(value: number | string | readonly (number | string)[] | undefined) => [formatCurrency(Number(value || 0)), "Doanh thu"]}
                    cursor={{ fill: 'var(--muted)' }}
                 />
-                <Bar dataKey="value" fill="var(--color-primary, #16a34a)" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="value" fill="var(--color-primary, #16a34a)" radius={[8, 8, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>

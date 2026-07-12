@@ -2,8 +2,8 @@
 
 import { useVehicleFlowReport } from "../hooks/use-report";
 import {
-  LineChart,
-  Line,
+  AreaChart,
+  Area,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -30,7 +30,7 @@ export function DashboardCharts() {
   const chartData = (!isError && data?.details?.length) ? data.details : MOCK_DATA;
 
   return (
-    <Card className="col-span-1 lg:col-span-2 shadow-sm border-neutral-200 dark:border-neutral-800">
+    <Card className="col-span-1 lg:col-span-2 shadow-sm border-neutral-200 dark:border-white/5 bg-background dark:bg-white/[0.02] transition-colors">
       <CardHeader>
         <CardTitle>Lưu lượng xe trong ngày</CardTitle>
         <CardDescription>
@@ -45,11 +45,21 @@ export function DashboardCharts() {
         ) : (
           <div className="h-[300px] w-full mt-4">
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart
+              <AreaChart
                 data={chartData}
                 margin={{ top: 5, right: 30, left: 0, bottom: 5 }}
               >
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#88888833" />
+                <defs>
+                  <linearGradient id="colorVao" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3}/>
+                    <stop offset="95%" stopColor="#3b82f6" stopOpacity={0}/>
+                  </linearGradient>
+                  <linearGradient id="colorRa" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.3}/>
+                    <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0}/>
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#555555" opacity={0.3} />
                 <XAxis 
                   dataKey="time" 
                   axisLine={false} 
@@ -64,28 +74,31 @@ export function DashboardCharts() {
                   dx={-10} 
                 />
                 <Tooltip 
-                  contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
+                  contentStyle={{ borderRadius: '8px', border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(0,0,0,0.8)', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
+                  itemStyle={{ color: '#fff' }}
                 />
                 <Legend iconType="circle" wrapperStyle={{ paddingTop: '20px' }} />
-                <Line
+                <Area
                   type="monotone"
                   name="Xe vào"
                   dataKey="vao"
                   stroke="#3b82f6"
                   strokeWidth={3}
-                  dot={{ r: 4, strokeWidth: 2 }}
+                  fillOpacity={1}
+                  fill="url(#colorVao)"
                   activeDot={{ r: 6 }}
                 />
-                <Line
+                <Area
                   type="monotone"
                   name="Xe ra"
                   dataKey="ra"
                   stroke="#8b5cf6"
                   strokeWidth={3}
-                  dot={{ r: 4, strokeWidth: 2 }}
+                  fillOpacity={1}
+                  fill="url(#colorRa)"
                   activeDot={{ r: 6 }}
                 />
-              </LineChart>
+              </AreaChart>
             </ResponsiveContainer>
           </div>
         )}

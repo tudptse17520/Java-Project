@@ -4,6 +4,9 @@ export interface ParkingSlot {
   id: number;
   slotName: string;
   floorId: number;
+  floorName?: string;
+  buildingName?: string;
+  vehicleTypeName?: string;
   status: SlotStatus;
 }
 

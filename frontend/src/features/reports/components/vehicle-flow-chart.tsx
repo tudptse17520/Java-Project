@@ -3,6 +3,8 @@ import { useVehicleFlowReport } from "../hooks/use-report";
 import { LoadingSpinner } from "@/components/common/loading-spinner";
 import { EmptyState } from "@/components/common/empty-state";
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, Legend } from "recharts";
+import { format, parseISO } from "date-fns";
+import { vi } from "date-fns/locale";
 import { Activity } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { ReportFilter, ReportDetail } from "../types/report.type";
@@ -51,11 +53,21 @@ export function VehicleFlowChart({ filter }: VehicleFlowChartProps) {
   }
 
   // Assuming details has { name/date, entries, exits }
-  const chartData = data.details?.length > 0 ? data.details.map((d: ReportDetail) => ({
-    name: d.name || d.date || "Unknown",
-    entries: d.entries || d.vao || 0,
-    exits: d.exits || d.ra || 0,
-  })) : [
+  const chartData = data.details?.length > 0 ? data.details.map((d: ReportDetail) => {
+    let name = d.name || d.date;
+    if (name && name.includes("-")) {
+      try {
+        name = format(parseISO(name), "dd MMM", { locale: vi });
+      } catch (e) {
+        // ignore
+      }
+    }
+    return {
+      name: name || "Chưa xác định",
+      entries: d.entries || d.vao || 0,
+      exits: d.exits || d.ra || 0,
+    };
+  }) : [
     { name: "Tổng quan", entries: data.totalEntries, exits: data.totalExits }
   ];
 
@@ -87,8 +99,8 @@ export function VehicleFlowChart({ filter }: VehicleFlowChartProps) {
               <YAxis fontSize={12} tickLine={false} axisLine={false} />
               <Tooltip cursor={{ stroke: 'var(--muted)', strokeWidth: 1 }} />
               <Legend verticalAlign="top" height={36}/>
-              <Area type="monotone" dataKey="entries" name="Lượt vào" stroke="#16a34a" fillOpacity={1} fill="url(#colorEntries)" />
-              <Area type="monotone" dataKey="exits" name="Lượt ra" stroke="#ef4444" fillOpacity={1} fill="url(#colorExits)" />
+              <Area type="monotone" dataKey="entries" name="Lượt vào" stroke="#16a34a" fillOpacity={0.5} fill="url(#colorEntries)" />
+              <Area type="monotone" dataKey="exits" name="Lượt ra" stroke="#ef4444" fillOpacity={0.5} fill="url(#colorExits)" />
             </AreaChart>
           </ResponsiveContainer>
         </div>

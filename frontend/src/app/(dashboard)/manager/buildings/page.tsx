@@ -9,6 +9,7 @@ import { Search } from 'lucide-react';
 import { BuildingFilter } from '@/features/buildings/components/building-filter';
 import { BuildingTable } from '@/features/buildings/components/building-table';
 import { BuildingModal } from '@/features/buildings/components/building-modal';
+import { BuildingStats } from '@/features/buildings/components/building-stats';
 import { useBuildings } from '@/features/buildings/hooks/use-buildings';
 import { TableSkeleton } from '@/components/common/table-skeleton';
 import { EmptyState } from '@/components/common/empty-state';
@@ -45,6 +46,8 @@ export default function BuildingsPage() {
         } 
       />
       
+      <BuildingStats />
+
       <Toolbar>
         <BuildingFilter 
           keyword={keyword}

@@ -9,10 +9,15 @@ import { ConfirmDialog } from "@/components/common/confirm-dialog";
 import { useFloors, useCreateFloor, useUpdateFloor, useDeleteFloor } from "@/features/floors/hooks/use-floors";
 import { FloorTable } from "@/features/floors/components/floor-table";
 import { FloorFormDialog } from "@/features/floors/components/floor-form-dialog";
+import { FloorFilter } from "@/features/floors/components/floor-filter";
+import { Toolbar } from "@/components/common/toolbar";
 import { Floor } from "@/features/floors/types/floor.type";
 import type { FloorFormValues } from "@/features/floors/schemas/floor.schema";
 
 export default function FloorsPage() {
+  const [keyword, setKeyword] = useState("");
+  const [buildingId, setBuildingId] = useState<string | undefined>(undefined);
+
   const { data: floors = [], isLoading } = useFloors();
   const createMutation = useCreateFloor();
   const updateMutation = useUpdateFloor();
@@ -81,6 +86,15 @@ export default function FloorsPage() {
           </Button>
         }
       />
+
+      <Toolbar>
+        <FloorFilter 
+          keyword={keyword}
+          onKeywordChange={setKeyword}
+          buildingId={buildingId}
+          onBuildingChange={setBuildingId}
+        />
+      </Toolbar>
 
       <div className="mt-6">
         <FloorTable

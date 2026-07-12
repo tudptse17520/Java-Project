@@ -1,6 +1,7 @@
 package vn.edu.ut.pbms.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,6 +18,7 @@ import lombok.NoArgsConstructor;
 public class UserCreateRequest {
 
     @NotBlank(message = "Tên đăng nhập không được để trống.")
+    @Size(min = 4, message = "Tên đăng nhập phải có ít nhất 4 ký tự.")
     private String username;
 
     @NotBlank(message = "Mật khẩu không được để trống.")
@@ -27,6 +29,7 @@ public class UserCreateRequest {
     private String fullName;
 
     @NotBlank(message = "Số điện thoại không được để trống.")
+    @Pattern(regexp = "^(0[3|5|7|8|9])+([0-9]{8})$", message = "Số điện thoại không đúng định dạng.")
     private String phoneNumber;
 
     @NotBlank(message = "Vai trò không được để trống.")

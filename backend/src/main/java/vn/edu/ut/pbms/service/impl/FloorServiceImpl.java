@@ -5,12 +5,14 @@ import org.springframework.stereotype.Service;
 import vn.edu.ut.pbms.constant.FloorStatus;
 import vn.edu.ut.pbms.dto.request.FloorRequestDTO;
 import vn.edu.ut.pbms.dto.response.FloorResponseDTO;
+import vn.edu.ut.pbms.constant.ParkingSlotStatus;
 import vn.edu.ut.pbms.entity.Building;
 import vn.edu.ut.pbms.entity.Floor;
 import vn.edu.ut.pbms.entity.VehicleType;
 import vn.edu.ut.pbms.exception.ResourceNotFoundException;
 import vn.edu.ut.pbms.repository.BuildingRepository;
 import vn.edu.ut.pbms.repository.FloorRepository;
+import vn.edu.ut.pbms.repository.ParkingSlotRepository;
 import vn.edu.ut.pbms.repository.VehicleTypeRepository;
 import vn.edu.ut.pbms.service.FloorService;
 
@@ -24,6 +26,7 @@ public class FloorServiceImpl implements FloorService {
     private final FloorRepository floorRepository;
     private final BuildingRepository buildingRepository;
     private final VehicleTypeRepository vehicleTypeRepository;
+    private final ParkingSlotRepository parkingSlotRepository;
 
     @Override
     public FloorResponseDTO createFloor(FloorRequestDTO request) {
@@ -103,15 +106,19 @@ public class FloorServiceImpl implements FloorService {
 
     // Hàm phụ trợ map từ Entity sang DTO
     private FloorResponseDTO mapToResponseDTO(Floor floor) {
+        long availableSlots = parkingSlotRepository.countByFloorIdAndStatus(floor.getId(), ParkingSlotStatus.AVAILABLE);
+
         return FloorResponseDTO.builder()
                 .id(floor.getId())
                 .floorName(floor.getFloorName())
                 .floorLevel(floor.getFloorLevel())
                 .capacity(floor.getCapacity())
                 .status(floor.getStatus())
+                .availableSlots(availableSlots)
                 .buildingId(floor.getBuilding() != null ? floor.getBuilding().getId() : null)
                 .buildingName(floor.getBuilding() != null ? floor.getBuilding().getBuildingName() : null)
                 .vehicleTypeId(floor.getVehicleType() != null ? floor.getVehicleType().getId() : null)
+                .vehicleTypeName(floor.getVehicleType() != null ? floor.getVehicleType().getTypeName() : null)
                 .build();
     }
 }

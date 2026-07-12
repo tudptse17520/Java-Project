@@ -37,13 +37,16 @@ export default function UsersPage() {
         title="Quản lý tài khoản"
         description="Quản lý thông tin, phân quyền và trạng thái hoạt động của nhân viên và khách hàng."
         actions={
-          <Button onClick={handleOpenCreate}>
-            <Plus className="mr-2 h-4 w-4" /> Thêm mới
+          <Button 
+            onClick={handleOpenCreate} 
+            className="shadow-sm hover:shadow-md hover:brightness-110 transition-all"
+          >
+            <Plus className="mr-2 h-4.5 w-4.5" /> Thêm mới
           </Button>
         }
       />
 
-      <Toolbar>
+      <Toolbar className="mb-4">
         <UserFilter
           keyword={keyword}
           role={role}

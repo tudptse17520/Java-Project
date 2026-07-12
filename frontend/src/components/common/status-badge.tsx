@@ -1,6 +1,6 @@
 // ---------------------------------------------
 // Status Badge Component
-// Component chỉ chịu trách nhiệm hiển thị giao diện theo variant
+// Component chịu trách nhiệm hiển thị giao diện theo variant
 // ---------------------------------------------
 
 import React from "react";
@@ -13,13 +13,13 @@ import {
   type LucideIcon,
 } from "lucide-react";
 
-export type BadgeVariant = "success" | "warning" | "danger" | "info";
+export type BadgeVariant = "success" | "warning" | "danger" | "info" | "purple" | "cyan" | "default";
 
 interface StatusBadgeProps {
   variant: BadgeVariant;
   children: React.ReactNode;
   className?: string;
-  icon?: LucideIcon;
+  icon?: LucideIcon | null; // Cho phép ẩn icon nếu truyền null
 }
 
 const variantConfig: Record<
@@ -30,21 +30,33 @@ const variantConfig: Record<
   }
 > = {
   success: {
-    colorClass: "bg-emerald-500/10 text-emerald-600 border-emerald-500/20 dark:text-emerald-400 dark:bg-emerald-500/15",
+    colorClass: "bg-emerald-500/15 text-emerald-600 dark:text-emerald-500 border border-emerald-500/20",
     icon: CheckCircle2,
   },
   warning: {
-    colorClass: "bg-amber-500/10 text-amber-600 border-amber-500/20 dark:text-amber-400 dark:bg-amber-500/15",
+    colorClass: "bg-amber-500/15 text-amber-600 dark:text-amber-500 border border-amber-500/20",
     icon: Clock,
   },
   danger: {
-    colorClass: "bg-rose-500/10 text-rose-600 border-rose-500/20 dark:text-rose-400 dark:bg-rose-500/15",
+    colorClass: "bg-rose-500/15 text-rose-600 dark:text-rose-500 border border-rose-500/20",
     icon: AlertTriangle,
   },
   info: {
-    colorClass: "bg-blue-500/10 text-blue-600 border-blue-500/20 dark:text-blue-400 dark:bg-blue-500/15",
+    colorClass: "bg-blue-500/15 text-blue-600 dark:text-blue-500 border border-blue-500/20",
     icon: Info,
   },
+  purple: {
+    colorClass: "bg-purple-500/15 text-purple-600 dark:text-purple-500 border border-purple-500/20",
+    icon: Info,
+  },
+  cyan: {
+    colorClass: "bg-cyan-500/15 text-cyan-600 dark:text-cyan-500 border border-cyan-500/20",
+    icon: Info,
+  },
+  default: {
+    colorClass: "bg-slate-500/15 text-slate-600 dark:text-slate-400 border border-slate-500/20",
+    icon: Info,
+  }
 };
 
 export function StatusBadge({
@@ -54,17 +66,17 @@ export function StatusBadge({
   icon,
 }: StatusBadgeProps) {
   const config = variantConfig[variant] || variantConfig.info;
-  const Icon = icon || config.icon;
+  const Icon = icon === undefined ? config.icon : icon;
 
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border transition-colors shrink-0",
+        "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium transition-colors shrink-0 whitespace-nowrap h-6",
         config.colorClass,
         className
       )}
     >
-      <Icon className="h-3 w-3" />
+      {Icon && <Icon className="h-3.5 w-3.5" />}
       <span>{children}</span>
     </span>
   );

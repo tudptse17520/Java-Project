@@ -18,9 +18,9 @@ import {
 } from "@tanstack/react-table";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
-import { ArrowUpDown, ChevronLeft, ChevronRight } from "lucide-react";
+import { ArrowUpDown, ArrowUp, ArrowDown, ChevronLeft, ChevronRight } from "lucide-react";
 import { EmptyState } from "@/components/common/empty-state";
-import { LoadingSpinner } from "@/components/common/loading-spinner";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -64,8 +64,27 @@ export function DataTable<TData, TValue>({
 
   if (isLoading) {
     return (
-      <div className="flex h-64 items-center justify-center">
-        <LoadingSpinner text="Đang tải dữ liệu..." />
+      <div className={cn("space-y-4", className)}>
+        <div className="rounded-xl border border-border/60 bg-card shadow-sm overflow-hidden">
+          <table className="w-full">
+            <thead>
+              <tr className="border-b border-border/10 bg-muted/40">
+                {columns.map((_, i) => (
+                  <th key={i} className="px-4 py-3.5"><Skeleton className="h-4 w-20" /></th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {Array.from({ length: 5 }).map((_, i) => (
+                <tr key={i} className="border-b border-border/10">
+                  {columns.map((_, j) => (
+                    <td key={j} className="px-4 py-3"><Skeleton className="h-4 w-full" /></td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     );
   }
@@ -73,18 +92,18 @@ export function DataTable<TData, TValue>({
   return (
     <div className={cn("space-y-4", className)}>
       {/* Table */}
-      <div className="rounded-xl border border-border/60 bg-card shadow-sm overflow-hidden">
+      <div className="rounded-xl border border-white/5 bg-black/10 dark:bg-black/20 shadow-sm overflow-hidden">
         <table className="w-full">
           <thead>
             {table.getHeaderGroups().map((headerGroup) => (
               <tr
                 key={headerGroup.id}
-                className="border-b border-border/60 bg-muted/40"
+                className="border-b border-border/10 bg-transparent"
               >
                 {headerGroup.headers.map((header) => (
                   <th
                     key={header.id}
-                    className="px-4 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground"
+                    className="group px-4 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-slate-300"
                   >
                     {header.isPlaceholder ? null : (
                       <div
@@ -100,10 +119,15 @@ export function DataTable<TData, TValue>({
                           header.getContext()
                         )}
                         {header.column.getCanSort() && (
-                          <ArrowUpDown className={cn(
-                            "h-3 w-3 transition-transform duration-200",
-                            header.column.getIsSorted() === "asc" && "rotate-180",
-                          )} />
+                          <span className="flex items-center">
+                            {header.column.getIsSorted() === "asc" ? (
+                              <ArrowUp className="h-3.5 w-3.5 text-primary" />
+                            ) : header.column.getIsSorted() === "desc" ? (
+                              <ArrowDown className="h-3.5 w-3.5 text-primary" />
+                            ) : (
+                              <ArrowUpDown className="h-3.5 w-3.5 text-muted-foreground/40 opacity-0 group-hover:opacity-100 transition-opacity" />
+                            )}
+                          </span>
                         )}
                       </div>
                     )}
@@ -114,13 +138,10 @@ export function DataTable<TData, TValue>({
           </thead>
           <tbody>
             {table.getRowModel().rows.length ? (
-              table.getRowModel().rows.map((row, index) => (
+              table.getRowModel().rows.map((row) => (
                 <tr
                   key={row.id}
-                  className={cn(
-                    "border-b border-border/40 last:border-0 transition-colors duration-150 hover:bg-muted/30",
-                    index % 2 === 0 ? "bg-transparent" : "bg-muted/10"
-                  )}
+                  className="border-b border-border/10 transition-colors duration-200 hover:bg-white/5 last:border-0"
                 >
                   {row.getVisibleCells().map((cell) => (
                     <td key={cell.id} className="px-4 py-3 text-sm">
@@ -136,9 +157,12 @@ export function DataTable<TData, TValue>({
               <tr>
                 <td
                   colSpan={columns.length}
-                  className="px-4 py-8"
+                  className="px-4 py-12"
                 >
-                  <EmptyState />
+                  <EmptyState 
+                    title="Không có dữ liệu"
+                    description="Danh sách trống hoặc không có kết quả phù hợp."
+                  />
                 </td>
               </tr>
             )}
@@ -147,27 +171,29 @@ export function DataTable<TData, TValue>({
       </div>
 
       {/* Pagination */}
-      <div className="flex items-center justify-between text-sm text-muted-foreground px-1">
-        <span className="text-xs">
-          Trang {table.getPageCount() > 0 ? table.getState().pagination.pageIndex + 1 : 0}{" "}
-          / {table.getPageCount()}
+      <div className="flex items-center justify-end gap-8 text-sm text-muted-foreground px-1">
+        <span className="text-xs sm:text-sm">
+          Hiển thị trang {table.getPageCount() > 0 ? table.getState().pagination.pageIndex + 1 : 0}{" "}
+          trên tổng số {table.getPageCount()}
         </span>
-        <div className="flex items-center gap-1.5">
+        <div className="flex items-center gap-2">
           <button
             type="button"
-            className="inline-flex items-center justify-center h-8 w-8 rounded-lg border border-border/60 bg-background hover:bg-muted disabled:opacity-40 transition-colors duration-200"
+            className="inline-flex items-center justify-center h-8 px-3 rounded-lg border border-border/60 bg-background hover:bg-muted disabled:opacity-40 transition-colors duration-200"
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage() || isLoading}
           >
-            <ChevronLeft className="h-4 w-4" />
+            <ChevronLeft className="h-4 w-4 mr-1 sm:mr-1.5" />
+            <span className="hidden sm:inline">Trước</span>
           </button>
           <button
             type="button"
-            className="inline-flex items-center justify-center h-8 w-8 rounded-lg border border-border/60 bg-background hover:bg-muted disabled:opacity-40 transition-colors duration-200"
+            className="inline-flex items-center justify-center h-8 px-3 rounded-lg border border-border/60 bg-background hover:bg-muted disabled:opacity-40 transition-colors duration-200"
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage() || isLoading}
           >
-            <ChevronRight className="h-4 w-4" />
+            <span className="hidden sm:inline">Tiếp</span>
+            <ChevronRight className="h-4 w-4 ml-1 sm:ml-1.5" />
           </button>
         </div>
       </div>

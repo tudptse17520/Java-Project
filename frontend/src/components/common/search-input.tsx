@@ -52,11 +52,11 @@ export function SearchInput({
         value={internalValue}
         onChange={(e) => setInternalValue(e.target.value)}
         className={cn(
-          "peer h-11 w-full rounded-lg border border-input bg-background pl-10 pr-10 py-2 text-sm shadow-sm",
+          "peer h-11 w-full rounded-lg border border-border/40 bg-background hover:bg-muted/10 pl-10 pr-10 py-2 text-sm shadow-sm",
           "placeholder:text-muted-foreground/50",
           "transition-all duration-200",
-          "hover:border-ring/50",
-          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30 focus-visible:border-ring"
+          "hover:border-primary/50",
+          "focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary focus-visible:border-primary"
         )}
       />
       {internalValue && (

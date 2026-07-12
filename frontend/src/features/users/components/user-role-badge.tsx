@@ -9,10 +9,14 @@ interface UserRoleBadgeProps {
 export function UserRoleBadge({ role }: UserRoleBadgeProps) {
   const variant =
     role === "ADMIN"
-      ? "success"
+      ? "purple"
       : role === "MANAGER"
       ? "warning"
-      : "info";
+      : role === "STAFF"
+      ? "info"
+      : "cyan";
 
-  return <StatusBadge variant={variant}>{ROLE_LABELS[role]}</StatusBadge>;
+  // Hide icon for roles to make it cleaner, or keep it. The user said "keep same height/padding/border-radius". 
+  // We'll pass icon={null} if we don't want an icon, but we can keep the icon for consistency.
+  return <StatusBadge variant={variant} icon={null}>{ROLE_LABELS[role]}</StatusBadge>;
 }

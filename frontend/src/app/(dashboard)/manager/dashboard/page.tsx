@@ -9,6 +9,8 @@ import { LoadingSpinner } from "@/components/common/loading-spinner";
 import { Banknote, Car, CarFront, Clock, Percent } from "lucide-react";
 import { EmptyState } from "@/components/common/empty-state";
 import { Button } from "@/components/ui/button";
+import { DashboardCharts } from "@/features/reports/components/dashboard-charts";
+import { DashboardRecentActivity } from "@/features/reports/components/dashboard-recent-activity";
 
 const statCards = [
   {
@@ -70,13 +72,13 @@ function getStatValue(key: string, data: Record<string, unknown>): string {
   }
 }
 
-export default function ManagerDashboardPage() {
+export default function AdminDashboardPage() {
   const { data, isLoading, isError } = useDashboardReport();
 
   return (
     <PageContainer>
       <PageHeader
-        title="Dashboard Quản Lý"
+        title="Dashboard Quản Trị"
         description="Tổng quan tình hình vận hành của hệ thống bãi đỗ xe"
       />
 
@@ -98,33 +100,40 @@ export default function ManagerDashboardPage() {
           />
         </div>
       ) : (
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
-          {statCards.map((card) => {
-            const Icon = card.icon;
-            return (
-              <Card key={card.key} className="group relative overflow-hidden">
-                <CardContent className="p-5">
-                  <div className="flex items-start justify-between">
-                    <div className="space-y-1">
-                      <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                        {card.label}
-                      </p>
-                      <p className="text-2xl font-bold tracking-tight">
-                        {getStatValue(card.key, data as unknown as Record<string, unknown>)}
-                      </p>
-                      <p className="text-xs text-muted-foreground/70">
-                        {card.description}
-                      </p>
+        <>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+            {statCards.map((card) => {
+              const Icon = card.icon;
+              return (
+                <Card key={card.key} className="group relative overflow-hidden border-neutral-200 dark:border-neutral-800 shadow-sm transition-all hover:shadow-md">
+                  <CardContent className="p-5">
+                    <div className="flex items-start justify-between">
+                      <div className="space-y-1">
+                        <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                          {card.label}
+                        </p>
+                        <p className="text-2xl font-bold tracking-tight">
+                          {getStatValue(card.key, data as unknown as Record<string, unknown>)}
+                        </p>
+                        <p className="text-xs text-muted-foreground/70">
+                          {card.description}
+                        </p>
+                      </div>
+                      <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${card.bg}`}>
+                        <Icon className={`h-5 w-5 ${card.color}`} />
+                      </div>
                     </div>
-                    <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${card.bg}`}>
-                      <Icon className={`h-5 w-5 ${card.color}`} />
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            );
-          })}
-        </div>
+                  </CardContent>
+                </Card>
+              );
+            })}
+          </div>
+
+          <div className="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-3">
+            <DashboardCharts />
+            <DashboardRecentActivity />
+          </div>
+        </>
       )}
     </PageContainer>
   );

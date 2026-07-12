@@ -36,6 +36,7 @@ public class DataSeeder implements CommandLineRunner {
     private final PaymentRepository paymentRepository;
     private final FeedbackRepository feedbackRepository;
     private final BookingRepository bookingRepository;
+    private final SystemConfigRepository systemConfigRepository;
     private final PasswordEncoder passwordEncoder;
     private final org.springframework.jdbc.core.JdbcTemplate jdbcTemplate;
 
@@ -64,10 +65,14 @@ public class DataSeeder implements CommandLineRunner {
             pricingPolicyRepository.deleteAll();
             vehicleTypeRepository.deleteAll();
             userRepository.deleteAll();
+            systemConfigRepository.deleteAll();
         }
 
         if (userRepository.count() > 0) {
             log.info("Không thể xóa dữ liệu cũ. Bỏ qua Seeder.");
+            if (systemConfigRepository.count() == 0) {
+                seedSystemConfigs();
+            }
             return;
         }
 
@@ -76,8 +81,20 @@ public class DataSeeder implements CommandLineRunner {
         List<ParkingSlot> slots = seedInfrastructure(vehicleTypes);
         List<Vehicle> vehicles = seedVehicles(users, vehicleTypes);
         seedOperations(users, vehicles, slots);
+        seedSystemConfigs();
 
         log.info("=== KẾT THÚC CHẠY DATABASE SEEDER THÀNH CÔNG ===");
+    }
+
+    private void seedSystemConfigs() {
+        log.info("Đang tạo danh sách Cấu hình Hệ thống...");
+        List<SystemConfig> configs = List.of(
+                SystemConfig.builder().configKey("PARKING_OPEN_TIME").configValue("05:00").description("Giờ mở cửa bãi đỗ xe").build(),
+                SystemConfig.builder().configKey("PARKING_CLOSE_TIME").configValue("23:00").description("Giờ đóng cửa bãi đỗ xe").build(),
+                SystemConfig.builder().configKey("LATE_FEE_MULTIPLIER").configValue("1.5").description("Hệ số phạt trễ giờ").build(),
+                SystemConfig.builder().configKey("MAX_VEHICLES_PER_USER").configValue("3").description("Số lượng xe tối đa mỗi tài khoản có thể đăng ký").build()
+        );
+        systemConfigRepository.saveAll(configs);
     }
 
     private List<User> seedUsers() {

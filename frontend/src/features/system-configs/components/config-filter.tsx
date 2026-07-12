@@ -10,9 +10,9 @@ interface ConfigFilterProps {
 export function ConfigFilter({ onSearch, isLoading }: ConfigFilterProps) {
   return (
     <div className="flex items-center gap-4">
-      <div className="w-[300px]">
+      <div className="w-full sm:w-[450px]">
         <SearchInput
-          placeholder="Tìm kiếm cấu hình..."
+          placeholder="Tìm theo tên cấu hình, key hoặc mô tả..."
           onSearch={onSearch}
         />
       </div>

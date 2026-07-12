@@ -1,131 +1,133 @@
 "use client";
 
-import { useDashboardReport } from "@/features/reports/hooks/use-report";
 import { PageContainer } from "@/components/common/page-container";
 import { PageHeader } from "@/components/common/page-header";
-import { Card, CardContent } from "@/components/ui/card";
-import { formatCurrency } from "@/utils/format-currency";
-import { LoadingSpinner } from "@/components/common/loading-spinner";
-import { Banknote, Car, CarFront, Clock, Percent } from "lucide-react";
-import { EmptyState } from "@/components/common/empty-state";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Users, UserCheck, Building, Layers, MapPin, Circle, Plus, Settings, ShieldCheck, UserPlus } from "lucide-react";
+import { AdminDashboardCharts } from "@/features/reports/components/admin-dashboard-charts";
+import { AdminSystemActivity } from "@/features/reports/components/admin-system-activity";
 
-const statCards = [
+const adminStatCards = [
   {
-    key: "revenue",
-    label: "Doanh thu",
-    description: "Tổng doanh thu hệ thống",
-    icon: Banknote,
-    color: "text-emerald-600 dark:text-emerald-400",
-    bg: "bg-emerald-500/10",
-  },
-  {
-    key: "entries",
-    label: "Lượt xe vào",
-    description: "Lượt xe đã check-in",
-    icon: CarFront,
-    color: "text-blue-600 dark:text-blue-400",
+    key: "total_users",
+    label: "Tổng Tài Khoản",
+    value: "129",
+    description: "Toàn bộ tài khoản hệ thống",
+    icon: Users,
+    color: "text-blue-500",
     bg: "bg-blue-500/10",
   },
   {
-    key: "exits",
-    label: "Lượt xe ra",
-    description: "Lượt xe đã check-out",
-    icon: Car,
-    color: "text-indigo-600 dark:text-indigo-400",
-    bg: "bg-indigo-500/10",
+    key: "active_users",
+    label: "Đang Hoạt Động",
+    value: "125",
+    description: "Tài khoản trạng thái Active",
+    icon: UserCheck,
+    color: "text-emerald-500",
+    bg: "bg-emerald-500/10",
   },
   {
-    key: "occupancy",
-    label: "Tỷ lệ lấp đầy",
-    description: "Hiệu suất sử dụng bãi",
-    icon: Percent,
-    color: "text-amber-600 dark:text-amber-400",
+    key: "buildings",
+    label: "Tổng Tòa Nhà",
+    value: "1",
+    description: "Cơ sở đang vận hành",
+    icon: Building,
+    color: "text-purple-500",
+    bg: "bg-purple-500/10",
+  },
+  {
+    key: "floors",
+    label: "Tổng Tầng",
+    value: "3",
+    description: "Khu vực phân lô xe",
+    icon: Layers,
+    color: "text-amber-500",
     bg: "bg-amber-500/10",
   },
   {
-    key: "peak",
-    label: "Giờ cao điểm",
-    description: "Khung giờ đông nhất",
-    icon: Clock,
-    color: "text-rose-600 dark:text-rose-400",
+    key: "slots",
+    label: "Tổng Slot Đỗ",
+    value: "150",
+    description: "Sức chứa tối đa (Capacity)",
+    icon: MapPin,
+    color: "text-rose-500",
     bg: "bg-rose-500/10",
   },
 ] as const;
 
-function getStatValue(key: string, data: Record<string, unknown>): string {
-  switch (key) {
-    case "revenue":
-      return formatCurrency((data.totalRevenue as number) || 0);
-    case "entries":
-      return String((data.totalEntries as number) || 0);
-    case "exits":
-      return String((data.totalExits as number) || 0);
-    case "occupancy":
-      return `${((data.occupancyRate as number) || 0).toFixed(1)}%`;
-    case "peak":
-      return (data.peakHour as string) || "--:--";
-    default:
-      return "--";
-  }
-}
-
 export default function AdminDashboardPage() {
-  const { data, isLoading, isError } = useDashboardReport();
-
   return (
     <PageContainer>
-      <PageHeader
-        title="Dashboard Quản Trị"
-        description="Tổng quan tình hình vận hành của hệ thống bãi đỗ xe"
-      />
+      <div className="flex items-center justify-between mb-4">
+        <PageHeader
+          title="Admin Dashboard"
+          description="Tổng quan quản trị hệ thống PBMS và cơ sở hạ tầng"
+        />
+        <Badge variant="outline" className="px-3 py-1 text-sm bg-emerald-500/10 text-emerald-500 border-emerald-500/20">
+          <Circle className="w-2 h-2 fill-current mr-2 animate-pulse" />
+          System Online
+        </Badge>
+      </div>
 
-      {isLoading ? (
-        <div className="flex justify-center items-center h-64">
-          <LoadingSpinner text="Đang tải dữ liệu..." />
-        </div>
-      ) : isError || !data ? (
-        <div className="h-64 mt-6">
-          <EmptyState
-            icon={Car}
-            title="Lỗi tải dữ liệu"
-            description="Không thể kết nối để lấy dữ liệu tổng quan lúc này."
-            action={
-              <Button variant="outline" onClick={() => window.location.reload()}>
-                Thử lại
-              </Button>
-            }
-          />
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
-          {statCards.map((card) => {
-            const Icon = card.icon;
-            return (
-              <Card key={card.key} className="group relative overflow-hidden">
-                <CardContent className="p-5">
-                  <div className="flex items-start justify-between">
-                    <div className="space-y-1">
-                      <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                        {card.label}
-                      </p>
-                      <p className="text-2xl font-bold tracking-tight">
-                        {getStatValue(card.key, data as unknown as Record<string, unknown>)}
-                      </p>
-                      <p className="text-xs text-muted-foreground/70">
-                        {card.description}
-                      </p>
-                    </div>
-                    <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${card.bg}`}>
-                      <Icon className={`h-5 w-5 ${card.color}`} />
-                    </div>
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6 mt-2">
+        {adminStatCards.map((card) => {
+          const Icon = card.icon;
+          return (
+            <Card key={card.key} className="group relative overflow-hidden border border-white/5 bg-background shadow-sm transition-all hover:shadow-md">
+              <CardContent className="p-5">
+                <div className="flex items-start justify-between">
+                  <div className="space-y-2">
+                    <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                      {card.label}
+                    </p>
+                    <p className="text-3xl font-bold tracking-tight text-foreground">
+                      {card.value}
+                    </p>
+                    <p className="text-xs text-muted-foreground/60">
+                      {card.description}
+                    </p>
                   </div>
-                </CardContent>
-              </Card>
-            );
-          })}
+                  <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl ${card.bg}`}>
+                    <Icon className={`h-6 w-6 ${card.color}`} />
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          );
+        })}
+      </div>
+
+      {/* Quick Actions */}
+      <div className="mt-6">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <Button variant="outline" className="h-auto py-4 flex flex-col items-center justify-center gap-2 border-white/5 bg-background hover:bg-muted/50">
+            <UserPlus className="h-5 w-5 text-blue-500" />
+            <span className="text-sm font-medium">Thêm Tài Khoản</span>
+          </Button>
+          <Button variant="outline" className="h-auto py-4 flex flex-col items-center justify-center gap-2 border-white/5 bg-background hover:bg-muted/50">
+            <ShieldCheck className="h-5 w-5 text-indigo-500" />
+            <span className="text-sm font-medium">Phân Quyền</span>
+          </Button>
+          <Button variant="outline" className="h-auto py-4 flex flex-col items-center justify-center gap-2 border-white/5 bg-background hover:bg-muted/50">
+            <Settings className="h-5 w-5 text-amber-500" />
+            <span className="text-sm font-medium">Cấu Hình Hệ Thống</span>
+          </Button>
+          <Button variant="outline" className="h-auto py-4 flex flex-col items-center justify-center gap-2 border-white/5 bg-background hover:bg-muted/50">
+            <Building className="h-5 w-5 text-purple-500" />
+            <span className="text-sm font-medium">Quản Lý Tòa Nhà</span>
+          </Button>
         </div>
-      )}
+      </div>
+
+      {/* Charts and Activity */}
+      <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-3">
+        <AdminDashboardCharts />
+        <AdminSystemActivity />
+      </div>
+      
     </PageContainer>
   );
 }

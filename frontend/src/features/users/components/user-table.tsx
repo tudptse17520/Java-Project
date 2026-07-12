@@ -39,12 +39,15 @@ export function UserTable({ data, isLoading, onEdit }: UserTableProps) {
       {
         accessorKey: "id",
         header: "ID",
+        cell: ({ row }) => (
+          <span className="tabular-nums font-mono text-muted-foreground">{row.original.id}</span>
+        ),
       },
       {
         accessorKey: "username",
         header: "Tên đăng nhập",
         cell: ({ row }) => (
-          <span className="font-semibold">{row.original.username}</span>
+          <span className="font-semibold text-foreground">{row.original.username}</span>
         ),
       },
       {
@@ -54,6 +57,9 @@ export function UserTable({ data, isLoading, onEdit }: UserTableProps) {
       {
         accessorKey: "phoneNumber",
         header: "Số điện thoại",
+        cell: ({ row }) => (
+          <span className="tabular-nums">{row.original.phoneNumber || "—"}</span>
+        ),
       },
       {
         accessorKey: "role",
@@ -73,26 +79,28 @@ export function UserTable({ data, isLoading, onEdit }: UserTableProps) {
           const isActive = user.status === "ACTIVE";
 
           return (
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1">
               <Button
-                variant="outline"
-                size="sm"
-                className="h-8 px-2 text-primary"
+                variant="ghost"
+                size="icon"
+                className="h-8 w-8 text-muted-foreground hover:text-blue-500 hover:bg-blue-500/15 transition-colors"
                 onClick={() => onEdit(user)}
-                title="Cập nhật"
+                title="Cập nhật tài khoản"
+                aria-label="Cập nhật tài khoản"
               >
                 <Edit2 className="h-4 w-4" />
               </Button>
               <Button
-                variant="outline"
-                size="sm"
-                className={`h-8 px-2 ${
+                variant="ghost"
+                size="icon"
+                className={`h-8 w-8 transition-colors ${
                   isActive
-                    ? "text-destructive hover:bg-destructive hover:text-destructive-foreground"
-                    : "text-success hover:bg-success hover:text-success-foreground"
+                    ? "text-muted-foreground hover:text-rose-500 hover:bg-rose-500/15"
+                    : "text-muted-foreground hover:text-emerald-500 hover:bg-emerald-500/15"
                 }`}
                 onClick={() => setConfirmUser(user)}
                 title={isActive ? "Khóa tài khoản" : "Mở khóa tài khoản"}
+                aria-label={isActive ? "Khóa tài khoản" : "Mở khóa tài khoản"}
               >
                 {isActive ? (
                   <Lock className="h-4 w-4" />
@@ -110,7 +118,7 @@ export function UserTable({ data, isLoading, onEdit }: UserTableProps) {
 
   return (
     <>
-      <div className="w-full overflow-x-auto rounded-md border border-border">
+      <div className="w-full">
         <DataTable columns={columns} data={data} isLoading={isLoading} />
       </div>
 
@@ -121,11 +129,11 @@ export function UserTable({ data, isLoading, onEdit }: UserTableProps) {
         title={confirmUser?.status === "ACTIVE" ? "Khóa tài khoản" : "Mở khóa tài khoản"}
         description={
           confirmUser?.status === "ACTIVE"
-            ? `Bạn có chắc chắn muốn khóa tài khoản "${confirmUser?.fullName}" không?`
+            ? `Bạn có chắc chắn muốn khóa tài khoản "${confirmUser?.fullName}" không? Người này sẽ không thể đăng nhập vào hệ thống.`
             : `Bạn có chắc chắn muốn mở khóa tài khoản "${confirmUser?.fullName}" không?`
         }
-        confirmText={confirmUser?.status === "ACTIVE" ? "Khóa" : "Mở khóa"}
-        cancelText="Hủy"
+        confirmText={confirmUser?.status === "ACTIVE" ? "Khóa tài khoản" : "Mở khóa"}
+        cancelText="Hủy bỏ"
         variant={confirmUser?.status === "ACTIVE" ? "danger" : "default"}
         isLoading={updateStatusMutation.isPending}
       />

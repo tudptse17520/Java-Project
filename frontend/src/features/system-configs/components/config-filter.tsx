@@ -14,7 +14,6 @@ export function ConfigFilter({ onSearch, isLoading }: ConfigFilterProps) {
         <SearchInput
           placeholder="Tìm kiếm cấu hình..."
           onSearch={onSearch}
-          disabled={isLoading}
         />
       </div>
     </div>

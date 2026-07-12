@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { PageContainer } from "@/components/layouts/page-container";
-import { PageHeader } from "@/components/layouts/page-header";
+import { PageContainer } from "@/components/common/page-container";
+import { PageHeader } from "@/components/common/page-header";
 import { ConfigTable } from "@/features/system-configs/components/config-table";
 import { ConfigFilter } from "@/features/system-configs/components/config-filter";
 import { ConfigFormDialog } from "@/features/system-configs/components/config-form-dialog";

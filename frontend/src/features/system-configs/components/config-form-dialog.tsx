@@ -4,18 +4,12 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import toast from "react-hot-toast";
+import { X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { FormContainer, FormHeader, FormFields, FormActions } from "@/components/common/form-container";
 
 import { SystemConfig } from "../types/config.type";
 import { systemConfigSchema, SystemConfigFormValues } from "../schemas/config.schema";
@@ -81,58 +75,79 @@ export function ConfigFormDialog({
     );
   };
 
+  if (!isOpen) return null;
+
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
-          <DialogTitle>Cập nhật Cấu hình</DialogTitle>
-          <DialogDescription>
-            Thay đổi giá trị của cấu hình hệ thống.
-          </DialogDescription>
-        </DialogHeader>
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      {/* Backdrop */}
+      <div 
+        className="fixed inset-0 bg-black/50 transition-opacity" 
+        onClick={onClose} 
+        aria-hidden="true" 
+      />
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 py-4">
-          <div className="space-y-2">
-            <Label htmlFor="configKey">Khóa cấu hình (Không được sửa)</Label>
-            <Input
-              id="configKey"
-              value={config?.configKey || ""}
-              disabled
-              className="bg-muted"
-            />
-          </div>
+      {/* Modal Content */}
+      <div className="relative z-50 w-full max-w-md rounded-lg bg-background p-6 shadow-lg">
+        <button
+          onClick={onClose}
+          className="absolute right-4 top-4 text-muted-foreground hover:text-foreground"
+          type="button"
+        >
+          <X className="h-5 w-5" />
+          <span className="sr-only">Đóng</span>
+        </button>
 
-          <div className="space-y-2">
-            <Label htmlFor="configValue">
-              Giá trị <span className="text-destructive">*</span>
-            </Label>
-            <Input
-              id="configValue"
-              placeholder="Nhập giá trị..."
-              {...register("configValue")}
-              className={errors.configValue ? "border-destructive focus-visible:ring-destructive" : ""}
-            />
-            {errors.configValue && (
-              <p className="text-sm text-destructive">{errors.configValue.message}</p>
-            )}
-          </div>
+        <FormContainer onSubmit={handleSubmit(onSubmit)}>
+          <FormHeader 
+            title="Cập nhật Cấu hình" 
+            description="Thay đổi giá trị của cấu hình hệ thống."
+          />
 
-          <div className="space-y-2">
-            <Label htmlFor="description">
-              Mô tả <span className="text-destructive">*</span>
-            </Label>
-            <Input
-              id="description"
-              placeholder="Nhập mô tả..."
-              {...register("description")}
-              className={errors.description ? "border-destructive focus-visible:ring-destructive" : ""}
-            />
-            {errors.description && (
-              <p className="text-sm text-destructive">{errors.description.message}</p>
-            )}
-          </div>
+          <FormFields>
+            <div className="space-y-2">
+              <Label htmlFor="configKey">Khóa cấu hình (Không được sửa)</Label>
+              <Input
+                id="configKey"
+                value={config?.configKey || ""}
+                disabled
+                className="bg-muted"
+              />
+            </div>
 
-          <DialogFooter className="pt-4">
+            <div className="space-y-2">
+              <Label htmlFor="configValue">
+                Giá trị <span className="text-destructive">*</span>
+              </Label>
+              <Input
+                id="configValue"
+                placeholder="Nhập giá trị..."
+                {...register("configValue")}
+                className={errors.configValue ? "border-destructive focus-visible:ring-destructive" : ""}
+                disabled={updateConfigMutation.isPending}
+              />
+              {errors.configValue && (
+                <p className="text-sm text-destructive">{errors.configValue.message}</p>
+              )}
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="description">
+                Mô tả <span className="text-destructive">*</span>
+              </Label>
+              <Input
+                id="description"
+                placeholder="Nhập mô tả..."
+                {...register("description")}
+                className={errors.description ? "border-destructive focus-visible:ring-destructive" : ""}
+                disabled={updateConfigMutation.isPending}
+              />
+              {errors.description && (
+                <p className="text-sm text-destructive">{errors.description.message}</p>
+              )}
+            </div>
+          </FormFields>
+
+          <FormActions>
             <Button
               type="button"
               variant="outline"
@@ -144,9 +159,9 @@ export function ConfigFormDialog({
             <Button type="submit" disabled={updateConfigMutation.isPending}>
               {updateConfigMutation.isPending ? "Đang xử lý..." : "Lưu thay đổi"}
             </Button>
-          </DialogFooter>
-        </form>
-      </DialogContent>
-    </Dialog>
+          </FormActions>
+        </FormContainer>
+      </div>
+    </div>
   );
 }

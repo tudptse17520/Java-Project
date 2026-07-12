@@ -20,7 +20,7 @@ export function ConfigTable({ data, isLoading, onEdit }: ConfigTableProps) {
     {
       header: "Key",
       accessorKey: "configKey",
-      cell: (value: any) => <span className="font-semibold text-primary">{value}</span>,
+      cell: ({ getValue }: any) => <span className="font-semibold text-primary">{getValue()}</span>,
     },
     {
       header: "Giá trị",
@@ -33,11 +33,11 @@ export function ConfigTable({ data, isLoading, onEdit }: ConfigTableProps) {
     {
       header: "Thao tác",
       accessorKey: "id",
-      cell: (_: any, row: SystemConfig) => (
+      cell: ({ row }: any) => (
         <Button
           variant="outline"
           size="sm"
-          onClick={() => onEdit(row)}
+          onClick={() => onEdit(row.original)}
         >
           <Edit className="w-4 h-4 mr-2" />
           Sửa
@@ -51,7 +51,6 @@ export function ConfigTable({ data, isLoading, onEdit }: ConfigTableProps) {
       columns={columns}
       data={data}
       isLoading={isLoading}
-      emptyMessage="Không có cấu hình nào được tìm thấy."
     />
   );
 }

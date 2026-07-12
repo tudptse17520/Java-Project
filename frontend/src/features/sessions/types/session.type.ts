@@ -1,9 +1,20 @@
+﻿import { SessionStatus } from "@/constants/session-status";
+
+export interface ParkingSession {
+  id: number;
+  plate: string;
+  timeIn: string;
+  timeOut: string | null;
+  totalFee: number | null;
+  status?: SessionStatus;
+}
+
 export interface SessionResponse {
   id: number;
   plate: string;
-  timeIn: string; // ISO 8601 string from backend LocalDateTime
-  timeOut?: string; // Optional, null if IN_PROGRESS
-  totalFee?: number; // Optional, null if IN_PROGRESS
+  timeIn: string; 
+  timeOut?: string; 
+  totalFee?: number; 
 }
 
 export interface SessionListResponse {
@@ -13,6 +24,40 @@ export interface SessionListResponse {
 
 export interface SessionFilterParams {
   plate?: string;
-  status?: string; // IN_PROGRESS, COMPLETED
-  fromDate?: string; // Will be formatted to DD-MM-YYYY before API call
+  status?: string; 
+  fromDate?: string; 
+}
+
+export interface PlateValidationRequest {
+  plateOut: string;
+  plateOutImage: string;
+}
+
+export interface OverrideCheckoutRequest {
+  overrideReason: string;
+}
+
+export interface LostTicketRequest {
+  note: string;
+}
+
+export interface CheckOutRequest {
+  timeOut: string;
+}
+
+export interface FeeCalculationResponse {
+  baseFee: number;
+  overtimeFee: number;
+  penaltyFee: number;
+  totalFee: number;
+  message: string;
+}
+
+export interface CheckOutResponse {
+  sessionId: number;
+  timeIn: string;
+  timeOut: string;
+  totalFee: number;
+  status: SessionStatus;
+  message: string;
 }

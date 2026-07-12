@@ -314,9 +314,6 @@ public class PaymentServiceImpl implements PaymentService {
             // Validate signature
             String signValue = VnpayUtil.hashAllFields(fields, vnpayConfig.getSecretKey());
             if (signValue.equals(vnp_SecureHash)) {
-                boolean checkOrderId = true; // Payment ID exists in DB
-                boolean checkAmount = true; // Amount matches DB
-                boolean checkOrderStatus = true; // Status is PENDING
 
                 Long paymentId = Long.parseLong(fields.get("vnp_TxnRef"));
                 Payment payment = paymentRepository.findById(paymentId).orElse(null);

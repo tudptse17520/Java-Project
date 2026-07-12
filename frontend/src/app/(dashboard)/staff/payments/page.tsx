@@ -64,11 +64,11 @@ export default function PaymentPage() {
   // Map biển số xe vào payment và filter theo biển số xe nếu có
   const enrichedPayments = useMemo(() => {
     return payments
-      .map(payment => {
-        const session = allSessions.find(s => s.id === payment.parkingSessionId);
+      .map((payment: any) => {
+        const session = allSessions.find((s: any) => s.id === payment.parkingSessionId);
         return { ...payment, plate: session?.plate || "" };
       })
-      .filter(payment => {
+      .filter((payment: any) => {
         if (filter.feeType && payment.feeType !== filter.feeType) return false;
         if (!filter.plate) return true;
         return payment.plate.includes(filter.plate.toUpperCase());

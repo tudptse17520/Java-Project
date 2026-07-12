@@ -147,6 +147,8 @@ public class UserServiceImpl implements UserService {
                 .status(user.getStatus())
                 .build();
     }
+
+
     /**
      * Parse a role String to the Role enum, returning null if blank/null.
      * Used for optional filter parameters.
@@ -160,6 +162,19 @@ public class UserServiceImpl implements UserService {
         } catch (IllegalArgumentException e) {
             throw new vn.edu.ut.pbms.exception.BusinessRuleViolationException(
                     "Vai trò không hợp lệ: '" + role + "'. Giá trị hợp lệ: ADMIN, MANAGER, STAFF, USER.");
+        }
+    }
+
+    /**
+     * Parse a status String to the UserStatus enum.
+     * Throws BusinessRuleViolationException if the value is invalid.
+     */
+    private UserStatus parseStatus(String status) {
+        try {
+            return UserStatus.valueOf(status.toUpperCase().trim());
+        } catch (IllegalArgumentException e) {
+            throw new vn.edu.ut.pbms.exception.BusinessRuleViolationException(
+                    "Trạng thái không hợp lệ: '" + status + "'. Giá trị hợp lệ: ACTIVE, INACTIVE.");
         }
     }
 }

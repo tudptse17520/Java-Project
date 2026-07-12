@@ -80,22 +80,22 @@ export function PaymentTable({
         ),
       },
       {
-        accessorKey: "payment_method",
+        accessorKey: "paymentMethod",
         header: "Phương thức",
         cell: ({ row }) =>
-          PAYMENT_METHOD_LABELS[row.original.payment_method] ||
-          row.original.payment_method,
+          PAYMENT_METHOD_LABELS[row.original.paymentMethod] ||
+          row.original.paymentMethod,
       },
       {
-        accessorKey: "fee_type",
+        accessorKey: "feeType",
         header: "Loại phí",
         cell: ({ row }) =>
-          FEE_TYPE_LABELS[row.original.fee_type] || row.original.fee_type,
+          FEE_TYPE_LABELS[row.original.feeType] || row.original.feeType,
       },
       {
-        accessorKey: "payment_time",
+        accessorKey: "paymentTime",
         header: "Thời gian",
-        cell: ({ row }) => row.original.payment_time || "—",
+        cell: ({ row }) => row.original.paymentTime || "—",
       },
       {
         accessorKey: "status",

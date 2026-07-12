@@ -34,37 +34,37 @@ export function PricingPolicyTable({
         header: "ID",
       },
       {
-        accessorKey: "vehicle_type_name",
+        accessorKey: "vehicleTypeName",
         header: "Loại phương tiện",
         cell: ({ row }) => (
           <span className="font-medium">
-            {row.original.vehicle_type_name || `ID: ${row.original.vehicle_type_id}`}
+            {row.original.vehicleTypeName || `ID: ${row.original.vehicleTypeId}`}
           </span>
         ),
       },
       {
-        accessorKey: "base_price",
+        accessorKey: "basePrice",
         header: "Giá cơ bản",
         cell: ({ row }) => (
           <span className="font-semibold text-primary">
-            {formatCurrency(row.original.base_price)}
+            {formatCurrency(row.original.basePrice)}
           </span>
         ),
       },
       {
-        accessorKey: "extra_fee_per_hour",
+        accessorKey: "extraFeePerHour",
         header: "Phụ thu / giờ",
         cell: ({ row }) => (
           <span className="text-muted-foreground">
-            {formatCurrency(row.original.extra_fee_per_hour)}
+            {formatCurrency(row.original.extraFeePerHour)}
           </span>
         ),
       },
       {
-        accessorKey: "effective_date",
+        accessorKey: "effectiveDate",
         header: "Ngày hiệu lực",
         cell: ({ row }) => (
-          <span>{row.original.effective_date.replace(/-/g, "/")}</span>
+          <span>{row.original.effectiveDate.replace(/-/g, "/")}</span>
         ),
       },
       {

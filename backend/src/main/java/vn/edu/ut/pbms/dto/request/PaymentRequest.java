@@ -1,6 +1,5 @@
 package vn.edu.ut.pbms.dto.request;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -19,10 +18,7 @@ import java.math.BigDecimal;
 public class PaymentRequest {
 
     @NotNull(message = "Mã phiên gửi xe không được để trống.")
-    @JsonProperty("parking_session_id")
     private Long parkingSessionId;
-
-    @JsonProperty("booking_id")
     private Long bookingId;
 
     @NotNull(message = "Số tiền thanh toán không được để trống.")
@@ -30,10 +26,8 @@ public class PaymentRequest {
     private BigDecimal amount;
 
     @NotBlank(message = "Phương thức thanh toán không được để trống.")
-    @JsonProperty("payment_method")
     private String paymentMethod;
 
     @NotBlank(message = "Loại chi phí không được để trống.")
-    @JsonProperty("fee_type")
     private String feeType;
 }

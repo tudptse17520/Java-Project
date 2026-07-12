@@ -3,6 +3,7 @@ package vn.edu.ut.pbms.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.security.core.context.SecurityContextHolder;
 import vn.edu.ut.pbms.constant.*;
 import vn.edu.ut.pbms.dto.request.*;
 import vn.edu.ut.pbms.dto.response.CheckOutResponse;
@@ -66,9 +67,8 @@ public class CheckoutServiceImpl implements CheckoutService {
     public CheckOutResponse overrideCheckout(Long sessionId, OverrideCheckoutRequest request) {
         ParkingSession session = getActiveSession(sessionId);
 
-        // Kiểm tra sự tồn tại của nhân viên
-        User staff = userRepository.findById(request.getStaffId())
-                .orElseThrow(() -> new ResourceNotFoundException("Nhân viên xác nhận không tồn tại."));
+        // Trích xuất nhân viên xác nhận từ Security Context (đã được parse từ JWT)
+        User staff = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         if (staff.getRole() == Role.USER) {
             throw new BusinessRuleViolationException("Tài khoản khách hàng không có quyền thực hiện thao tác này.");
@@ -144,9 +144,8 @@ public class CheckoutServiceImpl implements CheckoutService {
     public FeeCalculationResponse processLostTicket(Long sessionId, LostTicketRequest request) {
         ParkingSession session = getActiveSession(sessionId);
 
-        // Kiểm tra nhân viên xác nhận
-        User staff = userRepository.findById(request.getStaffId())
-                .orElseThrow(() -> new ResourceNotFoundException("Nhân viên xác nhận không tồn tại."));
+        // Trích xuất nhân viên xác nhận từ Security Context (đã được parse từ JWT)
+        User staff = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         if (staff.getRole() == Role.USER) {
             throw new BusinessRuleViolationException("Tài khoản khách hàng không có quyền thực hiện thao tác này.");

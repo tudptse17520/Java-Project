@@ -70,10 +70,10 @@ export function PricingPolicyFormDialog({
   } = useForm<PricingPolicyFormValues>({
     resolver: zodResolver(pricingPolicySchema),
     defaultValues: {
-      vehicle_type_id: 0,
-      base_price: 0,
-      extra_fee_per_hour: 0,
-      effective_date: "",
+      vehicleTypeId: 0,
+      basePrice: 0,
+      extraFeePerHour: 0,
+      effectiveDate: "",
     },
   });
 
@@ -82,17 +82,17 @@ export function PricingPolicyFormDialog({
     if (open) {
       if (defaultValues) {
         reset({
-          vehicle_type_id: defaultValues.vehicle_type_id,
-          base_price: defaultValues.base_price,
-          extra_fee_per_hour: defaultValues.extra_fee_per_hour,
-          effective_date: defaultValues.effective_date,
+          vehicleTypeId: defaultValues.vehicleTypeId,
+          basePrice: defaultValues.basePrice,
+          extraFeePerHour: defaultValues.extraFeePerHour,
+          effectiveDate: defaultValues.effectiveDate,
         });
       } else {
         reset({
-          vehicle_type_id: 0,
-          base_price: 0,
-          extra_fee_per_hour: 0,
-          effective_date: "",
+          vehicleTypeId: 0,
+          basePrice: 0,
+          extraFeePerHour: 0,
+          effectiveDate: "",
         });
       }
     }
@@ -127,16 +127,16 @@ export function PricingPolicyFormDialog({
           {/* Loại phương tiện */}
           <div>
             <label
-              htmlFor="vehicle_type_id"
+              htmlFor="vehicleTypeId"
               className="block text-sm font-medium"
             >
               Loại phương tiện <span className="text-destructive">*</span>
             </label>
             <select
-              id="vehicle_type_id"
+              id="vehicleTypeId"
               className="mt-1 w-full rounded-md border bg-background px-3 py-2 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
               disabled={isLoadingVehicleTypes}
-              {...register("vehicle_type_id", { valueAsNumber: true })}
+              {...register("vehicleTypeId", { valueAsNumber: true })}
             >
               <option value={0}>
                 {isLoadingVehicleTypes
@@ -145,34 +145,34 @@ export function PricingPolicyFormDialog({
               </option>
               {vehicleTypes.map((vt) => (
                 <option key={vt.id} value={vt.id}>
-                  {vt.type_name}
+                  {vt.typeName}
                 </option>
               ))}
             </select>
-            {errors.vehicle_type_id && (
+            {errors.vehicleTypeId && (
               <p className="mt-1 text-xs text-destructive">
-                {errors.vehicle_type_id.message}
+                {errors.vehicleTypeId.message}
               </p>
             )}
           </div>
 
           {/* Giá cơ bản */}
           <div>
-            <label htmlFor="base_price" className="block text-sm font-medium">
+            <label htmlFor="basePrice" className="block text-sm font-medium">
               Giá cơ bản (VND) <span className="text-destructive">*</span>
             </label>
             <input
-              id="base_price"
+              id="basePrice"
               type="number"
               min={0}
               step={1000}
               className="mt-1 w-full rounded-md border bg-background px-3 py-2 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
               placeholder="Ví dụ: 15000"
-              {...register("base_price", { valueAsNumber: true })}
+              {...register("basePrice", { valueAsNumber: true })}
             />
-            {errors.base_price && (
+            {errors.basePrice && (
               <p className="mt-1 text-xs text-destructive">
-                {errors.base_price.message}
+                {errors.basePrice.message}
               </p>
             )}
           </div>
@@ -180,23 +180,23 @@ export function PricingPolicyFormDialog({
           {/* Phụ thu mỗi giờ */}
           <div>
             <label
-              htmlFor="extra_fee_per_hour"
+              htmlFor="extraFeePerHour"
               className="block text-sm font-medium"
             >
               Phụ thu mỗi giờ (VND) <span className="text-destructive">*</span>
             </label>
             <input
-              id="extra_fee_per_hour"
+              id="extraFeePerHour"
               type="number"
               min={0}
               step={1000}
               className="mt-1 w-full rounded-md border bg-background px-3 py-2 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
               placeholder="Ví dụ: 5000"
-              {...register("extra_fee_per_hour", { valueAsNumber: true })}
+              {...register("extraFeePerHour", { valueAsNumber: true })}
             />
-            {errors.extra_fee_per_hour && (
+            {errors.extraFeePerHour && (
               <p className="mt-1 text-xs text-destructive">
-                {errors.extra_fee_per_hour.message}
+                {errors.extraFeePerHour.message}
               </p>
             )}
           </div>
@@ -204,30 +204,30 @@ export function PricingPolicyFormDialog({
           {/* Ngày hiệu lực */}
           <div>
             <label
-              htmlFor="effective_date"
+              htmlFor="effectiveDate"
               className="block text-sm font-medium"
             >
               Ngày hiệu lực <span className="text-destructive">*</span>
             </label>
             <input
-              id="effective_date"
+              id="effectiveDate"
               type="date"
               className="mt-1 w-full rounded-md border bg-background px-3 py-2 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
               defaultValue={
-                defaultValues?.effective_date
-                  ? toInputDate(defaultValues.effective_date)
+                defaultValues?.effectiveDate
+                  ? toInputDate(defaultValues.effectiveDate)
                   : ""
               }
               onChange={(e) => {
                 const val = e.target.value;
-                setValue("effective_date", val ? toApiDate(val) : "", {
+                setValue("effectiveDate", val ? toApiDate(val) : "", {
                   shouldValidate: true,
                 });
               }}
             />
-            {errors.effective_date && (
+            {errors.effectiveDate && (
               <p className="mt-1 text-xs text-destructive">
-                {errors.effective_date.message}
+                {errors.effectiveDate.message}
               </p>
             )}
           </div>

@@ -43,7 +43,7 @@ export function PricingPolicyFilter({
         </option>
         {vehicleTypes.map((vt) => (
           <option key={vt.id} value={vt.id}>
-            {vt.type_name}
+            {vt.typeName}
           </option>
         ))}
       </select>

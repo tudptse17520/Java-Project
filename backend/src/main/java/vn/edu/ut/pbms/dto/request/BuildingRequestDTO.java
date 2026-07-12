@@ -1,6 +1,5 @@
 package vn.edu.ut.pbms.dto.request;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -17,22 +16,14 @@ import vn.edu.ut.pbms.constant.BuildingStatus;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BuildingRequestDTO {
-
-    @JsonProperty("building_name")
     @NotBlank(message = "Tên tòa nhà không được để trống.")
     @Size(max = 100, message = "Tên tòa nhà không được vượt quá 100 ký tự.")
     private String buildingName;
-
-    @JsonProperty("address")
     @NotBlank(message = "Địa chỉ không được để trống.")
     @Size(max = 255, message = "Địa chỉ không được vượt quá 255 ký tự.")
     private String address;
-
-    @JsonProperty("number_of_floors")
     @NotNull(message = "Số tầng không được để trống.")
     @Min(value = 1, message = "Số tầng phải lớn hơn hoặc bằng 1.")
     private Integer numberOfFloors;
-
-    @JsonProperty("status")
     private BuildingStatus status;
 }

@@ -33,10 +33,10 @@ export function VehicleTypeTable({
         header: "ID",
       },
       {
-        accessorKey: "type_name",
+        accessorKey: "typeName",
         header: "Tên loại",
         cell: ({ row }) => (
-          <span className="font-medium">{row.original.type_name}</span>
+          <span className="font-medium">{row.original.typeName}</span>
         ),
       },
       {
@@ -47,6 +47,18 @@ export function VehicleTypeTable({
           return (
             <span className="text-muted-foreground">
               {desc ? desc : <span className="italic">Không có mô tả</span>}
+            </span>
+          );
+        },
+      },
+      {
+        accessorKey: "activeSessionsCount",
+        header: "Đang đỗ (xe)",
+        cell: ({ row }) => {
+          const count = row.original.activeSessionsCount || 0;
+          return (
+            <span className={cn("font-medium", count > 0 ? "text-blue-500" : "text-muted-foreground")}>
+              {count}
             </span>
           );
         },

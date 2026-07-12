@@ -33,12 +33,8 @@ export const useCreateBooking = () => {
   return useMutation({
     mutationFn: (request: BookingRequest) => createBooking(request),
     onSuccess: (_, variables) => {
-      // Invalidate both user-specific and all bookings lists
       queryClient.invalidateQueries({
-        queryKey: BOOKING_KEYS.userLists(variables.userId),
-      });
-      queryClient.invalidateQueries({
-        queryKey: BOOKING_KEYS.lists(),
+        queryKey: BOOKING_KEYS.all,
       });
     },
   });

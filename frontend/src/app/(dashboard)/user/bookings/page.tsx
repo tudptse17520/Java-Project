@@ -29,7 +29,6 @@ export default function UserBookingsPage() {
   const handleCreateBooking = (data: BookingFormValues) => {
     createBookingMutation.mutate(
       {
-        userId,
         vehicleId: Number(data.vehicleId),
         parkingSlotId: Number(data.parkingSlotId),
         expectedTimeIn: data.expectedTimeIn,

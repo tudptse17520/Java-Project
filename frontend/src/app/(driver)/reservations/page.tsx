@@ -27,7 +27,6 @@ export default function DriverReservationsPage() {
 
     createBookingMutation.mutate(
       {
-        userId: user.id,
         vehicleId: data.vehicleId,
         parkingSlotId: data.parkingSlotId,
         expectedTimeIn: data.expectedTimeIn,

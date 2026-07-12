@@ -1,5 +1,4 @@
 export interface BookingRequest {
-  userId: number;
   vehicleId: number;
   parkingSlotId: number;
   expectedTimeIn: string; // ISO DateTime string or DD-MM-YYYY HH:mm:ss based on backend preference
@@ -13,9 +12,9 @@ export interface BookingResponse {
 }
 
 export interface BookingListResponse {
-  booking_id: number;
-  parking_slot_id: number;
-  expected_time_in: string;
+  bookingId: number;
+  parkingSlotId: number;
+  expectedTimeIn: string;
   status: string;
 }
 

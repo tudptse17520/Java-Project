@@ -15,18 +15,18 @@ export function BookingTable({ data, isLoading }: BookingTableProps) {
   const columns = useMemo<ColumnDef<BookingListResponse>[]>(
     () => [
       {
-        accessorKey: "booking_id",
+        accessorKey: "bookingId",
         header: "Mã Đặt chỗ",
       },
       {
-        accessorKey: "parking_slot_id",
+        accessorKey: "parkingSlotId",
         header: "Vị trí đỗ (Slot ID)",
       },
       {
-        accessorKey: "expected_time_in",
+        accessorKey: "expectedTimeIn",
         header: "Thời gian dự kiến vào",
         cell: ({ row }) => {
-          const dateStr = row.original.expected_time_in;
+          const dateStr = row.original.expectedTimeIn;
           // You might want to format the date if it's ISO, e.g., using date-fns
           return <span>{dateStr}</span>;
         },

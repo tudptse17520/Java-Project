@@ -12,6 +12,7 @@ import { z } from "zod";
  */
 export const createPaymentSchema = z
   .object({
+    plate: z.string().optional(),
     parkingSessionId: z
       .union([z.number().int().positive(), z.nan()])
       .nullable(),
@@ -20,7 +21,6 @@ export const createPaymentSchema = z
       .nullable(),
     amount: z
       .number({ message: "Số tiền không được để trống." })
-      .positive("Số tiền phải lớn hơn 0.")
       .min(1000, "Số tiền tối thiểu là 1.000đ."),
     paymentMethod: z
       .string()

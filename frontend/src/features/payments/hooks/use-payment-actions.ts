@@ -4,14 +4,17 @@
 // Tầng này CHỈ quản lý Client State và gọi lệnh mutate
 // ---------------------------------------------
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import type { Payment, PaymentFilter } from "@/features/payments/types/payment.type";
 import type { CreatePaymentFormValues, ManualStatusFormValues } from "@/features/payments/schemas/payment.schema";
 import {
   useCreatePayment,
   useUpdatePaymentStatus,
   useCancelPayment,
+  usePaymentDetail,
+  paymentKeys,
 } from "@/features/payments/hooks/use-payments";
+import { useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import type { AxiosError } from "axios";
 import type { ApiErrorResponse } from "@/types/api";
@@ -45,7 +48,31 @@ export function usePaymentActions() {
   // Create Payment Dialog State
   // =============================================
   const [isCreateOpen, setIsCreateOpen] = useState(false);
+  
+  // QR Dialog State
+  const [isQrOpen, setIsQrOpen] = useState(false);
+  const [qrUrl, setQrUrl] = useState<string | null>(null);
+  const [qrAmount, setQrAmount] = useState<number | null>(null);
+  const [qrPaymentId, setQrPaymentId] = useState<number | null>(null);
+  const queryClient = useQueryClient();
+
   const createMutation = useCreatePayment();
+
+  // Polling khi QR đang mở
+  const { data: polledPayment } = usePaymentDetail(
+    isQrOpen && qrPaymentId ? qrPaymentId : null,
+    { refetchInterval: 3000 } // Poll mỗi 3 giây
+  );
+
+  // Tự động đóng QR và báo thành công khi polling thấy trạng thái đổi sang SUCCESS
+  useEffect(() => {
+    if (isQrOpen && polledPayment?.status === "SUCCESS") {
+      toast.success("Khách hàng đã thanh toán VNPay thành công!");
+      setIsQrOpen(false);
+      setQrPaymentId(null);
+      queryClient.invalidateQueries({ queryKey: paymentKeys.all });
+    }
+  }, [polledPayment, isQrOpen, queryClient]);
 
   const handleOpenCreate = useCallback(() => {
     setIsCreateOpen(true);
@@ -66,9 +93,18 @@ export function usePaymentActions() {
           feeType: values.feeType,
         },
         {
-          onSuccess: () => {
+          onSuccess: (data: any) => {
             toast.success("Tạo giao dịch thành công!");
             setIsCreateOpen(false);
+            if (data?.payment_url) {
+              setQrUrl(data.payment_url);
+              setQrAmount(values.amount);
+              setQrPaymentId(data.id);
+              setIsQrOpen(true);
+            } else {
+              // Cash or other successful payments without URL
+              queryClient.invalidateQueries({ queryKey: paymentKeys.all });
+            }
           },
           onError: (error) => {
             const axiosError = error as AxiosError<ApiErrorResponse>;
@@ -187,6 +223,25 @@ export function usePaymentActions() {
     handleCloseCreate,
     handleCreateSubmit,
     isCreating: createMutation.isPending,
+
+    // QR Dialog
+    isQrOpen,
+    qrUrl,
+    qrAmount,
+    handleCloseQr: () => {
+      if (qrPaymentId) {
+        cancelMutation.mutate(qrPaymentId, {
+          onSuccess: () => {
+            toast.success("Đã tự động hủy giao dịch VNPay.");
+            queryClient.invalidateQueries({ queryKey: paymentKeys.all });
+          }
+        });
+      }
+      setIsQrOpen(false);
+      setQrUrl(null);
+      setQrAmount(null);
+      setQrPaymentId(null);
+    },
 
     // Detail Dialog
     isDetailOpen,

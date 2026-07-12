@@ -13,16 +13,25 @@ import type {
 import {
   getPayments,
   getPaymentById,
+  getRemainingDebt,
+  getSessionByPlate,
+  getSessionById,
+  getAllSessions,
+  getBookingById,
   createPayment,
   updatePaymentStatus,
   cancelPayment,
 } from "@/services/payment.service";
 
 /** Query key factory cho Payment */
-const paymentKeys = {
+export const paymentKeys = {
   all: ["payments"] as const,
   list: (filter?: PaymentFilter) => [...paymentKeys.all, "list", filter] as const,
   detail: (id: number) => [...paymentKeys.all, "detail", id] as const,
+  debt: (id: number) => [...paymentKeys.all, "debt", id] as const,
+  sessionByPlate: (plate: string) => [...paymentKeys.all, "session-by-plate", plate] as const,
+  sessionById: (id: number) => [...paymentKeys.all, "session-by-id", id] as const,
+  bookingById: (id: number) => [...paymentKeys.all, "booking-by-id", id] as const,
 };
 
 /**
@@ -38,13 +47,68 @@ export function usePayments(filter?: PaymentFilter) {
 
 /**
  * Hook lấy chi tiết 1 giao dịch.
- * Chỉ gọi API khi có id (enabled).
+ * Có thể truyền options để cấu hình thêm (ví dụ: refetchInterval để polling).
  */
-export function usePaymentDetail(id: number | null) {
+export function usePaymentDetail(id: number | null, options?: { refetchInterval?: number }) {
   return useQuery({
     queryKey: paymentKeys.detail(id!),
     queryFn: () => getPaymentById(id!),
     enabled: id != null,
+    refetchInterval: options?.refetchInterval,
+  });
+}
+
+/**
+ * Hook lấy dư nợ còn lại của phiên đỗ xe.
+ */
+export function usePaymentDebt(sessionId: number | null) {
+  return useQuery({
+    queryKey: paymentKeys.debt(sessionId!),
+    queryFn: () => getRemainingDebt(sessionId!),
+    enabled: sessionId != null,
+  });
+}
+
+/**
+ * Hook lấy session theo biển số xe
+ */
+export function useSessionByPlate(plate: string) {
+  return useQuery({
+    queryKey: paymentKeys.sessionByPlate(plate),
+    queryFn: () => getSessionByPlate(plate),
+    enabled: !!plate && plate.length >= 3, // Only fetch if plate has at least 3 chars
+  });
+}
+
+/**
+ * Hook lấy session theo id
+ */
+export function useSessionById(id: number | null) {
+  return useQuery({
+    queryKey: paymentKeys.sessionById(id!),
+    queryFn: () => getSessionById(id!),
+    enabled: id != null,
+  });
+}
+
+/**
+ * Hook lấy booking theo id
+ */
+export function useBookingById(id: number | null) {
+  return useQuery({
+    queryKey: paymentKeys.bookingById(id!),
+    queryFn: () => getBookingById(id!),
+    enabled: id != null,
+  });
+}
+
+/**
+ * Hook lấy tất cả sessions
+ */
+export function useAllSessions() {
+  return useQuery({
+    queryKey: [...paymentKeys.all, "all-sessions"],
+    queryFn: () => getAllSessions(),
   });
 }
 

@@ -8,7 +8,7 @@
 import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { PaymentFilter as PaymentFilterType } from "@/features/payments/types/payment.type";
-import { PAYMENT_METHODS } from "@/features/payments/constants/payment.constants";
+import { PAYMENT_METHODS, FEE_TYPES } from "@/features/payments/constants/payment.constants";
 import { PaymentStatus, PAYMENT_STATUS_LABELS } from "@/constants/payment-status";
 
 interface PaymentFilterProps {
@@ -43,7 +43,7 @@ export function PaymentFilter({
   onClearFilters,
 }: PaymentFilterProps) {
   const hasFilters =
-    filter.paymentMethod || filter.status || filter.fromDate;
+    filter.paymentMethod || filter.status || filter.fromDate || filter.plate || filter.feeType;
 
   return (
     <div className="flex flex-wrap items-end gap-3">
@@ -66,6 +66,25 @@ export function PaymentFilter({
         </select>
       </div>
 
+      {/* Loại phí */}
+      <div className="flex flex-col gap-1">
+        <label className="text-xs font-medium text-muted-foreground">
+          Loại phí
+        </label>
+        <select
+          className="h-9 rounded-md border border-input bg-background px-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+          value={filter.feeType || ""}
+          onChange={(e) => onFilterChange("feeType", e.target.value)}
+        >
+          <option value="">Tất cả</option>
+          {FEE_TYPES.map((feeType) => (
+            <option key={feeType.value} value={feeType.value}>
+              {feeType.label}
+            </option>
+          ))}
+        </select>
+      </div>
+
       {/* Trạng thái */}
       <div className="flex flex-col gap-1">
         <label className="text-xs font-medium text-muted-foreground">
@@ -83,6 +102,20 @@ export function PaymentFilter({
             </option>
           ))}
         </select>
+      </div>
+
+      {/* Biển số xe */}
+      <div className="flex flex-col gap-1">
+        <label className="text-xs font-medium text-muted-foreground">
+          Biển số xe
+        </label>
+        <input
+          type="text"
+          placeholder="Nhập biển số..."
+          className="h-9 w-32 rounded-md border border-input bg-background px-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring uppercase"
+          value={filter.plate || ""}
+          onChange={(e) => onFilterChange("plate", e.target.value.toUpperCase())}
+        />
       </div>
 
       {/* Từ ngày */}

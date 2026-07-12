@@ -148,18 +148,6 @@ public class UserServiceImpl implements UserService {
                 .build();
     }
 
-    /**
-     * Parse a role String to the Role enum.
-     * Throws BusinessRuleViolationException if the value is invalid.
-     */
-    private Role parseRole(String role) {
-        try {
-            return Role.valueOf(role.toUpperCase().trim());
-        } catch (IllegalArgumentException e) {
-            throw new vn.edu.ut.pbms.exception.BusinessRuleViolationException(
-                    "Vai trò không hợp lệ: '" + role + "'. Giá trị hợp lệ: ADMIN, MANAGER, STAFF, USER.");
-        }
-    }
 
     /**
      * Parse a role String to the Role enum, returning null if blank/null.

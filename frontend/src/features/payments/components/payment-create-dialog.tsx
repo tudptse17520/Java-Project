@@ -87,7 +87,7 @@ export function PaymentCreateDialog({
     parkingSessionId ? Number(parkingSessionId) : null
   );
 
-  // Auto-fill amount based on feeType and debtInfo
+  // Auto-fill amount based on fee_type and debtInfo
   useEffect(() => {
     if (feeType === "PARKING_FEE" && debtInfo) {
       setValue("amount", debtInfo.remaining_fee, { shouldValidate: true });
@@ -176,7 +176,7 @@ export function PaymentCreateDialog({
               </div>
             </div>
 
-            {/* Mã đặt chỗ */}
+            {/* Mã đặt chỗ (cho luồng thanh toán tiền cọc) */}
             <div className="flex flex-col gap-2">
               <label className="text-sm font-medium">
                 Mã đặt chỗ (bookingId)
@@ -201,12 +201,12 @@ export function PaymentCreateDialog({
                 Loại phí <span className="text-destructive">*</span>
               </label>
               <select
-                disabled={!hasValidSession}
+                disabled={!hasValidSession && !watch("bookingId")}
                 className="h-9 rounded-md border border-input bg-background px-3 text-sm disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-ring"
                 {...register("feeType")}
               >
                 <option value="">-- Chọn loại phí --</option>
-                {FEE_TYPES.filter(type => type.value !== "BOOKING_DEPOSIT").map((type) => (
+                {FEE_TYPES.map((type) => (
                   <option key={type.value} value={type.value}>
                     {type.label}
                   </option>
@@ -225,7 +225,7 @@ export function PaymentCreateDialog({
                 Phương thức thanh toán <span className="text-destructive">*</span>
               </label>
               <select
-                disabled={!hasValidSession || !feeType}
+                disabled={!hasValidSession && !watch("bookingId")}
                 className="h-9 rounded-md border border-input bg-background px-3 text-sm disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-ring"
                 {...register("paymentMethod")}
               >
@@ -258,11 +258,16 @@ export function PaymentCreateDialog({
                 <>
                   <input
                     type="number"
-                    readOnly
-                    placeholder="Số tiền sẽ được tự động tính..."
-                    className="h-9 rounded-md border border-input bg-muted opacity-70 px-3 text-sm font-bold text-primary focus:outline-none"
+                    readOnly={feeType === "PARKING_FEE"}
+                    placeholder="Nhập số tiền..."
+                    className="h-9 rounded-md border border-input bg-background px-3 text-sm focus:outline-none"
                     {...register("amount", { valueAsNumber: true })}
                   />
+                  {errors.amount && (
+                    <p className="text-xs text-destructive">
+                      {errors.amount.message}
+                    </p>
+                  )}
                 </>
               ) : (
                 <>

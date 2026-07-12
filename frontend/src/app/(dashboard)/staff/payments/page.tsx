@@ -21,7 +21,6 @@ import { PaymentDetailDialog } from "@/features/payments/components/payment-deta
 import { PaymentManualStatusDialog } from "@/features/payments/components/payment-manual-status-dialog";
 import { PaymentQrDialog } from "@/features/payments/components/payment-qr-dialog";
 import { useMemo } from "react";
-import { Payment } from "@/features/payments/types/payment.type";
 
 export default function PaymentPage() {
   // Hook Action: quản lý trạng thái UI
@@ -65,14 +64,14 @@ export default function PaymentPage() {
   // Map biển số xe vào payment và filter theo biển số xe nếu có
   const enrichedPayments = useMemo(() => {
     return payments
-      .map((payment: Payment) => {
-        const session = allSessions.find((s: any) => s.id === payment.parkingSessionId);
+      .map(payment => {
+        const session = allSessions.find(s => s.id === payment.parkingSessionId);
         return { ...payment, plate: session?.plate || "" };
       })
-      .filter((payment: Payment) => {
+      .filter(payment => {
         if (filter.feeType && payment.feeType !== filter.feeType) return false;
         if (!filter.plate) return true;
-        return payment.plate?.includes(filter.plate.toUpperCase());
+        return payment.plate.includes(filter.plate.toUpperCase());
       });
   }, [payments, allSessions, filter.plate, filter.feeType]);
 
@@ -101,7 +100,7 @@ export default function PaymentPage() {
 
       {/* Bảng dữ liệu */}
       <PaymentTable
-        data={enrichedPayments} // we removed as any because Payment type now has plate
+        data={enrichedPayments as any} // we cast to any because Payment type doesn't have plate yet, or we could update Payment type
         isLoading={isLoading}
         onViewDetail={handleOpenDetail}
         onManualStatus={handleOpenManualStatus}

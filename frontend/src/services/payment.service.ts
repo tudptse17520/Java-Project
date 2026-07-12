@@ -18,6 +18,7 @@ const BASE_PATH = "/payments";
  * Lấy danh sách giao dịch (có thể lọc theo paymentMethod, status, fromDate)
  * Backend trả về wrapper: { totalItems, message, data: [...] }
  */
+
 export const getPayments = async (
   filter?: PaymentFilter
 ): Promise<Payment[]> => {
@@ -87,6 +88,10 @@ export const getSessionById = async (id: number): Promise<any | null> => {
 
 export const getAllBookings = async (): Promise<any[]> => {
   const response = await axiosClient.get(`/bookings`);
+  // The API returns the list directly or inside data? Let's check BookingController
+  // `ResponseEntity.ok(response)` which means it returns a List directly, NOT wrapped in { data: ... }
+  // Wait, let's verify. Usually Spring Boot returns the list directly if not wrapped in a custom response object.
+  // I'll just check if it's an array.
   return Array.isArray(response.data) ? response.data : [];
 };
 
@@ -101,7 +106,10 @@ export const getBookingById = async (id: number): Promise<any | null> => {
 export const createPayment = async (
   data: PaymentRequest
 ): Promise<Payment> => {
-  const response = await axiosClient.post<Payment>(BASE_PATH, data);
+  const payload = {
+    ...data,
+  };
+  const response = await axiosClient.post<Payment>(BASE_PATH, payload);
   return response.data;
 };
 

@@ -17,7 +17,6 @@ export interface Payment {
   paymentTime: string;
   status: string;
   payment_url?: string;
-  plate?: string;
 }
 
 /**

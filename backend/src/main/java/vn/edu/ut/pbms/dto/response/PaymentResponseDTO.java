@@ -1,5 +1,9 @@
 package vn.edu.ut.pbms.dto.response;
 
+import vn.edu.ut.pbms.constant.PaymentStatus;
+import vn.edu.ut.pbms.constant.PaymentMethod;
+import vn.edu.ut.pbms.constant.FeeType;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,9 +24,9 @@ public class PaymentResponseDTO {
     private Long parkingSessionId;
     private Long bookingId;
     private BigDecimal amount;
-    private String paymentMethod;
-    private String feeType;
+    private PaymentMethod paymentMethod;
+    private FeeType feeType;
     private String paymentTime;
-    private String status;
+    private PaymentStatus status;
     private String paymentUrl;
 }

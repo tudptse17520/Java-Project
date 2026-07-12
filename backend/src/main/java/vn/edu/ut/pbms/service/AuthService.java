@@ -23,4 +23,11 @@ public interface AuthService {
      * @return UserResponse chứa thông tin cá nhân của người dùng
      */
     UserResponse getMe();
+
+    /**
+     * Thay đổi mật khẩu cho người dùng hiện tại.
+     *
+     * @param request chứa mật khẩu cũ và mới
+     */
+    void changePassword(vn.edu.ut.pbms.dto.request.ChangePasswordRequest request);
 }

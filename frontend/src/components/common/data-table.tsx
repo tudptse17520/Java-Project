@@ -92,7 +92,7 @@ export function DataTable<TData, TValue>({
   return (
     <div className={cn("space-y-4", className)}>
       {/* Table */}
-      <div className="rounded-xl border border-white/5 bg-black/10 dark:bg-black/20 shadow-sm overflow-hidden">
+      <div className="rounded-xl border border-slate-200 dark:border-white/5 bg-slate-50 dark:bg-black/20 shadow-sm overflow-hidden">
         <table className="w-full">
           <thead>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -103,7 +103,7 @@ export function DataTable<TData, TValue>({
                 {headerGroup.headers.map((header) => (
                   <th
                     key={header.id}
-                    className="group px-4 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-slate-300"
+                    className="group px-4 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300"
                   >
                     {header.isPlaceholder ? null : (
                       <div
@@ -139,9 +139,9 @@ export function DataTable<TData, TValue>({
           <tbody>
             {table.getRowModel().rows.length ? (
               table.getRowModel().rows.map((row) => (
-                <tr
+                  <tr
                   key={row.id}
-                  className="border-b border-border/10 transition-colors duration-200 hover:bg-white/5 last:border-0"
+                  className="border-b border-border/10 transition-colors duration-200 hover:bg-slate-100 dark:hover:bg-white/5 last:border-0"
                 >
                   {row.getVisibleCells().map((cell) => (
                     <td key={cell.id} className="px-4 py-3 text-sm">

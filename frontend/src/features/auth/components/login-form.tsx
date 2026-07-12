@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
-import { Eye, EyeOff, Loader2, Shield, Briefcase, UserCheck, User, Lock, LogIn, Store } from "lucide-react";
+import { Eye, EyeOff, Loader2, Shield, Briefcase, UserCheck, User, Lock, LogIn, ParkingSquare } from "lucide-react";
 
 import { loginSchema, type LoginFormData } from "../schemas/login.schema";
 import { useLogin } from "../hooks/use-login";
@@ -65,10 +65,8 @@ export function LoginForm() {
     });
   };
 
-  // Đăng nhập nhanh bằng tài khoản có thật (thực hiện call API login thực tế)
+  // Điền thông tin đăng nhập nhanh vào form
   const handleQuickLogin = (role: 'ADMIN' | 'MANAGER' | 'STAFF' | 'USER') => {
-    // TODO: Chỉnh sửa lại các thông tin username và password dưới đây 
-    // sao cho khớp chính xác với dữ liệu (seed data) đang có trong database của backend.
     const credentials = {
       ADMIN: { username: "admin", password: "password" },
       MANAGER: { username: "manager", password: "password" },
@@ -78,29 +76,17 @@ export function LoginForm() {
 
     const { username, password } = credentials[role];
 
-    // Gọi API đăng nhập thực tế thay vì mock token
-    login(
-      { username, password },
-      {
-        onSuccess: (res) => {
-          setCookie("access_token", res.token);
-          toast.success(res.message || `Đăng nhập nhanh với quyền ${role} thành công!`);
-          router.push(getRedirectPathByRole(res.role));
-        },
-        onError: (error) => {
-          const message = error.response?.data?.message || `Tài khoản mặc định cho ${role} chưa đúng. Vui lòng cập nhật lại credentials trong mã nguồn.`;
-          toast.error(message);
-        },
-      }
-    );
+    form.setValue("username", username);
+    form.setValue("password", password);
+    toast.success(`Đăng nhập nhanh với quyền ${role} thành công!`);
   };
 
   return (
     <div className="w-full rounded-[28px] border border-border/40 bg-card/90 p-8 md:p-10 shadow-xl backdrop-blur-xl animate-scale-in max-w-[440px] mx-auto">
       {/* Logo & Header */}
       <div className="mb-8 flex flex-col items-center text-center">
-        <div className="mb-4 text-indigo-600 dark:text-indigo-400">
-          <Store className="h-16 w-16 stroke-[1.25]" />
+        <div className="mb-4 flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-indigo-600 text-white shadow-lg shadow-indigo-600/20 dark:bg-indigo-500">
+          <ParkingSquare className="h-8 w-8 stroke-[2]" />
         </div>
         <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white">
           Đăng nhập
@@ -208,14 +194,14 @@ export function LoginForm() {
           <div className="flex-grow border-t border-border/40"></div>
         </div>
         
-        <div className="flex flex-wrap justify-center gap-2 mt-3">
+        <div className="grid grid-cols-4 gap-2 mt-3">
           <Button
             type="button"
             variant="outline"
             onClick={() => handleQuickLogin("ADMIN")}
-            className="rounded-full px-4 border-rose-500 text-rose-600 hover:bg-rose-500/10 dark:border-rose-500/40 dark:text-rose-400 dark:hover:bg-rose-500/20 text-xs h-9 font-medium gap-1.5 transition-all"
+            className="rounded-xl px-0 border-rose-500 text-rose-600 hover:bg-rose-500/10 dark:border-rose-500/40 dark:text-rose-400 dark:hover:bg-rose-500/20 text-[11px] h-11 flex-col font-medium gap-1 transition-all"
           >
-            <Shield className="h-3.5 w-3.5" />
+            <Shield className="h-4 w-4" />
             Admin
           </Button>
           
@@ -223,9 +209,9 @@ export function LoginForm() {
             type="button"
             variant="outline"
             onClick={() => handleQuickLogin("MANAGER")}
-            className="rounded-full px-4 border-amber-500 text-amber-600 hover:bg-amber-500/10 dark:border-amber-500/40 dark:text-amber-400 dark:hover:bg-amber-500/20 text-xs h-9 font-medium gap-1.5 transition-all"
+            className="rounded-xl px-0 border-amber-500 text-amber-600 hover:bg-amber-500/10 dark:border-amber-500/40 dark:text-amber-400 dark:hover:bg-amber-500/20 text-[11px] h-11 flex-col font-medium gap-1 transition-all"
           >
-            <Briefcase className="h-3.5 w-3.5" />
+            <Briefcase className="h-4 w-4" />
             Quản lý
           </Button>
 
@@ -233,9 +219,9 @@ export function LoginForm() {
             type="button"
             variant="outline"
             onClick={() => handleQuickLogin("STAFF")}
-            className="rounded-full px-4 border-sky-500 text-sky-600 hover:bg-sky-500/10 dark:border-sky-500/40 dark:text-sky-400 dark:hover:bg-sky-500/20 text-xs h-9 font-medium gap-1.5 transition-all"
+            className="rounded-xl px-0 border-sky-500 text-sky-600 hover:bg-sky-500/10 dark:border-sky-500/40 dark:text-sky-400 dark:hover:bg-sky-500/20 text-[11px] h-11 flex-col font-medium gap-1 transition-all"
           >
-            <UserCheck className="h-3.5 w-3.5" />
+            <UserCheck className="h-4 w-4" />
             Nhân viên
           </Button>
 
@@ -243,10 +229,10 @@ export function LoginForm() {
             type="button"
             variant="outline"
             onClick={() => handleQuickLogin("USER")}
-            className="rounded-full px-4 border-emerald-500 text-emerald-600 hover:bg-emerald-500/10 dark:border-emerald-500/40 dark:text-emerald-400 dark:hover:bg-emerald-500/20 text-xs h-9 font-medium gap-1.5 transition-all"
+            className="rounded-xl px-0 border-emerald-500 text-emerald-600 hover:bg-emerald-500/10 dark:border-emerald-500/40 dark:text-emerald-400 dark:hover:bg-emerald-500/20 text-[11px] h-11 flex-col font-medium gap-1 transition-all"
           >
-            <User className="h-3.5 w-3.5" />
-            Khách hàng
+            <User className="h-4 w-4" />
+            Khách
           </Button>
         </div>
       </div>

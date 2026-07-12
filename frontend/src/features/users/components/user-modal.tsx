@@ -22,6 +22,7 @@ import {
   FormFields,
   FormActions,
 } from "@/components/common/form-container";
+import { Portal } from "@/components/common/portal";
 
 // --------------------------------------------------
 // Sub-component: Create Form (username + password visible)
@@ -336,42 +337,44 @@ export function UserModal({
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      {/* Backdrop */}
-      <div
-        className="fixed inset-0 bg-black/40 backdrop-blur-sm animate-backdrop"
-        onClick={onClose}
-        aria-hidden="true"
-      />
-
-      {/* Modal Dialog Content */}
-      <div className="relative z-50 w-full max-w-lg rounded-xl border border-border/60 bg-background p-6 shadow-xl animate-scale-in">
-        {/* Close Button */}
-        <button
-          type="button"
+    <Portal>
+      <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+        {/* Backdrop */}
+        <div
+          className="fixed inset-0 bg-black/40 backdrop-blur-sm animate-backdrop"
           onClick={onClose}
-          className="absolute right-4 top-4 rounded-lg p-1 text-muted-foreground/60 hover:text-foreground hover:bg-muted transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-ring/30"
-        >
-          <X className="h-4 w-4" />
-          <span className="sr-only">Close</span>
-        </button>
+          aria-hidden="true"
+        />
 
-        {initialData ? (
-          <EditUserForm
-            onSubmit={onSubmit}
-            onClose={onClose}
-            isLoading={isLoading}
-            initialData={initialData}
-          />
-        ) : (
-          <CreateUserForm
-            onSubmit={onSubmit}
-            onClose={onClose}
-            isLoading={isLoading}
-            isOpen={open}
-          />
-        )}
+        {/* Modal Dialog Content */}
+        <div className="relative z-50 w-full max-w-lg rounded-xl border border-border/60 bg-background p-6 shadow-xl animate-scale-in">
+          {/* Close Button */}
+          <button
+            type="button"
+            onClick={onClose}
+            className="absolute right-4 top-4 rounded-lg p-1 text-muted-foreground/60 hover:text-foreground hover:bg-muted transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-ring/30"
+          >
+            <X className="h-4 w-4" />
+            <span className="sr-only">Close</span>
+          </button>
+
+          {initialData ? (
+            <EditUserForm
+              onSubmit={onSubmit}
+              onClose={onClose}
+              isLoading={isLoading}
+              initialData={initialData}
+            />
+          ) : (
+            <CreateUserForm
+              onSubmit={onSubmit}
+              onClose={onClose}
+              isLoading={isLoading}
+              isOpen={open}
+            />
+          )}
+        </div>
       </div>
-    </div>
+    </Portal>
   );
 }

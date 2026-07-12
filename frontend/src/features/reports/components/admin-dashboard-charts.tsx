@@ -1,5 +1,6 @@
 "use client";
 
+import { useMemo } from "react";
 import {
   BarChart,
   Bar,
@@ -10,15 +11,35 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-
-const ROLE_DATA = [
-  { name: "Admin", users: 1 },
-  { name: "Manager", users: 3 },
-  { name: "Staff", users: 5 },
-  { name: "User", users: 120 },
-];
+import { useUsers } from "@/features/users/hooks/use-users";
+import { UserResponse } from "@/types/user.type";
 
 export function AdminDashboardCharts() {
+  const { data: usersData } = useUsers();
+
+  const roleData = useMemo(() => {
+    const users = usersData?.data || [];
+    let admin = 0, manager = 0, staff = 0, user = 0;
+    
+    users.forEach((u: UserResponse) => {
+      // The chart description says "Thống kê số lượng người dùng đang hoạt động"
+      // So we might only count ACTIVE users, but to be safe and match the old mock data, we count all or just ACTIVE.
+      if (u.status !== "ACTIVE") return;
+
+      if (u.role === "ADMIN") admin++;
+      else if (u.role === "MANAGER") manager++;
+      else if (u.role === "STAFF") staff++;
+      else if (u.role === "USER") user++;
+    });
+
+    return [
+      { name: "Admin", users: admin },
+      { name: "Manager", users: manager },
+      { name: "Staff", users: staff },
+      { name: "User", users: user },
+    ];
+  }, [usersData]);
+
   return (
     <Card className="col-span-1 lg:col-span-2 shadow-sm border-white/5 bg-background">
       <CardHeader>
@@ -31,7 +52,7 @@ export function AdminDashboardCharts() {
         <div className="h-[300px] w-full mt-4">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart
-              data={ROLE_DATA}
+              data={roleData}
               margin={{ top: 5, right: 30, left: 0, bottom: 5 }}
             >
               <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#88888833" />

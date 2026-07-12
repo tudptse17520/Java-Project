@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
 import { PageContainer } from "@/components/common/page-container";
 import { PageHeader } from "@/components/common/page-header";
 import { Toolbar } from "@/components/common/toolbar";
@@ -16,8 +17,12 @@ import { EmptyState } from "@/components/common/empty-state";
 export default function UsersPage() {
   const [keyword, setKeyword] = useState("");
   const [role, setRole] = useState("");
+  const [status, setStatus] = useState("");
 
-  const { data, isLoading, isError, refetch } = useUsers(keyword, role);
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
+  const { data, isLoading, isError, refetch } = useUsers(keyword, role, status);
 
   const {
     isModalOpen,
@@ -28,6 +33,13 @@ export default function UsersPage() {
     handleCloseModal,
     handleModalSubmit,
   } = useUserActions();
+
+  useEffect(() => {
+    if (searchParams.get("action") === "create") {
+      handleOpenCreate();
+      router.replace("/admin/users"); // Remove the param so it doesn't open again on refresh
+    }
+  }, [searchParams, router, handleOpenCreate]);
 
   const users = data?.data || [];
 
@@ -50,8 +62,10 @@ export default function UsersPage() {
         <UserFilter
           keyword={keyword}
           role={role}
+          status={status}
           onKeywordChange={setKeyword}
           onRoleChange={setRole}
+          onStatusChange={setStatus}
         />
       </Toolbar>
 

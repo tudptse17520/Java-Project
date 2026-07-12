@@ -17,9 +17,10 @@ public interface UserService {
      *
      * @param keyword partial text to match against fullName or phoneNumber
      * @param role    optional role filter (String representation of Role enum)
+     * @param status  optional status filter (String representation of UserStatus enum)
      * @return UserListResponse containing matched users, total count, and message
      */
-    UserListResponse getUsers(String keyword, String role);
+    UserListResponse getUsers(String keyword, String role, String status);
 
     /**
      * Create a new user in the system.

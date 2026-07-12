@@ -46,8 +46,9 @@ public class UserController {
     @GetMapping
     public ResponseEntity<UserListResponse> getUsers(
             @RequestParam(required = false) String keyword,
-            @RequestParam(required = false) String role) {
-        UserListResponse response = userService.getUsers(keyword, role);
+            @RequestParam(required = false) String role,
+            @RequestParam(required = false) String status) {
+        UserListResponse response = userService.getUsers(keyword, role, status);
         return ResponseEntity.ok(response);
     }
 

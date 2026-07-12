@@ -97,4 +97,43 @@ public class AuthController {
         UserResponse response = authService.getMe();
         return ResponseEntity.ok(response);
     }
+
+    /**
+     * Thay đổi mật khẩu người dùng hiện tại.
+     *
+     * @param request chứa mật khẩu cũ và mới
+     * @return Thông báo thành công
+     */
+    @Operation(
+            summary = "Đổi mật khẩu",
+            description = "Cho phép người dùng đang đăng nhập đổi mật khẩu."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Thành công",
+                    content = @Content(schema = @Schema(implementation = vn.edu.ut.pbms.dto.response.ApiResponse.class))
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Mật khẩu cũ không chính xác hoặc xác nhận mật khẩu không khớp",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class))
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Chưa đăng nhập",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class))
+            )
+    })
+    @PostMapping("/change-password")
+    public ResponseEntity<vn.edu.ut.pbms.dto.response.ApiResponse<String>> changePassword(@Valid @RequestBody vn.edu.ut.pbms.dto.request.ChangePasswordRequest request) {
+        authService.changePassword(request);
+        return ResponseEntity.ok(
+                vn.edu.ut.pbms.dto.response.ApiResponse.<String>builder()
+                        .success(true)
+                        .message("Đổi mật khẩu thành công.")
+                        .data(null)
+                        .build()
+        );
+    }
 }

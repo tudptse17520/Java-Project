@@ -61,6 +61,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
      */
     @Query("SELECT u FROM User u WHERE " +
             "(:keyword IS NULL OR :keyword = '' OR LOWER(u.fullName) LIKE LOWER(CONCAT('%', :keyword, '%')) OR u.phoneNumber LIKE CONCAT('%', :keyword, '%')) " +
-            "AND (:role IS NULL OR u.role = :role)")
-    List<User> searchUsers(@Param("keyword") String keyword, @Param("role") Role role);
+            "AND (:role IS NULL OR u.role = :role) " +
+            "AND (:status IS NULL OR u.status = :status)")
+    List<User> searchUsers(@Param("keyword") String keyword, @Param("role") Role role, @Param("status") vn.edu.ut.pbms.constant.UserStatus status);
 }

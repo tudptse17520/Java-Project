@@ -30,7 +30,7 @@ export function ConfigTable({ data, isLoading, onEdit }: ConfigTableProps) {
         header: () => <div className="w-[250px]">Key</div>,
         cell: ({ row }) => (
           <div className="w-[250px]" title={row.original.description}>
-            <span className="font-mono text-[13px] bg-white/5 px-2.5 py-1.5 rounded-md text-slate-200 border border-white/20 cursor-help">
+            <span className="font-mono text-[13px] bg-slate-100 dark:bg-white/5 px-2.5 py-1.5 rounded-md text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-white/20 cursor-help">
               {row.original.configKey}
             </span>
           </div>
@@ -47,12 +47,12 @@ export function ConfigTable({ data, isLoading, onEdit }: ConfigTableProps) {
           return (
             <div className="w-[150px] lg:w-[200px] flex items-center font-medium">
               {isTime ? (
-                <div className="flex items-center gap-1.5 text-slate-200">
+                <div className="flex items-center gap-1.5 text-slate-700 dark:text-slate-200">
                   <Clock className="w-4 h-4 text-muted-foreground" />
                   <span className="tabular-nums">{value}</span>
                 </div>
               ) : (
-                <span className={`tabular-nums ${isNumber ? "font-semibold text-slate-200" : ""}`}>{value}</span>
+                <span className={`tabular-nums ${isNumber ? "font-semibold text-slate-700 dark:text-slate-200" : ""}`}>{value}</span>
               )}
             </div>
           );
@@ -75,7 +75,7 @@ export function ConfigTable({ data, isLoading, onEdit }: ConfigTableProps) {
             <Button
               variant="ghost"
               size="icon"
-              className="h-8 w-8 text-slate-400 hover:text-blue-400 hover:bg-blue-500/20 transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-primary"
+              className="h-8 w-8 text-slate-500 hover:text-blue-600 dark:text-slate-400 dark:hover:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-500/20 transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-primary"
               onClick={() => onEdit(row.original)}
               title="Sửa cấu hình"
               aria-label={`Sửa cấu hình ${row.original.configKey}`}

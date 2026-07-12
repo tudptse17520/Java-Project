@@ -10,11 +10,13 @@ const BASE_PATH = "/users";
 
 export const getUsers = async (
   keyword?: string,
-  role?: string
+  role?: string,
+  status?: string
 ): Promise<UserListResponse> => {
   const params: Record<string, string> = {};
   if (keyword) params.keyword = keyword;
   if (role) params.role = role;
+  if (status) params.status = status;
 
   const response = await axiosClient.get<UserListResponse>(BASE_PATH, {
     params,

@@ -22,7 +22,7 @@ const PUBLIC_ROUTES = ["/", "/login"];
 
 /** Mapping role -> prefix route được phép truy cập */
 const ROLE_ROUTE_MAP: Record<string, string[]> = {
-  ADMIN: ["/admin"],
+  ADMIN: ["/admin", "/manager", "/staff", "/browse", "/reservations", "/vehicles", "/profile"],
   MANAGER: ["/manager"],
   STAFF: ["/staff"],
   USER: ["/browse", "/reservations", "/vehicles", "/profile"],

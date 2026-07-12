@@ -6,15 +6,19 @@ import { Role, ROLE_LABELS } from "@/constants/role";
 interface UserFilterProps {
   keyword: string;
   role: string;
+  status: string;
   onKeywordChange: (value: string) => void;
   onRoleChange: (value: string) => void;
+  onStatusChange: (value: string) => void;
 }
 
 export function UserFilter({
   keyword,
   role,
+  status,
   onKeywordChange,
   onRoleChange,
+  onStatusChange,
 }: UserFilterProps) {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-12 gap-4 w-full items-center">
@@ -44,14 +48,17 @@ export function UserFilter({
         </select>
       </div>
 
-      {/* Status Filter (Coming Soon) - 3 columns (~25%) */}
-      <div className="sm:col-span-3 w-full opacity-60">
+      {/* Status Filter - 3 columns (~25%) */}
+      <div className="sm:col-span-3 w-full">
         <select
-          className="h-11 w-full rounded-lg border border-dashed border-border/40 bg-muted/10 px-3 py-2 text-sm text-muted-foreground cursor-not-allowed transition-colors shadow-sm"
-          disabled
+          value={status}
+          onChange={(e) => onStatusChange(e.target.value)}
+          className="h-11 w-full rounded-lg border border-border/40 bg-background hover:bg-muted/10 px-3 py-2 text-sm ring-offset-background transition-all duration-200 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary focus-visible:border-primary shadow-sm"
           aria-label="Lọc theo trạng thái"
         >
-          <option value="">🚧 Sắp ra mắt</option>
+          <option value="">Tất cả trạng thái</option>
+          <option value="ACTIVE">Đang hoạt động</option>
+          <option value="INACTIVE">Vô hiệu hóa</option>
         </select>
       </div>
       

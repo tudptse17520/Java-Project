@@ -58,11 +58,12 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public UserResponse getMe() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || !authentication.isAuthenticated() || "anonymousUser".equals(authentication.getName())) {
+        if (authentication == null || !authentication.isAuthenticated() || !(authentication.getPrincipal() instanceof User)) {
             throw new AuthenticationException("Vui lòng đăng nhập để thực hiện chức năng này.");
         }
 
-        String username = authentication.getName();
+        User currentUser = (User) authentication.getPrincipal();
+        String username = currentUser.getUsername();
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new ResourceNotFoundException("Tài khoản không tồn tại."));
 
@@ -74,5 +75,29 @@ public class AuthServiceImpl implements AuthService {
                 .role(user.getRole())
                 .status(user.getStatus())
                 .build();
+    }
+
+    @Override
+    public void changePassword(vn.edu.ut.pbms.dto.request.ChangePasswordRequest request) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated() || !(authentication.getPrincipal() instanceof User)) {
+            throw new AuthenticationException("Vui lòng đăng nhập để thực hiện chức năng này.");
+        }
+
+        User currentUser = (User) authentication.getPrincipal();
+        String username = currentUser.getUsername();
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new ResourceNotFoundException("Tài khoản không tồn tại."));
+
+        if (!passwordEncoder.matches(request.getOldPassword(), user.getPassword())) {
+            throw new vn.edu.ut.pbms.exception.BusinessRuleViolationException("Mật khẩu cũ không chính xác.");
+        }
+
+        if (!request.getNewPassword().equals(request.getConfirmPassword())) {
+            throw new vn.edu.ut.pbms.exception.BusinessRuleViolationException("Xác nhận mật khẩu không khớp.");
+        }
+
+        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+        userRepository.save(user);
     }
 }

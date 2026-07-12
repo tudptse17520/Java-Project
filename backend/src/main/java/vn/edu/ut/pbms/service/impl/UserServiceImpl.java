@@ -36,10 +36,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(readOnly = true)
-    public UserListResponse getUsers(String keyword, String role) {
+    public UserListResponse getUsers(String keyword, String role, String status) {
         Role roleEnum = parseRoleOrNull(role);
+        UserStatus statusEnum = null;
+        if (status != null && !status.isBlank()) {
+            statusEnum = parseStatus(status);
+        }
 
-        List<User> users = userRepository.searchUsers(keyword, roleEnum);
+        List<User> users = userRepository.searchUsers(keyword, roleEnum, statusEnum);
 
         List<UserResponse> data = users.stream()
                 .map(this::mapToUserResponse)

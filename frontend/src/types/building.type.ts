@@ -1,9 +1,12 @@
+import { BuildingStatus } from '@/constants/building-status';
+import { FloorStatus } from '@/constants/floor-status';
+
 export interface FloorResponse {
   id: number;
   floorName: string;
   floorLevel: number;
   capacity: number;
-  status: 'ACTIVE' | 'INACTIVE' | 'MAINTENANCE';
+  status: FloorStatus;
   availableSlots: number;
   buildingId: number;
   buildingName: string;
@@ -17,7 +20,7 @@ export interface BuildingResponse {
   address: string;
   numberOfFloors: number;
   totalAvailableSlots: number;
-  status: 'ACTIVE' | 'INACTIVE' | 'MAINTENANCE';
+  status: BuildingStatus;
   floors?: FloorResponse[];
 }
 

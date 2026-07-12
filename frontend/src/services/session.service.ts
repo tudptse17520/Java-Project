@@ -1,21 +1,30 @@
-import axiosClient from "@/lib/axios-client";
-import type { SessionListResponse, SessionFilterParams } from "@/features/sessions/types/session.type";
+import axiosClient from '@/lib/axios-client';
+import { SessionListResponse, SessionResponse } from '@/types/session.type';
 
-const SESSION_API_URL = "/sessions";
+const SESSION_API = '/api/v1/sessions';
 
-export const getSessions = async (params?: SessionFilterParams): Promise<SessionListResponse> => {
-  let formattedDate = undefined;
-  if (params?.fromDate) {
-    // Assuming params.fromDate is YYYY-MM-DD from <input type="date">
-    formattedDate = `${params.fromDate}T00:00:00`;
+export const sessionService = {
+  getSessions: async (keyword?: string, status?: string): Promise<SessionListResponse> => {
+    const params = new URLSearchParams();
+    if (keyword) params.append('plate', keyword);
+    if (status && status !== 'ALL') params.append('status', status);
+    
+    const response = await axiosClient.get<SessionListResponse>(SESSION_API, { params });
+    return response.data;
+  },
+
+  checkInVehicle: async (data: { plate: string; vehicleId?: number | null; parkingSlotId?: number | null }): Promise<SessionResponse> => {
+    const response = await axiosClient.post<SessionResponse>(`${SESSION_API}/check-in`, data);
+    return response.data;
+  },
+
+  updateSession: async (id: number, data: { plate: string; vehicleId?: number | null; parkingSlotId?: number | null }): Promise<SessionResponse> => {
+    const response = await axiosClient.put<SessionResponse>(`${SESSION_API}/${id}`, data);
+    return response.data;
+  },
+
+  updateSessionStatus: async (id: number, status: string): Promise<SessionResponse> => {
+    const response = await axiosClient.patch<SessionResponse>(`${SESSION_API}/${id}/status`, { status });
+    return response.data;
   }
-
-  const response = await axiosClient.get<SessionListResponse>(SESSION_API_URL, {
-    params: {
-      plate: params?.plate || undefined,
-      status: params?.status && params.status !== "ALL" ? params.status : undefined,
-      from_date: formattedDate,
-    },
-  });
-  return response.data;
 };

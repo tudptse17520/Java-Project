@@ -18,7 +18,7 @@ import { Label } from "@/components/ui/label";
 /**
  * Trả về đường dẫn redirect dựa trên role từ API response.
  */
-function getRedirectPathByRole(role: string): string {
+function getRedirectPathByRole(role: 'ADMIN' | 'MANAGER' | 'STAFF' | 'USER'): string {
   switch (role) {
     case Role.ADMIN:
       return "/admin/dashboard";

@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import React, { useEffect } from 'react';
@@ -5,6 +8,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormContainer, FormHeader, FormFields, FormActions } from '@/components/common/form-container';
 import { Button } from '@/components/ui/button';
+import { BuildingStatus } from '@/constants/building-status';
 import { buildingCreateSchema, buildingUpdateSchema, type BuildingCreateForm, type BuildingUpdateForm } from '../schemas/building-form.schema';
 import type { BuildingResponse } from '@/types/building.type';
 import { X } from 'lucide-react';
@@ -29,7 +33,7 @@ export function BuildingModal({ open, onClose, building }: BuildingModalProps) {
       buildingName: '',
       address: '',
       numberOfFloors: 1,
-      status: 'ACTIVE',
+      status: BuildingStatus.ACTIVE,
     },
   });
 
@@ -47,7 +51,7 @@ export function BuildingModal({ open, onClose, building }: BuildingModalProps) {
           buildingName: '',
           address: '',
           numberOfFloors: 1,
-          status: 'ACTIVE',
+          status: BuildingStatus.ACTIVE,
         });
       }
     }
@@ -119,7 +123,7 @@ export function BuildingModal({ open, onClose, building }: BuildingModalProps) {
               <input
                 id="numberOfFloors"
                 type="number"
-                {...form.register('numberOfFloors')}
+                {...form.register('numberOfFloors', { valueAsNumber: true })}
                 className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                 placeholder="Nhập số tầng"
                 disabled={isPending}

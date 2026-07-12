@@ -226,7 +226,7 @@ public class ParkingSessionServiceImpl implements ParkingSessionService {
                 .id(savedSession.getId().intValue())
                 .ticketCode(savedSession.getTicketCode())
                 .timeIn(savedSession.getTimeIn().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
-                .status(savedSession.getStatus().name())
+                .status(savedSession.getStatus())
                 .message("Xe check-in thành công.")
                 .build();
     }

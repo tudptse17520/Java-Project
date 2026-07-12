@@ -39,7 +39,7 @@ public class ParkingSessionController {
     public ResponseEntity<ParkingSessionListResponseDTO> getParkingSessions(
             @RequestParam(required = false) String plate,
             @RequestParam(required = false) String status,
-            @RequestParam(name = "from_date", required = false) String fromDate) {
+            @RequestParam(name = "fromDate", required = false) String fromDate) {
 
         ParkingSessionListResponseDTO response = parkingSessionService.getParkingSessions(plate, status, fromDate);
         return ResponseEntity.ok(response);

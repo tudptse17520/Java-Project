@@ -1,20 +1,32 @@
 import React from 'react';
-import { StatusBadge, type BadgeVariant } from '@/components/common/status-badge';
+import { StatusBadge, BadgeVariant } from '@/components/common/status-badge';
 
 interface SessionStatusBadgeProps {
-  timeOut?: string | null;
-  className?: string;
+  status: 'IN_PROGRESS' | 'COMPLETED';
 }
 
-export function SessionStatusBadge({ timeOut, className }: SessionStatusBadgeProps) {
-  const isCompleted = !!timeOut;
-  
-  const variant: BadgeVariant = isCompleted ? 'success' : 'warning';
-  const label = isCompleted ? 'Đã ra bãi' : 'Đang trong bãi';
+export const SessionStatusBadge = ({ status }: SessionStatusBadgeProps) => {
+  const getVariant = (status: string): BadgeVariant => {
+    switch (status) {
+      case 'IN_PROGRESS':
+        return 'success';
+      case 'COMPLETED':
+        return 'info';
+      default:
+        return 'info';
+    }
+  };
 
-  return (
-    <StatusBadge variant={variant} className={className}>
-      {label}
-    </StatusBadge>
-  );
-}
+  const getLabel = (status: string) => {
+    switch (status) {
+      case 'IN_PROGRESS':
+        return 'Đang đỗ';
+      case 'COMPLETED':
+        return 'Đã ra';
+      default:
+        return status;
+    }
+  };
+
+  return <StatusBadge variant={getVariant(status)}>{getLabel(status)}</StatusBadge>;
+};

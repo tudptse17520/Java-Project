@@ -1,56 +1,61 @@
-// ---------------------------------------------
-// Parking Sessions Management Page
-// Trang quản lý và tra cứu lượt gửi xe cho Staff
-// Route: /staff/sessions
-// ---------------------------------------------
-
 "use client";
 
-import { useState } from "react";
-import { PageHeader } from "@/components/common/page-header";
-import { PageContainer } from "@/components/common/page-container";
-import { Toolbar } from "@/components/common/toolbar";
-import { SessionFilter } from "@/features/sessions/components/session-filter";
-import { SessionTable } from "@/features/sessions/components/session-table";
-import { useSessions } from "@/features/sessions/hooks/use-sessions";
+import React, { useState } from 'react';
+import { PageContainer } from '@/components/common/page-container';
+import { PageHeader } from '@/components/common/page-header';
+import { Toolbar } from '@/components/common/toolbar';
+import { TableSkeleton } from '@/components/common/table-skeleton';
+import { EmptyState } from '@/components/common/empty-state';
+import { Search } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
-export default function StaffSessionsPage() {
-  const [filterParams, setFilterParams] = useState({
-    plate: "",
-    status: "ALL",
-    fromDate: "",
-  });
+import { SessionFilter } from '@/features/sessions/components/session-filter';
+import { SessionTable } from '@/features/sessions/components/session-table';
+import { CheckInModal } from '@/features/sessions/components/check-in-modal';
+import { useSessions } from '@/features/sessions/hooks/use-sessions';
 
-  const { data, isLoading, isError } = useSessions(filterParams);
+export default function SessionsPage() {
+  const [keyword, setKeyword] = useState('');
+  const [status, setStatus] = useState('ALL');
+  const [isCheckInModalOpen, setIsCheckInModalOpen] = useState(false);
 
-  const handleFilterChange = (key: string, value: string) => {
-    setFilterParams((prev) => ({ ...prev, [key]: value }));
-  };
+  const { data, isLoading } = useSessions(keyword, status);
 
   return (
     <PageContainer>
-      {/* Header */}
       <PageHeader
         title="Quản Lý Lượt Gửi Xe"
-        description="Theo dõi và tra cứu danh sách các xe đang đỗ hoặc đã rời bãi."
+        description="Theo dõi thông tin xe vào/ra bãi, kiểm tra trạng thái và thực hiện check-in cho phương tiện."
+        actions={
+          <Button onClick={() => setIsCheckInModalOpen(true)}>
+            Check-in xe vào
+          </Button>
+        }
       />
-
-      {/* Bộ lọc */}
       <Toolbar>
         <SessionFilter
-          plate={filterParams.plate}
-          status={filterParams.status}
-          fromDate={filterParams.fromDate}
-          onPlateChange={(val) => handleFilterChange("plate", val)}
-          onStatusChange={(val) => handleFilterChange("status", val)}
-          onFromDateChange={(val) => handleFilterChange("fromDate", val)}
+          keyword={keyword}
+          onKeywordChange={setKeyword}
+          status={status}
+          onStatusChange={setStatus}
         />
       </Toolbar>
+      
+      {isLoading ? (
+        <TableSkeleton rows={5} />
+      ) : data?.data?.length === 0 ? (
+        <EmptyState
+          icon={Search}
+          title="Không tìm thấy lượt gửi"
+          description="Thử thay đổi bộ lọc hoặc từ khóa tìm kiếm biển số xe."
+        />
+      ) : (
+        <SessionTable sessions={data?.data || []} />
+      )}
 
-      {/* Bảng dữ liệu */}
-      <SessionTable
-        sessions={data?.data || []}
-        isLoading={isLoading}
+      <CheckInModal
+        isOpen={isCheckInModalOpen}
+        onClose={() => setIsCheckInModalOpen(false)}
       />
     </PageContainer>
   );

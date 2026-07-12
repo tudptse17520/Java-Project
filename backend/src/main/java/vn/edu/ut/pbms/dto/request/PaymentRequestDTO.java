@@ -1,5 +1,8 @@
 package vn.edu.ut.pbms.dto.request;
 
+import vn.edu.ut.pbms.constant.PaymentMethod;
+import vn.edu.ut.pbms.constant.FeeType;
+
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -22,8 +25,8 @@ public class PaymentRequestDTO {
     @NotNull(message = "Số tiền thanh toán không được để trống.")
     @DecimalMin(value = "1000", message = "Số tiền thanh toán tối thiểu là 1.000đ.")
     private BigDecimal amount;
-    @NotBlank(message = "Phương thức thanh toán không được để trống.")
-    private String paymentMethod;
-    @NotBlank(message = "Loại phí không được để trống.")
-    private String feeType;
+    @NotNull(message = "Phương thức thanh toán không được để trống.")
+    private PaymentMethod paymentMethod;
+    @NotNull(message = "Loại phí không được để trống.")
+    private FeeType feeType;
 }

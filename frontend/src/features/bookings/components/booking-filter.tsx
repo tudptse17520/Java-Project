@@ -46,7 +46,7 @@ export function BookingFilter({
 
       <Select 
         value={status || undefined} 
-        onValueChange={(val) => onStatusChange(val === "all" ? undefined : val)}
+        onValueChange={(val) => onStatusChange(val === "all" ? undefined : (val ?? undefined))}
       >
         <SelectTrigger className="w-[180px] h-10 bg-background">
           <SelectValue placeholder="Tất cả trạng thái">

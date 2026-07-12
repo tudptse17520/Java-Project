@@ -41,7 +41,7 @@ export function SlotFilter({
         />
       </div>
 
-      <Select value={floorId?.toString()} onValueChange={(val) => onFloorIdChange(val === "all" ? undefined : Number(val))}>
+      <Select value={floorId?.toString()} onValueChange={(val) => onFloorIdChange(val === "all" ? undefined : Number(val ?? ""))}>
         <SelectTrigger className="w-[180px] bg-background">
           <SelectValue placeholder="Tất cả tầng">
             {floorId ? floors.find((f) => f.id === floorId)?.floorName || "Tất cả tầng" : "Tất cả tầng"}
@@ -57,7 +57,7 @@ export function SlotFilter({
         </SelectContent>
       </Select>
 
-      <Select value={status || undefined} onValueChange={(val) => onStatusChange(val === "all" ? "" : val)}>
+      <Select value={status || undefined} onValueChange={(val) => onStatusChange(val === "all" ? "" : (val ?? ""))}>
         <SelectTrigger className="w-[180px] bg-background">
           <SelectValue placeholder="Tất cả trạng thái">
             {status === "AVAILABLE" ? "Còn trống" : 

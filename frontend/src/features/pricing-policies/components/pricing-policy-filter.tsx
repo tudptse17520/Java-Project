@@ -47,7 +47,7 @@ export function PricingPolicyFilter({
 
       <Select 
         value={value?.toString() || undefined} 
-        onValueChange={(val) => onChange(val === "all" ? undefined : Number(val))}
+        onValueChange={(val) => onChange(val === "all" ? undefined : Number(val ?? ""))}
         disabled={isLoading}
       >
         <SelectTrigger className="w-[200px] h-10 bg-background">

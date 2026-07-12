@@ -33,7 +33,7 @@ export function FloorFilter({
         />
       </div>
 
-      <Select value={buildingId || undefined} onValueChange={(val) => onBuildingChange(val === "all" ? undefined : val)}>
+      <Select value={buildingId || undefined} onValueChange={(val) => onBuildingChange(val === "all" ? undefined : (val ?? undefined))}>
         <SelectTrigger className="w-[180px]">
           <SelectValue placeholder="Tất cả tòa nhà">
             {buildingId === "1" ? "PBMS Landmark 81" : buildingId === "2" ? "PBMS Bitexco" : "Tất cả tòa nhà"}

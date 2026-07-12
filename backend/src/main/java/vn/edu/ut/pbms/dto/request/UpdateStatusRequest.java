@@ -2,8 +2,6 @@ package vn.edu.ut.pbms.dto.request;
 
 import jakarta.validation.constraints.NotNull;
 import vn.edu.ut.pbms.constant.UserStatus;
-
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

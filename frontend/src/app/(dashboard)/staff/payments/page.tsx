@@ -21,6 +21,7 @@ import { PaymentDetailDialog } from "@/features/payments/components/payment-deta
 import { PaymentManualStatusDialog } from "@/features/payments/components/payment-manual-status-dialog";
 import { PaymentQrDialog } from "@/features/payments/components/payment-qr-dialog";
 import { useMemo } from "react";
+import { Payment } from "@/features/payments/types/payment.type";
 
 export default function PaymentPage() {
   // Hook Action: quản lý trạng thái UI
@@ -64,14 +65,14 @@ export default function PaymentPage() {
   // Map biển số xe vào payment và filter theo biển số xe nếu có
   const enrichedPayments = useMemo(() => {
     return payments
-      .map(payment => {
-        const session = allSessions.find(s => s.id === payment.parkingSessionId);
+      .map((payment: Payment) => {
+        const session = allSessions.find((s: any) => s.id === payment.parkingSessionId);
         return { ...payment, plate: session?.plate || "" };
       })
-      .filter(payment => {
+      .filter((payment: Payment) => {
         if (filter.feeType && payment.feeType !== filter.feeType) return false;
         if (!filter.plate) return true;
-        return payment.plate.includes(filter.plate.toUpperCase());
+        return payment.plate?.includes(filter.plate.toUpperCase());
       });
   }, [payments, allSessions, filter.plate, filter.feeType]);
 

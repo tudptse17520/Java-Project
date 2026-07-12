@@ -2,8 +2,6 @@ package vn.edu.ut.pbms.dto.request;
 
 import vn.edu.ut.pbms.constant.ParkingSlotStatus;
 import jakarta.validation.constraints.NotNull;
-
-import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data

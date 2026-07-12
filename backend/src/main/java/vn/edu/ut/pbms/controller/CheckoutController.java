@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -36,6 +37,7 @@ import vn.edu.ut.pbms.service.CheckoutService;
 @RestController
 @RequestMapping("/api/v1")
 @RequiredArgsConstructor
+@PreAuthorize("hasAnyRole('STAFF', 'MANAGER', 'ADMIN')")
 @Tag(name = "Checkout", description = "API quản lý và xử lý quy trình xe ra bãi (Check-out)")
 public class CheckoutController {
 
@@ -61,9 +63,9 @@ public class CheckoutController {
                 content = @Content(schema = @Schema(implementation = ErrorResponse.class))
         )
     })
-    @PostMapping("/sessions/{session_id}/validate-plate")
+    @PostMapping("/sessions/{sessionId}/validate-plate")
     public ResponseEntity<Map<String, String>> validatePlate(
-            @PathVariable("session_id") Long sessionId,
+            @PathVariable("sessionId") Long sessionId,
             @Valid @RequestBody PlateValidationRequest request) {
 
         checkoutService.validatePlate(sessionId, request);
@@ -93,9 +95,9 @@ public class CheckoutController {
                 content = @Content(schema = @Schema(implementation = ErrorResponse.class))
         )
     })
-    @PostMapping("/sessions/{session_id}/override-checkout")
+    @PostMapping("/sessions/{sessionId}/override-checkout")
     public ResponseEntity<CheckOutResponse> overrideCheckout(
-            @PathVariable("session_id") Long sessionId,
+            @PathVariable("sessionId") Long sessionId,
             @Valid @RequestBody OverrideCheckoutRequest request) {
 
         CheckOutResponse response = checkoutService.overrideCheckout(sessionId, request);
@@ -118,9 +120,9 @@ public class CheckoutController {
                 content = @Content(schema = @Schema(implementation = ErrorResponse.class))
         )
     })
-    @PostMapping("/sessions/{session_id}/lost-ticket")
+    @PostMapping("/sessions/{sessionId}/lost-ticket")
     public ResponseEntity<FeeCalculationResponse> lostTicket(
-            @PathVariable("session_id") Long sessionId,
+            @PathVariable("sessionId") Long sessionId,
             @Valid @RequestBody LostTicketRequest request) {
 
         FeeCalculationResponse response = checkoutService.processLostTicket(sessionId, request);
@@ -138,9 +140,9 @@ public class CheckoutController {
                 content = @Content(schema = @Schema(implementation = FeeCalculationResponse.class))
         )
     })
-    @PostMapping("/sessions/{session_id}/calculate-fee")
+    @PostMapping("/sessions/{sessionId}/calculate-fee")
     public ResponseEntity<FeeCalculationResponse> calculateFee(
-            @PathVariable("session_id") Long sessionId) {
+            @PathVariable("sessionId") Long sessionId) {
 
         FeeCalculationResponse response = checkoutService.calculateFee(sessionId);
         return ResponseEntity.ok(response);
@@ -163,9 +165,9 @@ public class CheckoutController {
                 content = @Content(schema = @Schema(implementation = ErrorResponse.class))
         )
     })
-    @PostMapping("/sessions/{session_id}/exit-gate")
+    @PostMapping("/sessions/{sessionId}/exit-gate")
     public ResponseEntity<Map<String, String>> exitGate(
-            @PathVariable("session_id") Long sessionId) {
+            @PathVariable("sessionId") Long sessionId) {
 
         checkoutService.checkExitGate(sessionId);
         Map<String, String> response = new HashMap<>();
@@ -189,9 +191,9 @@ public class CheckoutController {
                 content = @Content(schema = @Schema(implementation = ErrorResponse.class))
         )
     })
-    @PutMapping("/sessions/{session_id}/check-out")
+    @PutMapping("/sessions/{sessionId}/check-out")
     public ResponseEntity<CheckOutResponse> checkOut(
-            @PathVariable("session_id") Long sessionId,
+            @PathVariable("sessionId") Long sessionId,
             @Valid @RequestBody CheckOutRequest request) {
 
         CheckOutResponse response = checkoutService.checkOut(sessionId, request);

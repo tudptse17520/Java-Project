@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import vn.edu.ut.pbms.dto.request.CheckinRequest;
 import vn.edu.ut.pbms.dto.response.CheckinResponse;
@@ -19,6 +20,7 @@ import vn.edu.ut.pbms.service.ParkingSessionService;
 @RequestMapping("/api/v1/sessions")
 @RequiredArgsConstructor
 @CrossOrigin
+@PreAuthorize("hasAnyRole('STAFF', 'MANAGER', 'ADMIN')")
 @Tag(name = "Parking Session", description = "Các API quản lý lượt gửi xe")
 public class ParkingSessionController {
 

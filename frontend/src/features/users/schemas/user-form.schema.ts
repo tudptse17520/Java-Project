@@ -4,6 +4,7 @@
 // ---------------------------------------------
 
 import { z } from "zod";
+import { Role } from "@/constants/role";
 
 export const userCreateSchema = z.object({
   username: z
@@ -24,9 +25,7 @@ export const userCreateSchema = z.object({
       /^(0[3|5|7|8|9])+([0-9]{8})$/,
       "Số điện thoại không đúng định dạng."
     ),
-  role: z
-    .string()
-    .min(1, "Vai trò không được để trống."),
+  role: z.nativeEnum(Role),
 });
 
 export const userUpdateSchema = z.object({
@@ -40,9 +39,7 @@ export const userUpdateSchema = z.object({
       /^(0[3|5|7|8|9])+([0-9]{8})$/,
       "Số điện thoại không đúng định dạng."
     ),
-  role: z
-    .string()
-    .min(1, "Vai trò không được để trống."),
+  role: z.nativeEnum(Role),
 });
 
 export type UserCreateFormData = z.infer<typeof userCreateSchema>;

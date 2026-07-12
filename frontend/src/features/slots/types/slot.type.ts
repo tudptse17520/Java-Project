@@ -1,12 +1,14 @@
+import { SlotStatus } from '@/constants/slot-status';
+
 export interface ParkingSlot {
   id: number;
   slotName: string;
   floorId: number;
-  status: 'AVAILABLE' | 'OCCUPIED' | 'RESERVED' | 'MAINTENANCE' | 'LOCKED';
+  status: SlotStatus;
 }
 
 export interface CreateSlotDto {
   floorId: number;
   slotName: string;
-  status: string;
+  status: SlotStatus;
 }

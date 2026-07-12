@@ -65,15 +65,15 @@ export default function PaymentPage() {
   const enrichedPayments = useMemo(() => {
     return payments
       .map(payment => {
-        const session = allSessions.find(s => s.id === payment.parking_session_id);
+        const session = allSessions.find(s => s.id === payment.parkingSessionId);
         return { ...payment, plate: session?.plate || "" };
       })
       .filter(payment => {
-        if (filter.fee_type && payment.fee_type !== filter.fee_type) return false;
+        if (filter.feeType && payment.feeType !== filter.feeType) return false;
         if (!filter.plate) return true;
         return payment.plate.includes(filter.plate.toUpperCase());
       });
-  }, [payments, allSessions, filter.plate, filter.fee_type]);
+  }, [payments, allSessions, filter.plate, filter.feeType]);
 
   return (
     <PageContainer>
@@ -100,7 +100,7 @@ export default function PaymentPage() {
 
       {/* Bảng dữ liệu */}
       <PaymentTable
-        data={enrichedPayments as any} // we cast to any because Payment type doesn't have plate yet, or we could update Payment type
+        data={enrichedPayments} // we removed as any because Payment type now has plate
         isLoading={isLoading}
         onViewDetail={handleOpenDetail}
         onManualStatus={handleOpenManualStatus}

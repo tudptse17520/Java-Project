@@ -74,15 +74,15 @@ export function PaymentDetailDialog({
   payment,
 }: PaymentDetailDialogProps) {
   const { data: sessionData, isLoading: isSessionLoading } = useSessionById(
-    payment?.parking_session_id ?? null
+    payment?.parkingSessionId ?? null
   );
 
   const { data: bookingData, isLoading: isBookingLoading } = useBookingById(
-    payment?.booking_id ?? null
+    payment?.bookingId ?? null
   );
 
   const { data: debtInfo, isLoading: isDebtLoading } = usePaymentDebt(
-    payment?.parking_session_id ?? null
+    payment?.parkingSessionId ?? null
   );
 
   if (!open || !payment) return null;
@@ -105,11 +105,11 @@ export function PaymentDetailDialog({
 
         <div className="mt-4 space-y-3">
           <DetailRow label="Mã giao dịch" value={`#${payment.id}`} />
-          {payment.parking_session_id != null && (
-            <DetailRow label="Mã lượt gửi xe" value={`#${payment.parking_session_id}`} />
+          {payment.parkingSessionId != null && (
+            <DetailRow label="Mã lượt gửi xe" value={`#${payment.parkingSessionId}`} />
           )}
-          {payment.booking_id != null && (
-            <DetailRow label="Mã đặt chỗ" value={`#${payment.booking_id}`} />
+          {payment.bookingId != null && (
+            <DetailRow label="Mã đặt chỗ" value={`#${payment.bookingId}`} />
           )}
           <DetailRow
             label="Số tiền thanh toán"
@@ -119,19 +119,19 @@ export function PaymentDetailDialog({
           <DetailRow
             label="Phương thức"
             value={
-              PAYMENT_METHOD_LABELS[payment.payment_method] ||
-              payment.payment_method
+              PAYMENT_METHOD_LABELS[payment.paymentMethod] ||
+              payment.paymentMethod
             }
           />
           <DetailRow
             label="Loại phí"
             value={
-              FEE_TYPE_LABELS[payment.fee_type] || payment.fee_type
+              FEE_TYPE_LABELS[payment.feeType] || payment.feeType
             }
           />
           <DetailRow
             label="Thời gian"
-            value={payment.payment_time ? formatDateTime(payment.payment_time) : "Chưa ghi nhận"}
+            value={payment.paymentTime ? formatDateTime(payment.paymentTime) : "Chưa ghi nhận"}
           />
           <div className="flex items-center justify-between border-t pt-3">
             <span className="text-sm text-muted-foreground">Trạng thái</span>
@@ -141,7 +141,7 @@ export function PaymentDetailDialog({
           </div>
 
           {/* Booking Details */}
-          {payment.parking_session_id == null && payment.booking_id != null && (
+          {payment.parkingSessionId == null && payment.bookingId != null && (
             <div className="rounded-md bg-muted p-3 space-y-2 mt-2 mb-2">
               <div className="flex flex-col mb-2">
                 <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
@@ -163,7 +163,7 @@ export function PaymentDetailDialog({
           )}
 
           {/* Session Details */}
-          {payment.parking_session_id != null && (
+          {payment.parkingSessionId != null && (
             <div className="rounded-md bg-muted p-3 space-y-2 mt-2 mb-2">
               <div className="flex flex-col mb-2">
                 <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">

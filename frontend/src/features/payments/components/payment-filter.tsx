@@ -43,7 +43,7 @@ export function PaymentFilter({
   onClearFilters,
 }: PaymentFilterProps) {
   const hasFilters =
-    filter.payment_method || filter.status || filter.from_date || filter.plate || filter.fee_type;
+    filter.paymentMethod || filter.status || filter.fromDate || filter.plate || filter.feeType;
 
   return (
     <div className="flex flex-wrap items-end gap-3">
@@ -54,8 +54,8 @@ export function PaymentFilter({
         </label>
         <select
           className="h-9 rounded-md border border-input bg-background px-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
-          value={filter.payment_method || ""}
-          onChange={(e) => onFilterChange("payment_method", e.target.value)}
+          value={filter.paymentMethod || ""}
+          onChange={(e) => onFilterChange("paymentMethod", e.target.value)}
         >
           <option value="">Tất cả</option>
           {PAYMENT_METHODS.map((method) => (
@@ -73,8 +73,8 @@ export function PaymentFilter({
         </label>
         <select
           className="h-9 rounded-md border border-input bg-background px-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
-          value={filter.fee_type || ""}
-          onChange={(e) => onFilterChange("fee_type", e.target.value)}
+          value={filter.feeType || ""}
+          onChange={(e) => onFilterChange("feeType", e.target.value)}
         >
           <option value="">Tất cả</option>
           {FEE_TYPES.map((feeType) => (
@@ -126,12 +126,12 @@ export function PaymentFilter({
         <input
           type="date"
           className="h-9 rounded-md border border-input bg-background px-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
-          value={filter.from_date ? formatDateToInput(filter.from_date) : ""}
+          value={filter.fromDate ? formatDateToInput(filter.fromDate) : ""}
           onChange={(e) => {
             const formatted = e.target.value
               ? formatDateToDDMMYYYY(e.target.value)
               : "";
-            onFilterChange("from_date", formatted);
+            onFilterChange("fromDate", formatted);
           }}
         />
       </div>

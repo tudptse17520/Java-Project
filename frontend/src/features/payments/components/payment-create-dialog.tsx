@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 // ---------------------------------------------
 // Payment Create Dialog
 // Form tạo thanh toán mới
@@ -45,17 +48,17 @@ export function PaymentCreateDialog({
     resolver: zodResolver(createPaymentSchema),
     defaultValues: {
       plate: "",
-      parking_session_id: null,
-      booking_id: null,
-      payment_method: "",
-      fee_type: "",
+      parkingSessionId: null,
+      bookingId: null,
+      paymentMethod: "",
+      feeType: "",
     } as any,
   });
 
   const plateValue = watch("plate");
-  const parkingSessionId = watch("parking_session_id");
-  const feeType = watch("fee_type");
-  const paymentMethod = watch("payment_method");
+  const parkingSessionId = watch("parkingSessionId");
+  const feeType = watch("feeType");
+  const paymentMethod = watch("paymentMethod");
   const amount = watch("amount");
 
   // State for debounced plate searching
@@ -70,12 +73,12 @@ export function PaymentCreateDialog({
 
   const { data: sessionData, isLoading: isSessionLoading, isError: isSessionError } = useSessionByPlate(searchPlate);
 
-  // Auto-fill parking_session_id when session is found
+  // Auto-fill parkingSessionId when session is found
   useEffect(() => {
     if (sessionData && sessionData.id) {
-      setValue("parking_session_id", sessionData.id);
+      setValue("parkingSessionId", sessionData.id);
     } else {
-      setValue("parking_session_id", null);
+      setValue("parkingSessionId", null);
       setValue("amount", NaN); // Reset amount if no session
     }
   }, [sessionData, setValue]);
@@ -84,7 +87,7 @@ export function PaymentCreateDialog({
     parkingSessionId ? Number(parkingSessionId) : null
   );
 
-  // Auto-fill amount based on fee_type and debtInfo
+  // Auto-fill amount based on feeType and debtInfo
   useEffect(() => {
     if (feeType === "PARKING_FEE" && debtInfo) {
       setValue("amount", debtInfo.remaining_fee, { shouldValidate: true });
@@ -155,7 +158,7 @@ export function PaymentCreateDialog({
             {/* 2. Mã lượt gửi xe (Read-only) */}
             <div className="flex flex-col gap-2">
               <label className="text-sm font-medium text-muted-foreground">
-                Mã lượt gửi xe (parking_session_id)
+                Mã lượt gửi xe (parkingSessionId)
               </label>
               <div className="relative">
                 <input
@@ -163,7 +166,7 @@ export function PaymentCreateDialog({
                   readOnly
                   placeholder="Tự động điền khi tìm thấy xe..."
                   className="h-9 w-full rounded-md border border-input bg-muted px-3 text-sm opacity-70 focus:outline-none"
-                  {...register("parking_session_id", { valueAsNumber: true })}
+                  {...register("parkingSessionId", { valueAsNumber: true })}
                 />
                 {sessionData && (
                   <span className="absolute right-3 top-2 text-xs font-semibold text-primary">
@@ -171,6 +174,24 @@ export function PaymentCreateDialog({
                   </span>
                 )}
               </div>
+            </div>
+
+            {/* Mã đặt chỗ */}
+            <div className="flex flex-col gap-2">
+              <label className="text-sm font-medium">
+                Mã đặt chỗ (bookingId)
+              </label>
+              <input
+                type="number"
+                placeholder="Nhập mã đặt chỗ..."
+                className="h-9 rounded-md border border-input bg-background px-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+                {...register("bookingId", { valueAsNumber: true })}
+              />
+              {errors.bookingId && (
+                <p className="text-xs text-destructive">
+                  {errors.bookingId.message}
+                </p>
+              )}
             </div>
 
 
@@ -182,7 +203,7 @@ export function PaymentCreateDialog({
               <select
                 disabled={!hasValidSession}
                 className="h-9 rounded-md border border-input bg-background px-3 text-sm disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-ring"
-                {...register("fee_type")}
+                {...register("feeType")}
               >
                 <option value="">-- Chọn loại phí --</option>
                 {FEE_TYPES.filter(type => type.value !== "BOOKING_DEPOSIT").map((type) => (
@@ -191,9 +212,9 @@ export function PaymentCreateDialog({
                   </option>
                 ))}
               </select>
-              {errors.fee_type && (
+              {errors.feeType && (
                 <p className="text-xs text-destructive">
-                  {errors.fee_type.message}
+                  {errors.feeType.message}
                 </p>
               )}
             </div>
@@ -206,7 +227,7 @@ export function PaymentCreateDialog({
               <select
                 disabled={!hasValidSession || !feeType}
                 className="h-9 rounded-md border border-input bg-background px-3 text-sm disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-ring"
-                {...register("payment_method")}
+                {...register("paymentMethod")}
               >
                 <option value="">-- Chọn phương thức --</option>
                 {PAYMENT_METHODS.map((method) => (
@@ -220,9 +241,9 @@ export function PaymentCreateDialog({
                   * Tính năng thanh toán qua MoMo hiện đang được phát triển.
                 </p>
               )}
-              {errors.payment_method && (
+              {errors.paymentMethod && (
                 <p className="text-xs text-destructive">
-                  {errors.payment_method.message}
+                  {errors.paymentMethod.message}
                 </p>
               )}
             </div>

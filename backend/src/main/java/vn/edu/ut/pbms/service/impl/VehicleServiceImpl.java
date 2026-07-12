@@ -20,6 +20,8 @@ import vn.edu.ut.pbms.repository.VehicleRepository;
 import vn.edu.ut.pbms.repository.VehicleTypeRepository;
 import vn.edu.ut.pbms.service.VehicleService;
 
+import org.springframework.security.core.context.SecurityContextHolder;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -36,9 +38,11 @@ public class VehicleServiceImpl implements VehicleService {
             throw new ConflictException("Biển số xe '" + request.getPlate() + "' đã được đăng ký trên hệ thống.");
         }
 
-        // 2. Tìm User
-        User user = userRepository.findById(request.getUserId())
-                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy người dùng với ID: " + request.getUserId()));
+        // 2. Lấy User từ Security Context (JWT) thay vì payload
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (user == null) {
+            throw new ResourceNotFoundException("Không tìm thấy thông tin xác thực của người dùng.");
+        }
 
         // 3. Tìm Vehicle Type
         VehicleType type = vehicleTypeRepository.findById(request.getVehicleTypeId())

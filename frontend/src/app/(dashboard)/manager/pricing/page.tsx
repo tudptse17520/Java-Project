@@ -6,6 +6,7 @@
 
 "use client";
 
+import React from "react";
 import { PageHeader } from "@/components/common/page-header";
 import { PageContainer } from "@/components/common/page-container";
 import { Toolbar } from "@/components/common/toolbar";
@@ -17,8 +18,7 @@ import {
   useVehicleTypesForFilter,
 } from "@/features/pricing-policies/hooks/use-pricing-policies";
 import { usePricingPolicyActions } from "@/features/pricing-policies/hooks/use-pricing-policy-actions";
-import { PageContainer } from "@/components/common/page-container";
-import { Toolbar } from "@/components/common/toolbar";
+
 import { PricingPolicyTable } from "@/features/pricing-policies/components/pricing-policy-table";
 import { PricingPolicyFormDialog } from "@/features/pricing-policies/components/pricing-policy-form-dialog";
 import { PricingPolicyFilter } from "@/features/pricing-policies/components/pricing-policy-filter";
@@ -44,12 +44,23 @@ export default function PricingPolicyPage() {
   } = usePricingPolicyActions();
 
   // Hook Data: lấy danh sách bảng giá (có filter)
-  const { data: pricingPolicies = [], isLoading } =
+  const { data: rawPricingPolicies = [], isLoading } =
     usePricingPolicies(filterVehicleTypeId);
 
   // Hook Data: lấy danh sách loại xe cho dropdown
   const { data: vehicleTypes = [], isLoading: isLoadingVehicleTypes } =
     useVehicleTypesForFilter();
+
+  // Ánh xạ tên loại xe vào danh sách bảng giá
+  const pricingPolicies = React.useMemo(() => {
+    return rawPricingPolicies.map((policy: any) => {
+      const vt = vehicleTypes.find((v: any) => v.id === policy.vehicle_type_id);
+      return {
+        ...policy,
+        vehicle_type_name: vt ? vt.typeName : policy.vehicle_type_name
+      };
+    });
+  }, [rawPricingPolicies, vehicleTypes]);
 
   return (
     <PageContainer>

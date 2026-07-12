@@ -9,14 +9,15 @@
  */
 export interface Payment {
   id: number;
-  parking_session_id: number | null;
-  booking_id: number | null;
+  parkingSessionId: number | null;
+  bookingId: number | null;
   amount: number;
-  payment_method: string;
-  fee_type: string;
-  payment_time: string;
+  paymentMethod: string;
+  feeType: string;
+  paymentTime: string;
   status: string;
   payment_url?: string;
+  plate?: string;
 }
 
 /**
@@ -24,7 +25,7 @@ export interface Payment {
  * Map 1:1 với PaymentListResponseDTO.java
  */
 export interface PaymentListResponse {
-  total_items: number;
+  totalItems: number;
   message: string;
   data: Payment[];
 }
@@ -34,11 +35,11 @@ export interface PaymentListResponse {
  * Map 1:1 với PaymentRequestDTO.java
  */
 export interface PaymentRequest {
-  parking_session_id?: number | null;
-  booking_id?: number | null;
+  parkingSessionId?: number | null;
+  bookingId?: number | null;
   amount: number;
-  payment_method: string;
-  fee_type: string;
+  paymentMethod: string;
+  feeType: string;
 }
 
 /**
@@ -54,9 +55,9 @@ export interface ManualStatusRequest {
  * Bộ lọc cho GET danh sách giao dịch (Query Parameters).
  */
 export interface PaymentFilter {
-  payment_method?: string;
+  paymentMethod?: string;
   status?: string;
-  from_date?: string;
+  fromDate?: string;
   plate?: string;
-  fee_type?: string;
+  feeType?: string;
 }

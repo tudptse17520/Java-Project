@@ -1,5 +1,5 @@
 import axiosClient from "@/lib/axios-client";
-import { Feedback, FeedbackRequest, IssueType, FeedbackStatus } from "../features/feedbacks/types/feedback.type";
+import { Feedback, FeedbackRequest, IssueType, FeedbackStatus } from "@/features/feedbacks/types/feedback.type";
 
 // Let's redefine PaginatedResponse here to avoid circular dependency or incorrect imports
 export interface PaginatedFeedbackResponse {

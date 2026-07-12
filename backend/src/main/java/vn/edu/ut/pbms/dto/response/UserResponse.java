@@ -1,5 +1,8 @@
 package vn.edu.ut.pbms.dto.response;
 
+import vn.edu.ut.pbms.constant.Role;
+import vn.edu.ut.pbms.constant.UserStatus;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,6 +22,6 @@ public class UserResponse {
     private String username;
     private String fullName;
     private String phoneNumber;
-    private String role;
-    private String status;
+    private Role role;
+    private UserStatus status;
 }

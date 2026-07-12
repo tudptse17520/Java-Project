@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import vn.edu.ut.pbms.constant.FeeType;
+import vn.edu.ut.pbms.constant.PaymentMethod;
 import vn.edu.ut.pbms.constant.PaymentStatus;
 
 import java.math.BigDecimal;
@@ -32,8 +33,9 @@ public class Payment {
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal amount;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "payment_method", nullable = false, length = 50)
-    private String paymentMethod;
+    private PaymentMethod paymentMethod;
 
     @Column(name = "payment_time", nullable = false)
     private LocalDateTime paymentTime;

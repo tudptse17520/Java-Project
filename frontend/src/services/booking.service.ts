@@ -1,6 +1,34 @@
-import  axiosClient  from '@/lib/axios-client';
-import { BookingResponse } from '@/features/bookings/types/booking.type';
+import axiosClient from "@/lib/axios-client";
+import type {
+  BookingRequest,
+  BookingResponse,
+  BookingListResponse,
+} from "@/features/bookings/types/booking.type";
 
-export const bookingService = {
-  getAll: () => axiosClient.get<BookingResponse>('/bookings'),
+const BASE_PATH = "";
+
+export const createBooking = async (
+  request: BookingRequest
+): Promise<BookingResponse> => {
+  const response = await axiosClient.post<BookingResponse>(
+    `${BASE_PATH}/bookings`,
+    request
+  );
+  return response.data;
+};
+
+export const getUserBookings = async (
+  userId: number
+): Promise<BookingListResponse[]> => {
+  const response = await axiosClient.get<BookingListResponse[]>(
+    `${BASE_PATH}/users/${userId}/bookings`
+  );
+  return response.data;
+};
+
+export const getAllBookings = async (): Promise<BookingListResponse[]> => {
+  const response = await axiosClient.get<BookingListResponse[]>(
+    `${BASE_PATH}/bookings`
+  );
+  return response.data;
 };

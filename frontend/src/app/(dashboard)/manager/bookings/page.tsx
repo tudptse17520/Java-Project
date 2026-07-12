@@ -2,30 +2,31 @@
 
 import { PageContainer } from "@/components/common/page-container";
 import { PageHeader } from "@/components/common/page-header";
-import { Toolbar } from "@/components/common/toolbar";
-import { DataTable } from "@/components/common/data-table";
-import { useBookings } from "@/features/bookings/hooks/use-bookings";
-import { columns } from "@/features/bookings/components/booking-columns";
+import { BookingTable } from "@/features/bookings/components/booking-table";
+import { useAllBookings } from "@/features/bookings/hooks/use-bookings";
 
-export default function ManageBookingsPage() {
-  const { data, isLoading, isError } = useBookings();
+export default function ManagerBookingsPage() {
+  const { data: bookings = [], isLoading, error } = useAllBookings();
+
+  if (error) {
+    return (
+      <PageContainer>
+        <div className="flex h-full items-center justify-center text-destructive">
+          Đã xảy ra lỗi khi tải danh sách đặt chỗ.
+        </div>
+      </PageContainer>
+    );
+  }
 
   return (
     <PageContainer>
       <PageHeader
-        title="Quản lý đặt chỗ"
-        description="Danh sách các đơn đặt chỗ của khách hàng"
+        title="Quản lý Đặt chỗ"
+        description="Xem toàn bộ danh sách khách hàng đặt trước vị trí đỗ xe."
       />
-      <Toolbar>
-        <div>
-          {/* ReservationFilter hoặc các nút chức năng sẽ thêm vào đây */}
-        </div>
-      </Toolbar>
-      <DataTable
-        data={data?.data ?? []}
-        columns={columns}
-        isLoading={isLoading}
-      />
+      <div className="mt-6">
+        <BookingTable data={bookings} isLoading={isLoading} />
+      </div>
     </PageContainer>
   );
 }

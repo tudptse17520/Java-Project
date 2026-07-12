@@ -21,8 +21,8 @@ public class ReportController {
     @Operation(summary = "Thống kê và đối soát doanh thu")
     @GetMapping("/revenue")
     public ResponseEntity<RevenueReportDTO> getRevenueReport(
-            @RequestParam(name = "start_date", required = false) String startDate,
-            @RequestParam(name = "end_date", required = false) String endDate) {
+            @RequestParam(name = "startDate", required = false) String startDate,
+            @RequestParam(name = "endDate", required = false) String endDate) {
         RevenueReportDTO response = reportService.getRevenueReport(startDate, endDate);
         return ResponseEntity.ok(response);
     }
@@ -30,9 +30,9 @@ public class ReportController {
     @Operation(summary = "Xem báo cáo lượt xe vào/ra")
     @GetMapping("/vehicle-flow")
     public ResponseEntity<VehicleEntryExitReportDTO> getVehicleFlowReport(
-            @RequestParam(name = "start_date", required = false) String startDate,
-            @RequestParam(name = "end_date", required = false) String endDate,
-            @RequestParam(name = "vehicle_type_id", required = false) Long vehicleTypeId) {
+            @RequestParam(name = "startDate", required = false) String startDate,
+            @RequestParam(name = "endDate", required = false) String endDate,
+            @RequestParam(name = "vehicleTypeId", required = false) Long vehicleTypeId) {
         VehicleEntryExitReportDTO response = reportService.getVehicleEntryExitReport(startDate, endDate, vehicleTypeId);
         return ResponseEntity.ok(response);
     }
@@ -40,9 +40,9 @@ public class ReportController {
     @Operation(summary = "Xem tỷ lệ lấp đầy")
     @GetMapping("/occupancy")
     public ResponseEntity<OccupancyRateReportDTO> getOccupancyReport(
-            @RequestParam(name = "start_date", required = false) String startDate,
-            @RequestParam(name = "end_date", required = false) String endDate,
-            @RequestParam(name = "vehicle_type_id", required = false) Long vehicleTypeId) {
+            @RequestParam(name = "startDate", required = false) String startDate,
+            @RequestParam(name = "endDate", required = false) String endDate,
+            @RequestParam(name = "vehicleTypeId", required = false) Long vehicleTypeId) {
         OccupancyRateReportDTO response = reportService.getOccupancyRateReport(startDate, endDate, vehicleTypeId);
         return ResponseEntity.ok(response);
     }
@@ -50,9 +50,9 @@ public class ReportController {
     @Operation(summary = "Xem khung giờ cao điểm")
     @GetMapping("/peak-hours")
     public ResponseEntity<PeakHourReportDTO> getPeakHourReport(
-            @RequestParam(name = "start_date", required = false) String startDate,
-            @RequestParam(name = "end_date", required = false) String endDate,
-            @RequestParam(name = "vehicle_type_id", required = false) Long vehicleTypeId) {
+            @RequestParam(name = "startDate", required = false) String startDate,
+            @RequestParam(name = "endDate", required = false) String endDate,
+            @RequestParam(name = "vehicleTypeId", required = false) Long vehicleTypeId) {
         PeakHourReportDTO response = reportService.getPeakHourReport(startDate, endDate, vehicleTypeId);
         return ResponseEntity.ok(response);
     }
@@ -60,9 +60,9 @@ public class ReportController {
     @Operation(summary = "Xem Dashboard tổng quan")
     @GetMapping
     public ResponseEntity<DashboardReportDTO> getDashboardReport(
-            @RequestParam(name = "start_date", required = false) String startDate,
-            @RequestParam(name = "end_date", required = false) String endDate,
-            @RequestParam(name = "vehicle_type_id", required = false) Long vehicleTypeId) {
+            @RequestParam(name = "startDate", required = false) String startDate,
+            @RequestParam(name = "endDate", required = false) String endDate,
+            @RequestParam(name = "vehicleTypeId", required = false) Long vehicleTypeId) {
         DashboardReportDTO response = reportService.getDashboardReport(startDate, endDate, vehicleTypeId);
         return ResponseEntity.ok(response);
     }

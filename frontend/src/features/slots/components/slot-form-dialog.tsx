@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { FormContainer, FormHeader, FormFields, FormActions } from "@/components/common/form-container";
+import { SlotStatus } from "@/constants/slot-status";
 import { slotSchema, type SlotFormValues } from "../schemas/slot.schema";
 import { useFloors } from "@/features/floors/hooks/use-floors";
 import { cn } from "@/lib/utils";
@@ -33,7 +34,7 @@ export function SlotFormDialog({
     defaultValues: {
       floorId: 0,
       slotName: "",
-      status: "AVAILABLE",
+      status: SlotStatus.AVAILABLE,
     },
   });
 
@@ -42,7 +43,7 @@ export function SlotFormDialog({
       reset({
         floorId: 0,
         slotName: "",
-        status: "AVAILABLE",
+        status: SlotStatus.AVAILABLE,
       });
     }
   }, [open, reset]);

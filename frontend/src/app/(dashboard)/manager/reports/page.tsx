@@ -13,7 +13,7 @@ import type { ReportFilter } from "@/features/reports/types/report.type";
 export default function ReportsDashboardPage() {
     const [filter, setFilter] = useState<ReportFilter>({});
 
-    const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>, field: 'start_date' | 'end_date') => {
+    const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>, field: 'startDate' | 'endDate') => {
         setFilter(prev => ({
             ...prev,
             [field]: e.target.value || undefined
@@ -32,8 +32,8 @@ export default function ReportsDashboardPage() {
                     <input 
                         type="date" 
                         className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
-                        value={filter.start_date || ""}
-                        onChange={(e) => handleDateChange(e, 'start_date')}
+                        value={filter.startDate || ""}
+                        onChange={(e) => handleDateChange(e, 'startDate')}
                     />
                 </div>
                 <div className="flex flex-col space-y-1">
@@ -41,8 +41,8 @@ export default function ReportsDashboardPage() {
                     <input 
                         type="date" 
                         className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
-                        value={filter.end_date || ""}
-                        onChange={(e) => handleDateChange(e, 'end_date')}
+                        value={filter.endDate || ""}
+                        onChange={(e) => handleDateChange(e, 'endDate')}
                     />
                 </div>
             </Toolbar>

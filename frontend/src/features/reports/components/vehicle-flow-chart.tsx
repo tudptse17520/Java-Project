@@ -56,7 +56,7 @@ export function VehicleFlowChart({ filter }: VehicleFlowChartProps) {
     entries: d.entries || d.vao || 0,
     exits: d.exits || d.ra || 0,
   })) : [
-    { name: "Tổng quan", entries: data.total_entries, exits: data.total_exits }
+    { name: "Tổng quan", entries: data.totalEntries, exits: data.totalExits }
   ];
 
   return (
@@ -64,8 +64,8 @@ export function VehicleFlowChart({ filter }: VehicleFlowChartProps) {
       <CardHeader>
         <CardTitle>Lưu lượng xe vào/ra</CardTitle>
         <CardDescription>
-          Vào: <span className="font-bold text-green-600">{data.total_entries}</span> | 
-          Ra: <span className="font-bold text-red-500">{data.total_exits}</span>
+          Vào: <span className="font-bold text-green-600">{data.totalEntries}</span> | 
+          Ra: <span className="font-bold text-blue-600">{data.totalExits}</span>
         </CardDescription>
       </CardHeader>
       <CardContent>

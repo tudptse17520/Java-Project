@@ -64,10 +64,10 @@ export function PeakHoursChart({ filter }: PeakHoursChartProps) {
           </div>
           <div className="text-center">
             <h3 className="text-4xl font-bold text-foreground">
-              {data.peak_hour || "N/A"}
+              {data.peakHour || "N/A"}
             </h3>
             <p className="text-muted-foreground mt-2">
-              Lượng xe tối đa: <span className="font-semibold text-foreground">{data.vehicle_count} lượt</span>
+              Lượng xe tối đa: <span className="font-semibold text-foreground">{data.vehicleCount} lượt</span>
             </p>
           </div>
         </div>

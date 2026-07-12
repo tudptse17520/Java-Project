@@ -50,7 +50,7 @@ export function OccupancyChart({ filter }: OccupancyChartProps) {
     );
   }
 
-  const rate = data.average_occupancy_rate || 0;
+  const rate = data.averageOccupancyRate || 0;
   const chartData = [
     { name: "Đã lấp đầy", value: rate },
     { name: "Trống", value: 100 - rate }

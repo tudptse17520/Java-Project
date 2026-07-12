@@ -14,7 +14,7 @@ import type {
     DashboardReport,
 } from "@/features/reports/types/report.type";
 
-const BASE_PATH = "/v1/reports";
+const BASE_PATH = "/reports";
 
 /**
  * Dashboard Report Overview
@@ -24,10 +24,10 @@ export const getDashboardReport = async (
 ): Promise<DashboardReport> => {
     const params: Record<string, string | number> = {};
 
-    if (filter?.start_date) params.start_date = filter.start_date;
-    if (filter?.end_date) params.end_date = filter.end_date;
-    if (filter?.vehicle_type_id)
-        params.vehicle_type_id = filter.vehicle_type_id;
+    if (filter?.startDate) params.start_date = filter.startDate;
+    if (filter?.endDate) params.end_date = filter.endDate;
+    if (filter?.vehicleTypeId)
+        params.vehicle_type_id = filter.vehicleTypeId;
 
     const response = await axiosClient.get<DashboardReport>(
         `${BASE_PATH}`,
@@ -47,10 +47,10 @@ export const getRevenueReport = async (
 ): Promise<RevenueReport> => {
     const params: Record<string, string | number> = {};
 
-    if (filter?.start_date) params.start_date = filter.start_date;
-    if (filter?.end_date) params.end_date = filter.end_date;
-    if (filter?.vehicle_type_id)
-        params.vehicle_type_id = filter.vehicle_type_id;
+    if (filter?.startDate) params.start_date = filter.startDate;
+    if (filter?.endDate) params.end_date = filter.endDate;
+    if (filter?.vehicleTypeId)
+        params.vehicle_type_id = filter.vehicleTypeId;
 
     const response = await axiosClient.get<RevenueReport>(
         `${BASE_PATH}/revenue`,
@@ -70,10 +70,10 @@ export const getOccupancyRateReport = async (
 ): Promise<OccupancyRateReport> => {
     const params: Record<string, string | number> = {};
 
-    if (filter?.start_date) params.start_date = filter.start_date;
-    if (filter?.end_date) params.end_date = filter.end_date;
-    if (filter?.vehicle_type_id)
-        params.vehicle_type_id = filter.vehicle_type_id;
+    if (filter?.startDate) params.start_date = filter.startDate;
+    if (filter?.endDate) params.end_date = filter.endDate;
+    if (filter?.vehicleTypeId)
+        params.vehicle_type_id = filter.vehicleTypeId;
 
     const response = await axiosClient.get<OccupancyRateReport>(
         `${BASE_PATH}/occupancy`,
@@ -93,10 +93,10 @@ export const getPeakHourReport = async (
 ): Promise<PeakHourReport> => {
     const params: Record<string, string | number> = {};
 
-    if (filter?.start_date) params.start_date = filter.start_date;
-    if (filter?.end_date) params.end_date = filter.end_date;
-    if (filter?.vehicle_type_id)
-        params.vehicle_type_id = filter.vehicle_type_id;
+    if (filter?.startDate) params.start_date = filter.startDate;
+    if (filter?.endDate) params.end_date = filter.endDate;
+    if (filter?.vehicleTypeId)
+        params.vehicle_type_id = filter.vehicleTypeId;
 
     const response = await axiosClient.get<PeakHourReport>(
         `${BASE_PATH}/peak-hours`,
@@ -116,10 +116,10 @@ export const getVehicleEntryExitReport = async (
 ): Promise<VehicleEntryExitReport> => {
     const params: Record<string, string | number> = {};
 
-    if (filter?.start_date) params.start_date = filter.start_date;
-    if (filter?.end_date) params.end_date = filter.end_date;
-    if (filter?.vehicle_type_id)
-        params.vehicle_type_id = filter.vehicle_type_id;
+    if (filter?.startDate) params.start_date = filter.startDate;
+    if (filter?.endDate) params.end_date = filter.endDate;
+    if (filter?.vehicleTypeId)
+        params.vehicle_type_id = filter.vehicleTypeId;
 
     const response = await axiosClient.get<VehicleEntryExitReport>(
         `${BASE_PATH}/vehicle-flow`,

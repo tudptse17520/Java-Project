@@ -1,7 +1,7 @@
 export interface ReportFilter {
-    start_date?: string; // Định dạng YYYY-MM-DD hoặc ISO
-    end_date?: string;   // Định dạng YYYY-MM-DD hoặc ISO
-    vehicle_type_id?: number;
+    startDate?: string; // Định dạng YYYY-MM-DD hoặc ISO
+    endDate?: string;   // Định dạng YYYY-MM-DD hoặc ISO
+    vehicleTypeId?: number;
 }
 
 export interface ReportDetail {
@@ -18,33 +18,33 @@ export interface ReportDetail {
 }
 
 export interface DashboardReport {
-    total_entries: number;
-    total_exits: number;
-    total_revenue: number;
-    occupancy_rate: number;
-    peak_hour: string;
+    totalEntries: number;
+    totalExits: number;
+    totalRevenue: number;
+    occupancyRate: number;
+    peakHour: string;
     details: ReportDetail;
 }
 
 export interface RevenueReport {
-    total_revenue: number;
+    totalRevenue: number;
     details: ReportDetail[];
 }
 
 export interface OccupancyRateReport {
-    average_occupancy_rate: number;
-    max_occupancy_rate: number;
+    averageOccupancyRate: number;
+    maxOccupancyRate: number;
     details: ReportDetail[];
 }
 
 export interface PeakHourReport {
-    peak_hour: string;
-    vehicle_count: number;
+    peakHour: string;
+    vehicleCount: number;
     details: ReportDetail[];
 }
 
 export interface VehicleEntryExitReport {
-    total_entries: number;
-    total_exits: number;
+    totalEntries: number;
+    totalExits: number;
     details: ReportDetail[];
 }

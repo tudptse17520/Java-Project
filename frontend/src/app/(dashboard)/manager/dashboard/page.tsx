@@ -45,7 +45,7 @@ export default function ManagerDashboardPage() {
               <Banknote className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{formatCurrency(data.total_revenue || 0)}</div>
+              <div className="text-2xl font-bold">{formatCurrency(data.totalRevenue || 0)}</div>
               <p className="text-xs text-muted-foreground">Tổng doanh thu hệ thống</p>
             </CardContent>
           </Card>
@@ -56,7 +56,7 @@ export default function ManagerDashboardPage() {
               <CarFront className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{data.total_entries || 0}</div>
+              <div className="text-2xl font-bold">{data.totalEntries || 0}</div>
               <p className="text-xs text-muted-foreground">Lượt xe đã check-in</p>
             </CardContent>
           </Card>
@@ -67,7 +67,7 @@ export default function ManagerDashboardPage() {
               <Car className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{data.total_exits || 0}</div>
+              <div className="text-2xl font-bold">{data.totalExits || 0}</div>
               <p className="text-xs text-muted-foreground">Lượt xe đã check-out</p>
             </CardContent>
           </Card>
@@ -78,7 +78,7 @@ export default function ManagerDashboardPage() {
               <Percent className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{(data.occupancy_rate || 0).toFixed(1)}%</div>
+              <div className="text-2xl font-bold">{(data.occupancyRate || 0).toFixed(1)}%</div>
               <p className="text-xs text-muted-foreground">Hiệu suất sử dụng bãi</p>
             </CardContent>
           </Card>
@@ -89,7 +89,7 @@ export default function ManagerDashboardPage() {
               <Clock className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{data.peak_hour || "--:--"}</div>
+              <div className="text-2xl font-bold">{data.peakHour || "--:--"}</div>
               <p className="text-xs text-muted-foreground">Khung giờ đông nhất</p>
             </CardContent>
           </Card>

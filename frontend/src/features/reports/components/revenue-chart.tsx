@@ -61,7 +61,7 @@ export function RevenueChart({ filter }: RevenueChartProps) {
       <CardHeader>
         <CardTitle>Doanh thu</CardTitle>
         <CardDescription>
-          Tổng doanh thu: <span className="font-bold text-primary">{formatCurrency(data.total_revenue)}</span>
+          Tổng doanh thu: <span className="font-bold text-primary">{formatCurrency(data.totalRevenue)}</span>
         </CardDescription>
       </CardHeader>
       <CardContent>

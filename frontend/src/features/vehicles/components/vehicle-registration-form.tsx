@@ -89,7 +89,7 @@ export function VehicleRegistrationForm() {
             <option value={0} disabled>
               -- Chọn loại xe --
             </option>
-            {vehicleTypes?.map((vt) => (
+            {vehicleTypes?.map((vt: any) => (
               <option key={vt.id} value={vt.id}>
                 {vt.typeName}
               </option>

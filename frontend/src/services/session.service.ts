@@ -13,7 +13,7 @@ import {
   SessionResponse,
 } from "@/features/sessions/types/session.type";
 
-const SESSION_API = '/api/v1/sessions';
+const SESSION_API = '/sessions';
 
 export const sessionService = {
   getSessions: async (keyword?: string, status?: string): Promise<SessionListResponse> => {

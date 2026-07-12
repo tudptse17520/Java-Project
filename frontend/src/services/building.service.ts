@@ -1,9 +1,9 @@
 import axiosClient from '@/lib/axios-client';
-import { env } from '@/config/env';
+
 import type { BuildingResponse, BuildingListResponse, BuildingActionResponse } from '@/types/building.type';
 import type { BuildingCreateForm, BuildingUpdateForm } from '@/features/buildings/schemas/building-form.schema';
 
-const BUILDING_API_URL = `${env.API_URL}/v1/buildings`;
+const BUILDING_API_URL = `/buildings`;
 
 export const getBuildings = async (keyword?: string, status?: string): Promise<BuildingListResponse> => {
   const params: Record<string, string> = {};

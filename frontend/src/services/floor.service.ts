@@ -6,32 +6,32 @@ import { Floor } from "@/features/floors/types/floor.type";
 
 export const floorService = {
   getAll: async () => {
-    const response = await axiosClient.get<Floor[]>("/api/v1/floors");
+    const response = await axiosClient.get<Floor[]>("/floors");
     return response.data;
   },
 
   getById: async (id: number) => {
-    const response = await axiosClient.get<Floor>(`/api/v1/floors/${id}`);
+    const response = await axiosClient.get<Floor>(`/floors/${id}`);
     return response.data;
   },
 
   getByBuilding: async (buildingId: number) => {
-    const response = await axiosClient.get<Floor[]>(`/api/v1/floors/building/${buildingId}`);
+    const response = await axiosClient.get<Floor[]>(`/floors/building/${buildingId}`);
     return response.data;
   },
 
   create: async (data: any) => {
-    const response = await axiosClient.post<Floor>("/api/v1/floors", data);
+    const response = await axiosClient.post<Floor>("/floors", data);
     return response.data;
   },
 
   update: async (id: number, data: any) => {
-    const response = await axiosClient.put<Floor>(`/api/v1/floors/${id}`, data);
+    const response = await axiosClient.put<Floor>(`/floors/${id}`, data);
     return response.data;
   },
 
   delete: async (id: number) => {
-    const response = await axiosClient.delete(`/api/v1/floors/${id}`);
+    const response = await axiosClient.delete(`/floors/${id}`);
     return response.data;
   },
 };

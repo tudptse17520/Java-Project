@@ -60,6 +60,19 @@ export function getCookie(name: string): string | null {
 }
 
 /**
+ * Ghi cookie an toàn
+ */
+export function setCookie(
+  name: string,
+  value: string,
+  maxAge: number = 86400,
+  path: string = "/"
+): void {
+  if (!isBrowser()) return;
+  document.cookie = `${name}=${encodeURIComponent(value)}; path=${path}; max-age=${maxAge}; SameSite=Lax`;
+}
+
+/**
  * Xóa cookie theo tên
  */
 export function removeCookie(name: string, path: string = "/"): void {

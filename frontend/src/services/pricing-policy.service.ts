@@ -17,7 +17,7 @@ const BASE_PATH = "/pricing-policies";
 export const getPricingPolicies = async (
   vehicleTypeId?: number
 ): Promise<PricingPolicy[]> => {
-  const params = vehicleTypeId ? { vehicle_type_id: vehicleTypeId } : {};
+  const params = vehicleTypeId ? { vehicleTypeId: vehicleTypeId } : {};
   const response = await axiosClient.get<{ message: string; data: PricingPolicy[] }>(BASE_PATH, {
     params,
   });

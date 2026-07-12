@@ -140,7 +140,7 @@ public class BuildingServiceImpl implements BuildingService {
 
     @Override
     @Transactional(readOnly = true)
-    public BuildingListResponseDTO getBuildings(BuildingStatus status) {
+    public BuildingListResponseDTO getBuildings(String keyword, BuildingStatus status) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Building> query = cb.createQuery(Building.class);
         Root<Building> root = query.from(Building.class);
@@ -151,10 +151,20 @@ public class BuildingServiceImpl implements BuildingService {
         // Tránh trùng lặp do LEFT JOIN FETCH
         query.distinct(true);
 
-        if (status != null) {
-            Predicate statusPredicate = cb.equal(root.get("status"), status);
-            query.where(statusPredicate);
+        Predicate predicate = cb.conjunction();
+
+        if (keyword != null && !keyword.trim().isEmpty()) {
+            String pattern = "%" + keyword.trim().toLowerCase() + "%";
+            Predicate namePredicate = cb.like(cb.lower(root.get("buildingName")), pattern);
+            Predicate addressPredicate = cb.like(cb.lower(root.get("address")), pattern);
+            predicate = cb.and(predicate, cb.or(namePredicate, addressPredicate));
         }
+
+        if (status != null) {
+            predicate = cb.and(predicate, cb.equal(root.get("status"), status));
+        }
+
+        query.where(predicate);
 
         List<Building> buildings = entityManager.createQuery(query).getResultList();
 

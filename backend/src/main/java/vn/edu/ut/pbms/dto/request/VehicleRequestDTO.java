@@ -13,8 +13,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class VehicleRequestDTO {
 
-    @NotNull(message = "Mã chủ sở hữu không được để trống")
-    private Long userId;
 
     @NotNull(message = "Mã loại xe không được để trống")
     private Long vehicleTypeId;

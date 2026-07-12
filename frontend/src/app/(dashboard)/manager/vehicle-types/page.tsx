@@ -62,7 +62,7 @@ export default function VehicleTypesPage() {
         onClose={handleCloseConfirm}
         onConfirm={handleConfirmDeactivate}
         title="Ngừng áp dụng loại xe"
-        description={`Bạn có chắc chắn muốn ngừng áp dụng "${vehicleTypeToDeactivate?.type_name}"? Các đơn giá liên quan đến loại xe này có thể bị ảnh hưởng.`}
+        description={`Bạn có chắc chắn muốn ngừng áp dụng "${vehicleTypeToDeactivate?.typeName}"? Các đơn giá liên quan đến loại xe này có thể bị ảnh hưởng.`}
         confirmText="Ngừng áp dụng"
         isLoading={isDeactivating}
       />

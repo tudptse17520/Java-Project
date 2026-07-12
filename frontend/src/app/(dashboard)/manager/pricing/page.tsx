@@ -57,7 +57,7 @@ export default function PricingPolicyPage() {
       const vt = vehicleTypes.find(v => v.id === policy.vehicle_type_id);
       return {
         ...policy,
-        vehicle_type_name: vt ? vt.type_name : policy.vehicle_type_name
+        vehicle_type_name: vt ? vt.typeName : policy.vehicle_type_name
       };
     });
   }, [rawPricingPolicies, vehicleTypes]);

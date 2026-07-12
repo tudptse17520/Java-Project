@@ -1,6 +1,9 @@
 package vn.edu.ut.pbms.dto.response;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import vn.edu.ut.pbms.constant.PaymentStatus;
+import vn.edu.ut.pbms.constant.PaymentMethod;
+import vn.edu.ut.pbms.constant.FeeType;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,31 +20,13 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PaymentResponseDTO {
-
-    @JsonProperty("id")
     private Long id;
-
-    @JsonProperty("parking_session_id")
     private Long parkingSessionId;
-
-    @JsonProperty("booking_id")
     private Long bookingId;
-
-    @JsonProperty("amount")
     private BigDecimal amount;
-
-    @JsonProperty("payment_method")
-    private String paymentMethod;
-
-    @JsonProperty("fee_type")
-    private String feeType;
-
-    @JsonProperty("payment_time")
+    private PaymentMethod paymentMethod;
+    private FeeType feeType;
     private String paymentTime;
-
-    @JsonProperty("status")
-    private String status;
-
-    @JsonProperty("payment_url")
+    private PaymentStatus status;
     private String paymentUrl;
 }

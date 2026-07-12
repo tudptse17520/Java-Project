@@ -80,9 +80,9 @@ public class PaymentController {
      */
     @GetMapping
     public ResponseEntity<PaymentListResponseDTO> getPayments(
-            @RequestParam(name = "payment_method", required = false) String paymentMethod,
+            @RequestParam(name = "paymentMethod", required = false) String paymentMethod,
             @RequestParam(name = "status", required = false) String status,
-            @RequestParam(name = "from_date", required = false) String fromDate) {
+            @RequestParam(name = "fromDate", required = false) String fromDate) {
         PaymentListResponseDTO response = paymentService.getPayments(paymentMethod, status, fromDate);
         return ResponseEntity.ok(response);
     }

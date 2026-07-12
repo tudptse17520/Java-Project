@@ -1,6 +1,8 @@
 package vn.edu.ut.pbms.dto.request;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import vn.edu.ut.pbms.constant.PaymentMethod;
+import vn.edu.ut.pbms.constant.FeeType;
+
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -19,21 +21,16 @@ import java.math.BigDecimal;
 public class PaymentRequest {
 
     @NotNull(message = "Mã phiên gửi xe không được để trống.")
-    @JsonProperty("parking_session_id")
     private Long parkingSessionId;
-
-    @JsonProperty("booking_id")
     private Long bookingId;
 
     @NotNull(message = "Số tiền thanh toán không được để trống.")
     @DecimalMin(value = "0.0", inclusive = false, message = "Số tiền thanh toán phải lớn hơn 0.")
     private BigDecimal amount;
 
-    @NotBlank(message = "Phương thức thanh toán không được để trống.")
-    @JsonProperty("payment_method")
-    private String paymentMethod;
+    @NotNull(message = "Phương thức thanh toán không được để trống.")
+    private PaymentMethod paymentMethod;
 
-    @NotBlank(message = "Loại chi phí không được để trống.")
-    @JsonProperty("fee_type")
-    private String feeType;
+    @NotNull(message = "Loại chi phí không được để trống.")
+    private FeeType feeType;
 }

@@ -79,15 +79,15 @@ export function PaymentDetailDialog({
           <DetailRow
             label="Mã lượt gửi xe"
             value={
-              payment.parking_session_id != null
-                ? `#${payment.parking_session_id}`
+              payment.parkingSessionId != null
+                ? `#${payment.parkingSessionId}`
                 : "—"
             }
           />
           <DetailRow
             label="Mã đặt chỗ"
             value={
-              payment.booking_id != null ? `#${payment.booking_id}` : "—"
+              payment.bookingId != null ? `#${payment.bookingId}` : "—"
             }
           />
           <DetailRow
@@ -98,19 +98,19 @@ export function PaymentDetailDialog({
           <DetailRow
             label="Phương thức"
             value={
-              PAYMENT_METHOD_LABELS[payment.payment_method] ||
-              payment.payment_method
+              PAYMENT_METHOD_LABELS[payment.paymentMethod] ||
+              payment.paymentMethod
             }
           />
           <DetailRow
             label="Loại phí"
             value={
-              FEE_TYPE_LABELS[payment.fee_type] || payment.fee_type
+              FEE_TYPE_LABELS[payment.feeType] || payment.feeType
             }
           />
           <DetailRow
             label="Thời gian"
-            value={payment.payment_time || "Chưa ghi nhận"}
+            value={payment.paymentTime || "Chưa ghi nhận"}
           />
           <div className="flex items-center justify-between border-t pt-3">
             <span className="text-sm text-muted-foreground">Trạng thái</span>

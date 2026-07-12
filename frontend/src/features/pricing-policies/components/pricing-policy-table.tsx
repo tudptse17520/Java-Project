@@ -39,7 +39,7 @@ export function PricingPolicyTable({
         ),
       },
       {
-        accessorKey: "vehicle_type_name",
+        accessorKey: "vehicleTypeName",
         header: "Loại phương tiện",
         cell: ({ row }) => (
           <div className="flex items-center gap-2">
@@ -50,7 +50,7 @@ export function PricingPolicyTable({
         ),
       },
       {
-        accessorKey: "base_price",
+        accessorKey: "basePrice",
         header: "Giá cơ bản",
         cell: ({ row }) => (
           <span className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-emerald-500 to-teal-600 drop-shadow-sm">
@@ -59,7 +59,7 @@ export function PricingPolicyTable({
         ),
       },
       {
-        accessorKey: "extra_fee_per_hour",
+        accessorKey: "extraFeePerHour",
         header: "Phụ thu / giờ",
         cell: ({ row }) => (
           <span className="font-medium text-amber-600/90 bg-amber-50 px-2 py-1 rounded-md border border-amber-100/50">
@@ -68,7 +68,7 @@ export function PricingPolicyTable({
         ),
       },
       {
-        accessorKey: "effective_date",
+        accessorKey: "effectiveDate",
         header: "Ngày hiệu lực",
         cell: ({ row }) => (
           <span className="text-sm font-medium text-slate-600 flex items-center gap-1.5">

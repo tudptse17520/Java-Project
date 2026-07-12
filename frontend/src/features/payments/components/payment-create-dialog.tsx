@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 // ---------------------------------------------
 // Payment Create Dialog
 // Form tạo thanh toán mới
@@ -40,10 +43,10 @@ export function PaymentCreateDialog({
   } = useForm<CreatePaymentFormValues>({
     resolver: zodResolver(createPaymentSchema),
     defaultValues: {
-      parking_session_id: null,
-      booking_id: null,
-      payment_method: "",
-      fee_type: "",
+      parkingSessionId: null,
+      bookingId: null,
+      paymentMethod: "",
+      feeType: "",
     } as any,
   });
 
@@ -79,17 +82,17 @@ export function PaymentCreateDialog({
           {/* Mã lượt gửi xe */}
           <div className="flex flex-col gap-2">
             <label className="text-sm font-medium">
-              Mã lượt gửi xe (parking_session_id)
+              Mã lượt gửi xe (parkingSessionId)
             </label>
             <input
               type="number"
               placeholder="Nhập mã lượt gửi xe..."
               className="h-9 rounded-md border border-input bg-background px-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
-              {...register("parking_session_id", { valueAsNumber: true })}
+              {...register("parkingSessionId", { valueAsNumber: true })}
             />
-            {errors.parking_session_id && (
+            {errors.parkingSessionId && (
               <p className="text-xs text-destructive">
-                {errors.parking_session_id.message}
+                {errors.parkingSessionId.message}
               </p>
             )}
           </div>
@@ -97,17 +100,17 @@ export function PaymentCreateDialog({
           {/* Mã đặt chỗ */}
           <div className="flex flex-col gap-2">
             <label className="text-sm font-medium">
-              Mã đặt chỗ (booking_id)
+              Mã đặt chỗ (bookingId)
             </label>
             <input
               type="number"
               placeholder="Nhập mã đặt chỗ..."
               className="h-9 rounded-md border border-input bg-background px-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
-              {...register("booking_id", { valueAsNumber: true })}
+              {...register("bookingId", { valueAsNumber: true })}
             />
-            {errors.booking_id && (
+            {errors.bookingId && (
               <p className="text-xs text-destructive">
-                {errors.booking_id.message}
+                {errors.bookingId.message}
               </p>
             )}
           </div>
@@ -137,7 +140,7 @@ export function PaymentCreateDialog({
             </label>
             <select
               className="h-9 rounded-md border border-input bg-background px-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
-              {...register("payment_method")}
+              {...register("paymentMethod")}
             >
               <option value="">-- Chọn phương thức --</option>
               {PAYMENT_METHODS.map((method) => (
@@ -146,9 +149,9 @@ export function PaymentCreateDialog({
                 </option>
               ))}
             </select>
-            {errors.payment_method && (
+            {errors.paymentMethod && (
               <p className="text-xs text-destructive">
-                {errors.payment_method.message}
+                {errors.paymentMethod.message}
               </p>
             )}
           </div>
@@ -160,7 +163,7 @@ export function PaymentCreateDialog({
             </label>
             <select
               className="h-9 rounded-md border border-input bg-background px-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
-              {...register("fee_type")}
+              {...register("feeType")}
             >
               <option value="">-- Chọn loại phí --</option>
               {FEE_TYPES.map((type) => (
@@ -169,9 +172,9 @@ export function PaymentCreateDialog({
                 </option>
               ))}
             </select>
-            {errors.fee_type && (
+            {errors.feeType && (
               <p className="text-xs text-destructive">
-                {errors.fee_type.message}
+                {errors.feeType.message}
               </p>
             )}
           </div>

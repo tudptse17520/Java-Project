@@ -70,10 +70,10 @@ export function PricingPolicyFormDialog({
   } = useForm<PricingPolicyFormValues>({
     resolver: zodResolver(pricingPolicySchema),
     defaultValues: {
-      vehicle_type_id: 0,
-      base_price: 0,
-      extra_fee_per_hour: 0,
-      effective_date: "",
+      vehicleTypeId: 0,
+      basePrice: 0,
+      extraFeePerHour: 0,
+      effectiveDate: "",
     },
   });
 
@@ -82,17 +82,17 @@ export function PricingPolicyFormDialog({
     if (open) {
       if (defaultValues) {
         reset({
-          vehicle_type_id: defaultValues.vehicle_type_id,
-          base_price: defaultValues.base_price,
-          extra_fee_per_hour: defaultValues.extra_fee_per_hour,
-          effective_date: defaultValues.effective_date,
+          vehicleTypeId: defaultValues.vehicle_type_id,
+          basePrice: defaultValues.base_price,
+          extraFeePerHour: defaultValues.extra_fee_per_hour,
+          effectiveDate: defaultValues.effective_date,
         });
       } else {
         reset({
-          vehicle_type_id: 0,
-          base_price: 0,
-          extra_fee_per_hour: 0,
-          effective_date: "",
+          vehicleTypeId: 0,
+          basePrice: 0,
+          extraFeePerHour: 0,
+          effectiveDate: "",
         });
       }
     }
@@ -130,17 +130,17 @@ export function PricingPolicyFormDialog({
               {/* Loại phương tiện */}
               <div className="space-y-1.5">
                 <label
-                  htmlFor="vehicle_type_id"
+                  htmlFor="vehicleTypeId"
                   className="block text-sm font-semibold text-slate-700"
                 >
                   Loại phương tiện <span className="text-destructive">*</span>
                 </label>
                 <div className="relative">
                   <select
-                    id="vehicle_type_id"
+                    id="vehicleTypeId"
                     className="appearance-none mt-1 w-full rounded-xl border border-slate-200 bg-white/50 px-4 py-2.5 text-sm font-medium focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all shadow-sm hover:bg-slate-50 disabled:opacity-50"
                     disabled={isLoadingVehicleTypes}
-                    {...register("vehicle_type_id", { valueAsNumber: true })}
+                    {...register("vehicleTypeId", { valueAsNumber: true })}
                   >
                     <option value={0}>
                       {isLoadingVehicleTypes
@@ -149,7 +149,7 @@ export function PricingPolicyFormDialog({
                     </option>
                     {vehicleTypes.map((vt) => (
                       <option key={vt.id} value={vt.id}>
-                        {vt.type_name}
+                        {vt.typeName}
                       </option>
                     ))}
                   </select>
@@ -157,9 +157,9 @@ export function PricingPolicyFormDialog({
                     <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
                   </div>
                 </div>
-                {errors.vehicle_type_id && (
+                {errors.vehicleTypeId && (
                   <p className="text-xs font-medium text-destructive animate-in slide-in-from-top-1">
-                    {errors.vehicle_type_id.message}
+                    {errors.vehicleTypeId.message}
                   </p>
                 )}
               </div>
@@ -167,24 +167,24 @@ export function PricingPolicyFormDialog({
               <div className="grid grid-cols-2 gap-4">
                 {/* Giá cơ bản */}
                 <div className="space-y-1.5">
-                  <label htmlFor="base_price" className="block text-sm font-semibold text-slate-700">
+                  <label htmlFor="basePrice" className="block text-sm font-semibold text-slate-700">
                     Giá cơ bản <span className="text-destructive">*</span>
                   </label>
                   <div className="relative">
                     <input
-                      id="base_price"
+                      id="basePrice"
                       type="number"
                       min={0}
                       step={1000}
                       className="mt-1 w-full rounded-xl border border-slate-200 bg-white/50 px-4 py-2.5 pl-10 text-sm font-semibold focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all shadow-sm placeholder:font-normal"
                       placeholder="Ví dụ: 15000"
-                      {...register("base_price", { valueAsNumber: true })}
+                      {...register("basePrice", { valueAsNumber: true })}
                     />
                     <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-medium">₫</span>
                   </div>
-                  {errors.base_price && (
+                  {errors.basePrice && (
                     <p className="text-xs font-medium text-destructive animate-in slide-in-from-top-1">
-                      {errors.base_price.message}
+                      {errors.basePrice.message}
                     </p>
                   )}
                 </div>
@@ -192,26 +192,26 @@ export function PricingPolicyFormDialog({
                 {/* Phụ thu mỗi giờ */}
                 <div className="space-y-1.5">
                   <label
-                    htmlFor="extra_fee_per_hour"
+                    htmlFor="extraFeePerHour"
                     className="block text-sm font-semibold text-slate-700"
                   >
                     Phụ thu / giờ <span className="text-destructive">*</span>
                   </label>
                   <div className="relative">
                     <input
-                      id="extra_fee_per_hour"
+                      id="extraFeePerHour"
                       type="number"
                       min={0}
                       step={1000}
                       className="mt-1 w-full rounded-xl border border-slate-200 bg-white/50 px-4 py-2.5 pl-10 text-sm font-semibold focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all shadow-sm placeholder:font-normal"
                       placeholder="Ví dụ: 5000"
-                      {...register("extra_fee_per_hour", { valueAsNumber: true })}
+                      {...register("extraFeePerHour", { valueAsNumber: true })}
                     />
                     <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-medium">₫</span>
                   </div>
-                  {errors.extra_fee_per_hour && (
+                  {errors.extraFeePerHour && (
                     <p className="text-xs font-medium text-destructive animate-in slide-in-from-top-1">
-                      {errors.extra_fee_per_hour.message}
+                      {errors.extraFeePerHour.message}
                     </p>
                   )}
                 </div>
@@ -220,14 +220,14 @@ export function PricingPolicyFormDialog({
               {/* Ngày hiệu lực */}
               <div className="space-y-1.5">
                 <label
-                  htmlFor="effective_date"
+                  htmlFor="effectiveDate"
                   className="block text-sm font-semibold text-slate-700"
                 >
                   Ngày hiệu lực <span className="text-destructive">*</span>
                 </label>
                 <div className="relative">
                   <input
-                    id="effective_date"
+                    id="effectiveDate"
                     type="date"
                     className="mt-1 w-full rounded-xl border border-slate-200 bg-white/50 px-4 py-2.5 text-sm font-medium focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all shadow-sm hover:bg-slate-50 cursor-pointer"
                     defaultValue={
@@ -237,15 +237,15 @@ export function PricingPolicyFormDialog({
                     }
                     onChange={(e) => {
                       const val = e.target.value;
-                      setValue("effective_date", val ? toApiDate(val) : "", {
+                      setValue("effectiveDate", val ? toApiDate(val) : "", {
                         shouldValidate: true,
                       });
                     }}
                   />
                 </div>
-                {errors.effective_date && (
+                {errors.effectiveDate && (
                   <p className="text-xs font-medium text-destructive animate-in slide-in-from-top-1">
-                    {errors.effective_date.message}
+                    {errors.effectiveDate.message}
                   </p>
                 )}
               </div>

@@ -30,19 +30,19 @@ const variantConfig: Record<
   }
 > = {
   success: {
-    colorClass: "bg-success/10 text-success border-success/20 dark:bg-success/20",
+    colorClass: "bg-emerald-500/10 text-emerald-600 border-emerald-500/20 dark:text-emerald-400 dark:bg-emerald-500/15",
     icon: CheckCircle2,
   },
   warning: {
-    colorClass: "bg-warning/10 text-warning border-warning/20 dark:bg-warning/20",
+    colorClass: "bg-amber-500/10 text-amber-600 border-amber-500/20 dark:text-amber-400 dark:bg-amber-500/15",
     icon: Clock,
   },
   danger: {
-    colorClass: "bg-danger/10 text-danger border-danger/20 dark:bg-danger/20",
+    colorClass: "bg-rose-500/10 text-rose-600 border-rose-500/20 dark:text-rose-400 dark:bg-rose-500/15",
     icon: AlertTriangle,
   },
   info: {
-    colorClass: "bg-blue-500/10 text-blue-600 border-blue-500/20 dark:text-blue-400 dark:bg-blue-500/20",
+    colorClass: "bg-blue-500/10 text-blue-600 border-blue-500/20 dark:text-blue-400 dark:bg-blue-500/15",
     icon: Info,
   },
 };
@@ -59,14 +59,13 @@ export function StatusBadge({
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold border transition-colors shrink-0",
+        "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border transition-colors shrink-0",
         config.colorClass,
         className
       )}
     >
-      <Icon className="h-3.5 w-3.5" />
+      <Icon className="h-3 w-3" />
       <span>{children}</span>
     </span>
   );
 }
-

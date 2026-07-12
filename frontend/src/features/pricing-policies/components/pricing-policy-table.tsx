@@ -44,7 +44,7 @@ export function PricingPolicyTable({
         cell: ({ row }) => (
           <div className="flex items-center gap-2">
             <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary border border-primary/20 shadow-sm transition-all hover:bg-primary/20">
-              {row.original.vehicle_type_name || `ID: ${row.original.vehicle_type_id}`}
+              {row.original.vehicleTypeName || `ID: ${row.original.vehicleTypeId}`}
             </span>
           </div>
         ),
@@ -54,7 +54,7 @@ export function PricingPolicyTable({
         header: "Giá cơ bản",
         cell: ({ row }) => (
           <span className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-emerald-500 to-teal-600 drop-shadow-sm">
-            {formatCurrency(row.original.base_price)}
+            {formatCurrency(row.original.basePrice)}
           </span>
         ),
       },
@@ -63,7 +63,7 @@ export function PricingPolicyTable({
         header: "Phụ thu / giờ",
         cell: ({ row }) => (
           <span className="font-medium text-amber-600/90 bg-amber-50 px-2 py-1 rounded-md border border-amber-100/50">
-            {formatCurrency(row.original.extra_fee_per_hour)}
+            {formatCurrency(row.original.extraFeePerHour)}
           </span>
         ),
       },
@@ -73,7 +73,7 @@ export function PricingPolicyTable({
         cell: ({ row }) => (
           <span className="text-sm font-medium text-slate-600 flex items-center gap-1.5">
             <div className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse"></div>
-            {row.original.effective_date.replace(/-/g, "/")}
+            {row.original.effectiveDate ? row.original.effectiveDate.replace(/-/g, "/") : "Chưa xác định"}
           </span>
         ),
       },

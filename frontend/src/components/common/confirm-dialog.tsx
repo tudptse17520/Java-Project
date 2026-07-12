@@ -35,30 +35,30 @@ export function ConfirmDialog({
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-black/50"
+        className="fixed inset-0 bg-black/40 backdrop-blur-sm animate-backdrop"
         onClick={onClose}
         aria-hidden="true"
       />
 
       {/* Dialog */}
-      <div className="relative z-50 w-full max-w-md rounded-lg border bg-background p-6 shadow-lg">
+      <div className="relative z-50 w-full max-w-md rounded-xl border border-border/60 bg-background p-6 shadow-xl animate-scale-in">
         <div className="flex items-start gap-4">
           <div
             className={cn(
-              "flex h-10 w-10 shrink-0 items-center justify-center rounded-full",
-              variant === "danger" && "bg-destructive/10 text-destructive",
-              variant === "warning" && "bg-yellow-100 text-yellow-600",
+              "flex h-11 w-11 shrink-0 items-center justify-center rounded-full",
+              variant === "danger" && "bg-rose-500/10 text-rose-600 dark:text-rose-400",
+              variant === "warning" && "bg-amber-500/10 text-amber-600 dark:text-amber-400",
               variant === "default" && "bg-primary/10 text-primary"
             )}
           >
             <AlertTriangle className="h-5 w-5" />
           </div>
-          <div className="flex-1">
-            <h3 className="text-lg font-semibold">{title}</h3>
-            <p className="mt-1 text-sm text-muted-foreground">
+          <div className="flex-1 pt-0.5">
+            <h3 className="text-base font-semibold">{title}</h3>
+            <p className="mt-1.5 text-sm text-muted-foreground leading-relaxed">
               {description}
             </p>
           </div>

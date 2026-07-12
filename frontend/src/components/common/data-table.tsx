@@ -18,7 +18,7 @@ import {
 } from "@tanstack/react-table";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
-import { ArrowUpDown } from "lucide-react";
+import { ArrowUpDown, ChevronLeft, ChevronRight } from "lucide-react";
 import { EmptyState } from "@/components/common/empty-state";
 import { LoadingSpinner } from "@/components/common/loading-spinner";
 
@@ -73,25 +73,25 @@ export function DataTable<TData, TValue>({
   return (
     <div className={cn("space-y-4", className)}>
       {/* Table */}
-      <div className="rounded-md border">
+      <div className="rounded-xl border border-border/60 bg-card shadow-sm overflow-hidden">
         <table className="w-full">
           <thead>
             {table.getHeaderGroups().map((headerGroup) => (
               <tr
                 key={headerGroup.id}
-                className="border-b bg-muted/50"
+                className="border-b border-border/60 bg-muted/40"
               >
                 {headerGroup.headers.map((header) => (
                   <th
                     key={header.id}
-                    className="px-4 py-3 text-left text-sm font-medium text-muted-foreground"
+                    className="px-4 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground"
                   >
                     {header.isPlaceholder ? null : (
                       <div
                         className={cn(
-                          "flex items-center gap-1",
+                          "flex items-center gap-1.5",
                           header.column.getCanSort() &&
-                            "cursor-pointer select-none hover:text-foreground"
+                            "cursor-pointer select-none hover:text-foreground transition-colors"
                         )}
                         onClick={header.column.getToggleSortingHandler()}
                       >
@@ -100,7 +100,10 @@ export function DataTable<TData, TValue>({
                           header.getContext()
                         )}
                         {header.column.getCanSort() && (
-                          <ArrowUpDown className="h-3 w-3" />
+                          <ArrowUpDown className={cn(
+                            "h-3 w-3 transition-transform duration-200",
+                            header.column.getIsSorted() === "asc" && "rotate-180",
+                          )} />
                         )}
                       </div>
                     )}
@@ -111,10 +114,13 @@ export function DataTable<TData, TValue>({
           </thead>
           <tbody>
             {table.getRowModel().rows.length ? (
-              table.getRowModel().rows.map((row) => (
+              table.getRowModel().rows.map((row, index) => (
                 <tr
                   key={row.id}
-                  className="border-b transition-colors hover:bg-muted/50"
+                  className={cn(
+                    "border-b border-border/40 last:border-0 transition-colors duration-150 hover:bg-muted/30",
+                    index % 2 === 0 ? "bg-transparent" : "bg-muted/10"
+                  )}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <td key={cell.id} className="px-4 py-3 text-sm">
@@ -140,28 +146,28 @@ export function DataTable<TData, TValue>({
         </table>
       </div>
 
-      {/* Pagination Info */}
-      <div className="flex items-center justify-between text-sm text-muted-foreground border-t pt-4 px-1">
-        <span>
-          Trang {table.getPageCount() > 0 ? table.getState().pagination.pageIndex + 1 : 0} /{" "}
-          {table.getPageCount()}
+      {/* Pagination */}
+      <div className="flex items-center justify-between text-sm text-muted-foreground px-1">
+        <span className="text-xs">
+          Trang {table.getPageCount() > 0 ? table.getState().pagination.pageIndex + 1 : 0}{" "}
+          / {table.getPageCount()}
         </span>
-        <div className="flex gap-2">
+        <div className="flex items-center gap-1.5">
           <button
             type="button"
-            className="rounded border px-3 py-1 hover:bg-muted disabled:opacity-50 transition-colors"
+            className="inline-flex items-center justify-center h-8 w-8 rounded-lg border border-border/60 bg-background hover:bg-muted disabled:opacity-40 transition-colors duration-200"
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage() || isLoading}
           >
-            Trước
+            <ChevronLeft className="h-4 w-4" />
           </button>
           <button
             type="button"
-            className="rounded border px-3 py-1 hover:bg-muted disabled:opacity-50 transition-colors"
+            className="inline-flex items-center justify-center h-8 w-8 rounded-lg border border-border/60 bg-background hover:bg-muted disabled:opacity-40 transition-colors duration-200"
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage() || isLoading}
           >
-            Sau
+            <ChevronRight className="h-4 w-4" />
           </button>
         </div>
       </div>

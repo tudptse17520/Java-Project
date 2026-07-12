@@ -1,7 +1,6 @@
 // ---------------------------------------------
 // Breadcrumbs
 // Dynamic breadcrumb navigation
-// Skeleton - sẽ triển khai chi tiết khi có business feature
 // ---------------------------------------------
 
 "use client";
@@ -36,6 +35,8 @@ const SEGMENT_LABELS: Record<string, string> = {
   vehicles: "Phương tiện",
   profile: "Hồ sơ",
   forbidden: "Truy cập bị từ chối",
+  bookings: "Đặt chỗ",
+  "vehicle-types": "Loại xe",
 };
 
 interface BreadcrumbsProps {
@@ -54,12 +55,12 @@ export function Breadcrumbs({ className }: BreadcrumbsProps) {
 
   return (
     <nav
-      className={cn("flex items-center gap-1 text-sm", className)}
+      className={cn("flex items-center gap-1.5 text-sm", className)}
       aria-label="Breadcrumb"
     >
       <Link
         href="/"
-        className="flex items-center text-muted-foreground hover:text-foreground"
+        className="flex items-center text-muted-foreground/60 hover:text-foreground transition-colors duration-200"
       >
         <Home className="h-3.5 w-3.5" />
       </Link>
@@ -70,14 +71,14 @@ export function Breadcrumbs({ className }: BreadcrumbsProps) {
         const label = SEGMENT_LABELS[segment] || segment;
 
         return (
-          <span key={href} className="flex items-center gap-1">
-            <ChevronRight className="h-3 w-3 text-muted-foreground" />
+          <span key={href} className="flex items-center gap-1.5">
+            <ChevronRight className="h-3 w-3 text-muted-foreground/30" />
             {isLast ? (
               <span className="font-medium text-foreground">{label}</span>
             ) : (
               <Link
                 href={href}
-                className="text-muted-foreground hover:text-foreground"
+                className="text-muted-foreground/60 hover:text-foreground hover:underline underline-offset-4 transition-colors duration-200"
               >
                 {label}
               </Link>

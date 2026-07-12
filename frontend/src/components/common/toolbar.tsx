@@ -15,7 +15,7 @@ export function Toolbar({ children, className }: ToolbarProps) {
   return (
     <div
       className={cn(
-        "flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border border-border bg-card p-4 rounded-lg w-full",
+        "flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between bg-muted/30 p-4 rounded-xl w-full",
         className
       )}
     >
@@ -23,4 +23,3 @@ export function Toolbar({ children, className }: ToolbarProps) {
     </div>
   );
 }
-

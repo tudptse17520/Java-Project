@@ -5,6 +5,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { X } from "lucide-react";
 import {
   userCreateSchema,
@@ -72,98 +74,94 @@ function CreateUserForm({
 
       <FormFields>
         {/* Username */}
-        <div className="space-y-1">
-          <label className="text-sm font-medium leading-none">
+        <div className="space-y-1.5">
+          <Label>
             Tên đăng nhập <span className="text-destructive">*</span>
-          </label>
-          <input
+          </Label>
+          <Input
             type="text"
             placeholder="Nhập tên đăng nhập (tối thiểu 4 ký tự)"
             className={cn(
-              "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
-              errors.username && "border-destructive focus-visible:ring-destructive"
+              errors.username && "border-destructive focus-visible:ring-destructive/30"
             )}
             {...register("username")}
           />
           {errors.username && (
-            <p className="text-sm text-destructive">
+            <p className="text-xs text-destructive">
               {errors.username.message}
             </p>
           )}
         </div>
 
         {/* Password */}
-        <div className="space-y-1">
-          <label className="text-sm font-medium leading-none">
+        <div className="space-y-1.5">
+          <Label>
             Mật khẩu <span className="text-destructive">*</span>
-          </label>
-          <input
+          </Label>
+          <Input
             type="password"
             placeholder="Nhập mật khẩu (tối thiểu 6 ký tự)"
             className={cn(
-              "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
-              errors.password && "border-destructive focus-visible:ring-destructive"
+              errors.password && "border-destructive focus-visible:ring-destructive/30"
             )}
             {...register("password")}
           />
           {errors.password && (
-            <p className="text-sm text-destructive">
+            <p className="text-xs text-destructive">
               {errors.password.message}
             </p>
           )}
         </div>
 
         {/* Full Name */}
-        <div className="space-y-1">
-          <label className="text-sm font-medium leading-none">
+        <div className="space-y-1.5">
+          <Label>
             Họ và tên <span className="text-destructive">*</span>
-          </label>
-          <input
+          </Label>
+          <Input
             type="text"
             placeholder="Nhập họ và tên"
             className={cn(
-              "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
-              errors.fullName && "border-destructive focus-visible:ring-destructive"
+              errors.fullName && "border-destructive focus-visible:ring-destructive/30"
             )}
             {...register("fullName")}
           />
           {errors.fullName && (
-            <p className="text-sm text-destructive">
+            <p className="text-xs text-destructive">
               {errors.fullName.message}
             </p>
           )}
         </div>
 
         {/* Phone Number */}
-        <div className="space-y-1">
-          <label className="text-sm font-medium leading-none">
+        <div className="space-y-1.5">
+          <Label>
             Số điện thoại <span className="text-destructive">*</span>
-          </label>
-          <input
+          </Label>
+          <Input
             type="tel"
             placeholder="Nhập số điện thoại (VD: 0912345678)"
             className={cn(
-              "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
-              errors.phoneNumber && "border-destructive focus-visible:ring-destructive"
+              errors.phoneNumber && "border-destructive focus-visible:ring-destructive/30"
             )}
             {...register("phoneNumber")}
           />
           {errors.phoneNumber && (
-            <p className="text-sm text-destructive">
+            <p className="text-xs text-destructive">
               {errors.phoneNumber.message}
             </p>
           )}
         </div>
 
         {/* Role */}
-        <div className="space-y-1">
-          <label className="text-sm font-medium leading-none">
+        <div className="space-y-1.5">
+          <Label>
             Vai trò <span className="text-destructive">*</span>
-          </label>
+          </Label>
           <select
             className={cn(
-              "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
-              errors.role && "border-destructive focus-visible:ring-destructive"
+              "flex h-11 w-full rounded-lg border border-input bg-background px-3.5 py-2 text-sm shadow-sm transition-colors duration-200 hover:border-ring/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30 focus-visible:border-ring disabled:cursor-not-allowed disabled:opacity-50",
+              errors.role && "border-destructive focus-visible:ring-destructive/30"
             )}
             {...register("role")}
           >
@@ -175,7 +173,7 @@ function CreateUserForm({
             ))}
           </select>
           {errors.role && (
-            <p className="text-sm text-destructive">
+            <p className="text-xs text-destructive">
               {errors.role.message}
             </p>
           )}
@@ -239,56 +237,54 @@ function EditUserForm({
 
       <FormFields>
         {/* Full Name */}
-        <div className="space-y-1">
-          <label className="text-sm font-medium leading-none">
+        <div className="space-y-1.5">
+          <Label>
             Họ và tên <span className="text-destructive">*</span>
-          </label>
-          <input
+          </Label>
+          <Input
             type="text"
             placeholder="Nhập họ và tên"
             className={cn(
-              "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
-              errors.fullName && "border-destructive focus-visible:ring-destructive"
+              errors.fullName && "border-destructive focus-visible:ring-destructive/30"
             )}
             {...register("fullName")}
           />
           {errors.fullName && (
-            <p className="text-sm text-destructive">
+            <p className="text-xs text-destructive">
               {errors.fullName.message}
             </p>
           )}
         </div>
 
         {/* Phone Number */}
-        <div className="space-y-1">
-          <label className="text-sm font-medium leading-none">
+        <div className="space-y-1.5">
+          <Label>
             Số điện thoại <span className="text-destructive">*</span>
-          </label>
-          <input
+          </Label>
+          <Input
             type="tel"
             placeholder="Nhập số điện thoại (VD: 0912345678)"
             className={cn(
-              "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
-              errors.phoneNumber && "border-destructive focus-visible:ring-destructive"
+              errors.phoneNumber && "border-destructive focus-visible:ring-destructive/30"
             )}
             {...register("phoneNumber")}
           />
           {errors.phoneNumber && (
-            <p className="text-sm text-destructive">
+            <p className="text-xs text-destructive">
               {errors.phoneNumber.message}
             </p>
           )}
         </div>
 
         {/* Role */}
-        <div className="space-y-1">
-          <label className="text-sm font-medium leading-none">
+        <div className="space-y-1.5">
+          <Label>
             Vai trò <span className="text-destructive">*</span>
-          </label>
+          </Label>
           <select
             className={cn(
-              "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
-              errors.role && "border-destructive focus-visible:ring-destructive"
+              "flex h-11 w-full rounded-lg border border-input bg-background px-3.5 py-2 text-sm shadow-sm transition-colors duration-200 hover:border-ring/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30 focus-visible:border-ring disabled:cursor-not-allowed disabled:opacity-50",
+              errors.role && "border-destructive focus-visible:ring-destructive/30"
             )}
             {...register("role")}
           >
@@ -300,7 +296,7 @@ function EditUserForm({
             ))}
           </select>
           {errors.role && (
-            <p className="text-sm text-destructive">
+            <p className="text-xs text-destructive">
               {errors.role.message}
             </p>
           )}
@@ -340,21 +336,21 @@ export function UserModal({
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-black/50"
+        className="fixed inset-0 bg-black/40 backdrop-blur-sm animate-backdrop"
         onClick={onClose}
         aria-hidden="true"
       />
 
       {/* Modal Dialog Content */}
-      <div className="relative z-50 w-full max-w-lg rounded-lg border bg-background p-6 shadow-lg">
+      <div className="relative z-50 w-full max-w-lg rounded-xl border border-border/60 bg-background p-6 shadow-xl animate-scale-in">
         {/* Close Button */}
         <button
           type="button"
           onClick={onClose}
-          className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+          className="absolute right-4 top-4 rounded-lg p-1 text-muted-foreground/60 hover:text-foreground hover:bg-muted transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-ring/30"
         >
           <X className="h-4 w-4" />
           <span className="sr-only">Close</span>

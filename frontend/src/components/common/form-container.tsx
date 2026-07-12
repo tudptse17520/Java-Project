@@ -22,8 +22,8 @@ interface FormHeaderProps {
 export function FormHeader({ title, description, className }: FormHeaderProps) {
   return (
     <div className={cn("mb-6", className)}>
-      <h2 className="text-lg font-semibold">{title}</h2>
-      {description && <p className="mt-1 text-sm text-muted-foreground">{description}</p>}
+      <h2 className="text-lg font-semibold tracking-tight">{title}</h2>
+      {description && <p className="mt-1.5 text-sm text-muted-foreground leading-relaxed">{description}</p>}
     </div>
   );
 }
@@ -35,7 +35,7 @@ interface FormFieldsProps {
 
 export function FormFields({ children, className }: FormFieldsProps) {
   return (
-    <div className={cn("space-y-4", className)}>
+    <div className={cn("space-y-5", className)}>
       {children}
     </div>
   );
@@ -48,7 +48,7 @@ interface FormActionsProps {
 
 export function FormActions({ children, className }: FormActionsProps) {
   return (
-    <div className={cn("mt-6 flex justify-end gap-3", className)}>
+    <div className={cn("mt-8 flex justify-end gap-3", className)}>
       {children}
     </div>
   );

@@ -82,10 +82,10 @@ export function PricingPolicyFormDialog({
     if (open) {
       if (defaultValues) {
         reset({
-          vehicleTypeId: defaultValues.vehicle_type_id,
-          basePrice: defaultValues.base_price,
-          extraFeePerHour: defaultValues.extra_fee_per_hour,
-          effectiveDate: defaultValues.effective_date,
+          vehicleTypeId: defaultValues.vehicleTypeId,
+          basePrice: defaultValues.basePrice,
+          extraFeePerHour: defaultValues.extraFeePerHour,
+          effectiveDate: defaultValues.effectiveDate,
         });
       } else {
         reset({
@@ -231,8 +231,8 @@ export function PricingPolicyFormDialog({
                     type="date"
                     className="mt-1 w-full rounded-xl border border-slate-200 bg-white/50 px-4 py-2.5 text-sm font-medium focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all shadow-sm hover:bg-slate-50 cursor-pointer"
                     defaultValue={
-                      defaultValues?.effective_date
-                        ? toInputDate(defaultValues.effective_date)
+                      defaultValues?.effectiveDate
+                        ? toInputDate(defaultValues.effectiveDate)
                         : ""
                     }
                     onChange={(e) => {

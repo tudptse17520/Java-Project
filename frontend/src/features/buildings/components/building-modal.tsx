@@ -6,8 +6,11 @@
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { cn } from '@/lib/utils';
 import { FormContainer, FormHeader, FormFields, FormActions } from '@/components/common/form-container';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { BuildingStatus } from '@/constants/building-status';
 import { buildingCreateSchema, buildingUpdateSchema, type BuildingCreateForm, type BuildingUpdateForm } from '../schemas/building-form.schema';
 import type { BuildingResponse } from '@/types/building.type';
@@ -77,19 +80,19 @@ export function BuildingModal({ open, onClose, building }: BuildingModalProps) {
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       {/* Backdrop */}
       <div 
-        className="fixed inset-0 bg-black/50 transition-opacity" 
+        className="fixed inset-0 bg-black/40 backdrop-blur-sm animate-backdrop" 
         onClick={onClose} 
         aria-hidden="true" 
       />
 
       {/* Modal Content */}
-      <div className="relative z-50 w-full max-w-md rounded-lg bg-background p-6 shadow-lg">
+      <div className="relative z-50 w-full max-w-md rounded-xl border border-border/60 bg-background p-6 shadow-xl animate-scale-in">
         <button
           onClick={onClose}
-          className="absolute right-4 top-4 text-muted-foreground hover:text-foreground"
+          className="absolute right-4 top-4 rounded-lg p-1 text-muted-foreground/60 hover:text-foreground hover:bg-muted transition-colors duration-200"
           type="button"
         >
-          <X className="h-5 w-5" />
+          <X className="h-4 w-4" />
           <span className="sr-only">Đóng</span>
         </button>
 
@@ -100,63 +103,63 @@ export function BuildingModal({ open, onClose, building }: BuildingModalProps) {
           />
 
           <FormFields>
-            <div className="space-y-2">
-              <label htmlFor="buildingName" className="text-sm font-medium">
-                Tên Tòa Nhà <span className="text-red-500">*</span>
-              </label>
-              <input
+            <div className="space-y-1.5">
+              <Label htmlFor="buildingName">
+                Tên Tòa Nhà <span className="text-destructive">*</span>
+              </Label>
+              <Input
                 id="buildingName"
                 {...form.register('buildingName')}
-                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                className={cn(form.formState.errors.buildingName && 'border-destructive focus-visible:ring-destructive/30')}
                 placeholder="Nhập tên tòa nhà"
                 disabled={isPending}
               />
               {form.formState.errors.buildingName && (
-                <p className="text-xs text-red-500">{form.formState.errors.buildingName.message}</p>
+                <p className="text-xs text-destructive">{form.formState.errors.buildingName.message}</p>
               )}
             </div>
 
-            <div className="space-y-2">
-              <label htmlFor="numberOfFloors" className="text-sm font-medium">
-                Số Tầng <span className="text-red-500">*</span>
-              </label>
-              <input
+            <div className="space-y-1.5">
+              <Label htmlFor="numberOfFloors">
+                Số Tầng <span className="text-destructive">*</span>
+              </Label>
+              <Input
                 id="numberOfFloors"
                 type="number"
                 {...form.register('numberOfFloors', { valueAsNumber: true })}
-                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                className={cn(form.formState.errors.numberOfFloors && 'border-destructive focus-visible:ring-destructive/30')}
                 placeholder="Nhập số tầng"
                 disabled={isPending}
               />
               {form.formState.errors.numberOfFloors && (
-                <p className="text-xs text-red-500">{form.formState.errors.numberOfFloors.message}</p>
+                <p className="text-xs text-destructive">{form.formState.errors.numberOfFloors.message}</p>
               )}
             </div>
 
-            <div className="space-y-2">
-              <label htmlFor="address" className="text-sm font-medium">
-                Địa Chỉ <span className="text-red-500">*</span>
-              </label>
-              <input
+            <div className="space-y-1.5">
+              <Label htmlFor="address">
+                Địa Chỉ <span className="text-destructive">*</span>
+              </Label>
+              <Input
                 id="address"
                 {...form.register('address')}
-                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                className={cn(form.formState.errors.address && 'border-destructive focus-visible:ring-destructive/30')}
                 placeholder="Nhập địa chỉ"
                 disabled={isPending}
               />
               {form.formState.errors.address && (
-                <p className="text-xs text-red-500">{form.formState.errors.address.message}</p>
+                <p className="text-xs text-destructive">{form.formState.errors.address.message}</p>
               )}
             </div>
 
-            <div className="space-y-2">
-              <label htmlFor="status" className="text-sm font-medium">
-                Trạng Thái <span className="text-red-500">*</span>
-              </label>
+            <div className="space-y-1.5">
+              <Label htmlFor="status">
+                Trạng Thái <span className="text-destructive">*</span>
+              </Label>
               <select
                 id="status"
                 {...form.register('status')}
-                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                className="flex h-11 w-full rounded-lg border border-input bg-background px-3.5 py-2 text-sm shadow-sm transition-colors duration-200 hover:border-ring/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30 focus-visible:border-ring disabled:cursor-not-allowed disabled:opacity-50"
                 disabled={isPending}
               >
                 <option value="ACTIVE">Đang hoạt động</option>
@@ -164,7 +167,7 @@ export function BuildingModal({ open, onClose, building }: BuildingModalProps) {
                 <option value="INACTIVE">Ngừng hoạt động</option>
               </select>
               {form.formState.errors.status && (
-                <p className="text-xs text-red-500">{form.formState.errors.status.message}</p>
+                <p className="text-xs text-destructive">{form.formState.errors.status.message}</p>
               )}
             </div>
           </FormFields>

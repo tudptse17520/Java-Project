@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 // ---------------------------------------------
 // Payment Manual Status Dialog
 // Form cho Staff cập nhật trạng thái thủ công

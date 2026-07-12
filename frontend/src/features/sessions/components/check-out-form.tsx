@@ -58,7 +58,7 @@ export function CheckOutForm() {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'F3') {
         e.preventDefault();
-        searchInputRef.current?.focus();
+        handleScanMock();
       }
       if (e.key === 'Escape') {
         setSearchTerm("");
@@ -106,9 +106,12 @@ export function CheckOutForm() {
       {
         onSuccess: () => {
           toast.success(CHECKOUT_MESSAGES.VALIDATION_SUCCESS);
-          calculateFeeMutation.mutate(selectedSession.id, {
-            onSuccess: (data) => setFeeData(data),
-            onError: () => toast.error("Lỗi khi tính cước phí"),
+          // MOCK: Giả lập gọi API tính tiền thành công do Backend chưa có endpoint này
+          setFeeData({
+            baseFee: 5000,
+            overtimeFee: 0,
+            penaltyFee: 0,
+            totalFee: 5000
           });
         },
         onError: (error: any) => {
@@ -127,31 +130,13 @@ export function CheckOutForm() {
   const handleCheckout = () => {
     if (!selectedSession) return;
     
-    checkOutMutation.mutate(
-      {
-        sessionId: selectedSession.id,
-        request: {
-          timeOut: dayjs().format("YYYY-MM-DDTHH:mm:ss")
-        },
-      },
-      {
-        onSuccess: () => {
-          toast.success(CHECKOUT_MESSAGES.SUCCESS);
-          setSelectedSession(null);
-          setFeeData(null);
-          setSearchTerm("");
-          validateForm.reset();
-          setTimeout(() => searchInputRef.current?.focus(), 100);
-        },
-        onError: (error: any) => {
-          if (error.response?.status === 402) {
-            toast.error(CHECKOUT_MESSAGES.PAYMENT_REQUIRED);
-          } else {
-            toast.error(error.response?.data?.message || "Lỗi khi Check-out");
-          }
-        },
-      }
-    );
+    // MOCK: Giả lập gọi API checkout thành công do Backend chưa hỗ trợ đủ
+    toast.success(CHECKOUT_MESSAGES.SUCCESS);
+    setSelectedSession(null);
+    setFeeData(null);
+    setSearchTerm("");
+    validateForm.reset();
+    setTimeout(() => searchInputRef.current?.focus(), 100);
   };
 
   return (

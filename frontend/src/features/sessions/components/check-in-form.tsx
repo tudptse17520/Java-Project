@@ -49,7 +49,7 @@ export const CheckInForm = ({ onSuccess, onCancel }: CheckInFormProps) => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'F2') {
         e.preventDefault();
-        inputRef.current?.focus();
+        handleScanMock();
       }
       if (e.key === 'Escape') {
         reset();
@@ -150,12 +150,6 @@ export const CheckInForm = ({ onSuccess, onCancel }: CheckInFormProps) => {
                 // @ts-ignore
                 inputRef.current = e;
               }}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  e.preventDefault();
-                  handleSubmit(onSubmit)();
-                }
-              }}
             />
             {errors.plate && (
               <p className="text-sm text-destructive mt-2 flex items-center gap-1">
@@ -168,22 +162,21 @@ export const CheckInForm = ({ onSuccess, onCancel }: CheckInFormProps) => {
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium mb-1 text-muted-foreground">Mã thẻ thành viên</label>
-              <Input type="number" {...register('vehicleId', { valueAsNumber: true })} placeholder="Tùy chọn" className="h-12 text-lg" />
+              <Input type="number" {...register('vehicleId', { setValueAs: v => v === "" ? undefined : parseInt(v, 10) })} placeholder="Tùy chọn" className="h-12 text-lg" />
             </div>
 
             <div>
               <label className="block text-sm font-medium mb-1 text-muted-foreground">Vị trí đỗ (Slot)</label>
-              <Input type="number" {...register('parkingSlotId', { valueAsNumber: true })} placeholder="Tùy chọn" className="h-12 text-lg" />
+              <Input type="number" {...register('parkingSlotId', { setValueAs: v => v === "" ? undefined : parseInt(v, 10) })} placeholder="Tùy chọn" className="h-12 text-lg" />
             </div>
           </div>
         </div>
 
         <div className="pt-4 border-t">
           <Button 
-            type="button" 
+            type="submit" 
             className="w-full h-16 text-xl font-bold bg-emerald-600 hover:bg-emerald-700" 
             disabled={checkInMutation.isPending}
-            onClick={handleSubmit(onSubmit)}
           >
             {checkInMutation.isPending ? 'ĐANG XỬ LÝ...' : 'CHECK-IN XE VÀO (ENTER)'}
           </Button>

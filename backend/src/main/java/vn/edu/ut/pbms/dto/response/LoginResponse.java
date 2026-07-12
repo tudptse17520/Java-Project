@@ -1,5 +1,7 @@
 package vn.edu.ut.pbms.dto.response;
 
+import vn.edu.ut.pbms.constant.Role;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,5 +21,5 @@ public class LoginResponse {
 
     private String message;
 
-    private String role;
+    private Role role;
 }

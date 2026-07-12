@@ -4,7 +4,9 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import vn.edu.ut.pbms.dto.request.CheckinRequest;
 import vn.edu.ut.pbms.dto.response.CheckinResponse;
@@ -19,6 +21,7 @@ import vn.edu.ut.pbms.service.ParkingSessionService;
 @RequestMapping("/api/v1/sessions")
 @RequiredArgsConstructor
 @CrossOrigin
+@PreAuthorize("hasAnyRole('STAFF', 'MANAGER', 'ADMIN')")
 @Tag(name = "Parking Session", description = "Các API quản lý lượt gửi xe")
 public class ParkingSessionController {
 
@@ -34,10 +37,11 @@ public class ParkingSessionController {
      * @return HTTP 200 với total_items và mảng data chi tiết [cite: 144]
      */
     @GetMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'STAFF')")
     public ResponseEntity<ParkingSessionListResponseDTO> getParkingSessions(
             @RequestParam(required = false) String plate,
             @RequestParam(required = false) String status,
-            @RequestParam(name = "from_date", required = false) String fromDate) {
+            @RequestParam(name = "fromDate", required = false) String fromDate) {
 
         ParkingSessionListResponseDTO response = parkingSessionService.getParkingSessions(plate, status, fromDate);
         return ResponseEntity.ok(response);

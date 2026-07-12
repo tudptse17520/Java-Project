@@ -70,7 +70,7 @@ public class PaymentServiceImpl implements PaymentService {
         validateMutualExclusivity(requestDTO);
 
         // 2. Validate fee_type enum
-        FeeType feeType = parseFeeType(requestDTO.getFeeType());
+        FeeType feeType = requestDTO.getFeeType();
 
         // 3. Validate cross-mapping: fee_type MUST match the provided ID type
         if (requestDTO.getBookingId() != null && feeType != FeeType.BOOKING_DEPOSIT) {
@@ -83,7 +83,7 @@ public class PaymentServiceImpl implements PaymentService {
         }
 
         // 4. Validate payment_method enum
-        PaymentMethod paymentMethod = parsePaymentMethod(requestDTO.getPaymentMethod());
+        PaymentMethod paymentMethod = requestDTO.getPaymentMethod();
 
         // 4. E2 Check (Fixed Fee Mismatch) - Booking_Deposit hoặc Lost_Ticket_Fine
         if (feeType == FeeType.BOOKING_DEPOSIT || feeType == FeeType.LOST_TICKET_FINE) {
@@ -155,7 +155,7 @@ public class PaymentServiceImpl implements PaymentService {
         PaymentStatus parsedStatus = null;
         if (status != null && !status.isBlank()) {
             try {
-                parsedStatus = PaymentStatus.valueOf(status);
+                parsedStatus = PaymentStatus.valueOf(status.trim().toUpperCase());
             } catch (IllegalArgumentException e) {
                 throw new BusinessRuleViolationException(
                         "Trạng thái '" + status + "' không hợp lệ. Các giá trị hợp lệ: PENDING, SUCCESS, FAILED.");
@@ -246,7 +246,7 @@ public class PaymentServiceImpl implements PaymentService {
         // 4. Parse and validate new status (only SUCCESS or FAILED allowed)
         PaymentStatus newStatus;
         try {
-            newStatus = PaymentStatus.valueOf(requestDTO.getStatus());
+            newStatus = requestDTO.getStatus();
         } catch (IllegalArgumentException e) {
             throw new BusinessRuleViolationException(
                     "Trạng thái '" + requestDTO.getStatus() + "' không hợp lệ. Chỉ chấp nhận SUCCESS hoặc FAILED.");
@@ -556,11 +556,11 @@ public class PaymentServiceImpl implements PaymentService {
                 .bookingId(payment.getBooking() != null ? payment.getBooking().getId() : null)
                 .amount(payment.getAmount())
                 .paymentMethod(payment.getPaymentMethod())
-                .feeType(payment.getFeeType().name())
+                .feeType(payment.getFeeType())
                 .paymentTime(payment.getPaymentTime() != null
                         ? payment.getPaymentTime().format(RESPONSE_DATE_FORMAT)
                         : null)
-                .status(payment.getStatus().name())
+                .status(payment.getStatus())
                 .build();
     }
 }

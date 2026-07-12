@@ -10,7 +10,7 @@ export interface SessionResponse {
 }
 
 export interface SessionListResponse {
-  total_items: number;
+  totalItems: number;
   data: SessionResponse[];
   message: string;
 }

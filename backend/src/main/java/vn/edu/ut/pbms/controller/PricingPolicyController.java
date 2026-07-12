@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 import vn.edu.ut.pbms.constant.MessageConstants;
 import vn.edu.ut.pbms.dto.request.PricingPolicyRequestDTO;
 import vn.edu.ut.pbms.exception.BusinessRuleViolationException;
@@ -34,6 +35,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @RestController
 @RequestMapping("/api/v1/pricing-policies")
 @RequiredArgsConstructor
+@PreAuthorize("hasAnyRole('USER', 'STAFF', 'MANAGER', 'ADMIN')")
 @Tag(name = "Pricing Policy")
 public class PricingPolicyController {
 
@@ -77,6 +79,7 @@ public class PricingPolicyController {
      * @return HTTP 201 với { id, message }
      */
     @PostMapping
+    @PreAuthorize("hasAnyRole('MANAGER', 'ADMIN')")
     public ResponseEntity<Map<String, Object>> createPricingPolicy(
             @Valid @RequestBody PricingPolicyRequestDTO requestDTO) {
         Map<String, Object> response = pricingPolicyService.createPricingPolicy(requestDTO);
@@ -96,6 +99,7 @@ public class PricingPolicyController {
      * @return HTTP 200 với { id, message }
      */
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('MANAGER', 'ADMIN')")
     public ResponseEntity<Map<String, Object>> updatePricingPolicy(
             @PathVariable Long id,
             @Valid @RequestBody PricingPolicyRequestDTO requestDTO) {
@@ -119,6 +123,7 @@ public class PricingPolicyController {
      * @return HTTP 200 với { message } nếu thành công
      */
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('MANAGER', 'ADMIN')")
     public ResponseEntity<Map<String, Object>> deletePricingPolicy(@PathVariable Long id) {
         try {
             Map<String, Object> response = pricingPolicyService.deletePricingPolicy(id);

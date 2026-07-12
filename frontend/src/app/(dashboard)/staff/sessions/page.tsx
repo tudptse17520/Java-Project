@@ -9,10 +9,10 @@ import { EmptyState } from '@/components/common/empty-state';
 import { Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
-import { SessionFilter } from '@/features/parking-sessions/components/session-filter';
-import { SessionTable } from '@/features/parking-sessions/components/session-table';
-import { CheckInModal } from '@/features/parking-sessions/components/check-in-modal';
-import { useSessions } from '@/features/parking-sessions/hooks/use-sessions';
+import { SessionFilter } from '@/features/sessions/components/session-filter';
+import { SessionTable } from '@/features/sessions/components/session-table';
+import { CheckInModal } from '@/features/sessions/components/check-in-modal';
+import { useSessions } from '@/features/sessions/hooks/use-sessions';
 
 export default function SessionsPage() {
   const [keyword, setKeyword] = useState('');

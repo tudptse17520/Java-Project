@@ -62,6 +62,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/floors/**").hasAnyRole("ADMIN", "MANAGER")
                         // Quản lý ô đỗ
                         .requestMatchers("/api/v1/slots/**").hasAnyRole("ADMIN", "MANAGER")
+                        // Quản lý loại phương tiện
+                        .requestMatchers("/api/v1/vehicle-types/**").hasAnyRole("ADMIN", "MANAGER")
                         // Yêu cầu quyền ADMIN hoặc MANAGER cho các API Báo cáo & Thống kê
                         .requestMatchers("/api/v1/reports/**").hasAnyRole("ADMIN", "MANAGER")
                         // Đặt chỗ

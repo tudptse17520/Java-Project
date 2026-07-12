@@ -15,16 +15,16 @@ import type {
 const BASE_PATH = "/payments";
 
 /**
- * Lấy danh sách giao dịch (có thể lọc theo payment_method, status, from_date)
- * Backend trả về wrapper: { total_items, message, data: [...] }
+ * Lấy danh sách giao dịch (có thể lọc theo paymentMethod, status, fromDate)
+ * Backend trả về wrapper: { totalItems, message, data: [...] }
  */
 export const getPayments = async (
   filter?: PaymentFilter
 ): Promise<Payment[]> => {
   const params: Record<string, string> = {};
-  if (filter?.payment_method) params.payment_method = filter.payment_method;
+  if (filter?.paymentMethod) params.paymentMethod = filter.paymentMethod;
   if (filter?.status) params.status = filter.status;
-  if (filter?.from_date) params.from_date = filter.from_date;
+  if (filter?.fromDate) params.fromDate = filter.fromDate;
 
   const response = await axiosClient.get<PaymentListResponse>(BASE_PATH, {
     params,

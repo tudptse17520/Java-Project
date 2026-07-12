@@ -1,6 +1,5 @@
 package vn.edu.ut.pbms.dto.request;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,8 +14,6 @@ import vn.edu.ut.pbms.constant.BuildingStatus;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BuildingStatusRequestDTO {
-
-    @JsonProperty("status")
     @NotNull(message = "Trạng thái không được để trống.")
     private BuildingStatus status;
 }

@@ -86,7 +86,7 @@ public class BookingServiceImpl implements BookingService {
 
         return BookingResponseDTO.builder()
                 .id(savedBooking.getId())
-                .status(savedBooking.getStatus().name())
+                .status(savedBooking.getStatus())
                 .message("Tạo đơn đặt chỗ thành công. Trạng thái: PENDING.")
                 .build();
     }
@@ -119,7 +119,7 @@ public class BookingServiceImpl implements BookingService {
                 .bookingId(booking.getId())
                 .parkingSlotId(booking.getParkingSlot() != null ? booking.getParkingSlot().getId() : null)
                 .expectedTimeIn(booking.getExpectedTimeIn().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
-                .status(booking.getStatus().name())
+                .status(booking.getStatus())
                 .build();
     }
 

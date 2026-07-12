@@ -71,9 +71,9 @@ export default function FloorsPage() {
 
   return (
     <PageContainer>
-      <PageHeader
-        title="Quản lý tầng đỗ xe"
-        description="Xem và quản lý danh sách các tầng trong bãi đỗ xe."
+      <PageHeader 
+        title="Quản lý tầng" 
+        description="Quản lý danh sách các tầng trong bãi đỗ xe"
         actions={
           <Button onClick={handleOpenCreate}>
             <Plus className="mr-2 h-4 w-4" />
@@ -104,7 +104,7 @@ export default function FloorsPage() {
         onClose={() => setIsDeleteOpen(false)}
         onConfirm={handleDeleteConfirm}
         title="Xóa tầng đỗ xe"
-        description={`Bạn có chắc chắn muốn xóa tầng "${floorToDelete?.floor_name}" không? Thao tác này không thể hoàn tác và sẽ chuyển tầng sang trạng thái LOCKED.`}
+        description={`Bạn có chắc chắn muốn xóa tầng "${floorToDelete?.floorName}" không? Thao tác này không thể hoàn tác và sẽ chuyển tầng sang trạng thái LOCKED.`}
         confirmText="Xóa"
         cancelText="Hủy"
         variant="danger"

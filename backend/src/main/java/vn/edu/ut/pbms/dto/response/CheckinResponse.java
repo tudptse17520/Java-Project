@@ -1,5 +1,7 @@
 package vn.edu.ut.pbms.dto.response;
 
+import vn.edu.ut.pbms.constant.ParkingSessionStatus;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,6 +19,6 @@ public class CheckinResponse {
     private int id;
     private String ticketCode;
     private String timeIn;
-    private String status;
+    private ParkingSessionStatus status;
     private String message;
 }

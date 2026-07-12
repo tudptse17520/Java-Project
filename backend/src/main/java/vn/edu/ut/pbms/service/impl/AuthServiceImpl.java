@@ -51,7 +51,7 @@ public class AuthServiceImpl implements AuthService {
         return LoginResponse.builder()
                 .token(token)
                 .message("Đăng nhập thành công.")
-                .role(user.getRole().name())
+                .role(user.getRole())
                 .build();
     }
 
@@ -71,8 +71,8 @@ public class AuthServiceImpl implements AuthService {
                 .username(user.getUsername())
                 .fullName(user.getFullName())
                 .phoneNumber(user.getPhoneNumber())
-                .role(user.getRole().name())
-                .status(user.getStatus().name())
+                .role(user.getRole())
+                .status(user.getStatus())
                 .build();
     }
 }

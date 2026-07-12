@@ -1,12 +1,14 @@
+import { FloorStatus } from '@/constants/floor-status';
+
 export interface Floor {
   id: number;
-  floor_name: string;
-  floor_level: number;
+  floorName: string;
+  floorLevel: number;
   capacity: number;
-  status: string;
-  available_slots: number;
-  building_id: number;
-  building_name: string;
-  vehicle_type_id: number;
-  vehicle_type_name: string;
+  status: FloorStatus;
+  availableSlots: number;
+  buildingId: number;
+  buildingName: string;
+  vehicleTypeId: number;
+  vehicleTypeName: string;
 }

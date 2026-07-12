@@ -32,7 +32,7 @@ export function ConfigTable({ data, isLoading, onEdit }: ConfigTableProps) {
     },
     {
       header: "Thao tác",
-      accessorKey: "id",
+      id: "actions",
       cell: ({ row }: any) => (
         <Button
           variant="outline"

@@ -36,10 +36,10 @@ public class VehicleType {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "type_name", nullable = false, unique = true, length = 100)
+    @Column(name = "type_name", nullable = false, unique = true, columnDefinition = "nvarchar(100)")
     private String typeName;
 
-    @Column(length = 255)
+    @Column(columnDefinition = "nvarchar(255)")
     private String description;
 
     @Enumerated(EnumType.STRING)

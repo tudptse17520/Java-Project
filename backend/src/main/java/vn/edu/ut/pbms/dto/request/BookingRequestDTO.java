@@ -13,8 +13,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class BookingRequestDTO {
 
-    @NotNull(message = "Mã người dùng không được để trống")
-    private Long userId;
 
     @NotNull(message = "Mã phương tiện không được để trống")
     private Long vehicleId;

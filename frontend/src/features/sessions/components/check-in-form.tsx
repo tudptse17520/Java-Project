@@ -1,3 +1,5 @@
+"use client";
+
 import React from 'react';
 import { FormContainer } from '@/components/common/form-container';
 import { Input } from '@/components/ui/input';

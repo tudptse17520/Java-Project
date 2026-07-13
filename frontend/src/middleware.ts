@@ -74,7 +74,8 @@ function hasRouteAccess(role: string, pathname: string): boolean {
 // =============================================
 
 export function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl;
+  // TẠM THỜI: Bỏ qua mọi route guard cho mục đích demo
+  return NextResponse.next();
 
   // 1. Bỏ qua static files và API routes
   if (

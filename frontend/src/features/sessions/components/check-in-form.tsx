@@ -22,12 +22,13 @@ import { formatPlate } from '@/utils/format-plate';
 interface CheckInFormProps {
   onSuccess?: () => void;
   onCancel?: () => void;
+  defaultValues?: Partial<CheckInFormValues>;
 }
 
-export const CheckInForm = ({ onSuccess, onCancel }: CheckInFormProps) => {
+export const CheckInForm = ({ onSuccess, onCancel, defaultValues }: CheckInFormProps) => {
   const { register, handleSubmit, formState: { errors }, reset, watch, setValue } = useForm<CheckInFormValues>({
     resolver: zodResolver(checkInSchema),
-    defaultValues: {
+    defaultValues: defaultValues || {
       plate: '',
       vehicleId: undefined,
       parkingSlotId: undefined,

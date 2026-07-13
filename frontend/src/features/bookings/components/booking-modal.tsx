@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -18,7 +18,6 @@ import {
   FormActions,
 } from "@/components/common/form-container";
 import { Portal } from "@/components/common/portal";
-import { DateTimePicker } from "@/components/common/date-time-picker";
 import { useAuthStore } from "@/stores/auth.store";
 import { useUserVehicles } from "@/features/vehicles/hooks/use-user-vehicles";
 import { useBrowseBuildings } from "@/features/browse-building/hooks/use-browse-buildings";
@@ -61,7 +60,6 @@ export function BookingModal({
     register,
     handleSubmit,
     reset,
-    control,
     formState: { errors },
   } = useForm<BookingFormValues>({
     resolver: zodResolver(bookingFormSchema),
@@ -223,16 +221,13 @@ export function BookingModal({
                   <label className="text-sm font-medium leading-none">
                     Thời gian dự kiến vào <span className="text-destructive">*</span>
                   </label>
-                  <Controller
-                    control={control}
-                    name="expectedTimeIn"
-                    render={({ field }) => (
-                      <DateTimePicker
-                        value={field.value}
-                        onChange={field.onChange}
-                        className={errors.expectedTimeIn ? "border-destructive" : ""}
-                      />
+                  <input
+                    type="datetime-local"
+                    className={cn(
+                      "flex h-11 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+                      errors.expectedTimeIn && "border-destructive focus-visible:ring-destructive"
                     )}
+                    {...register("expectedTimeIn")}
                   />
                   {errors.expectedTimeIn && (
                     <p className="text-sm text-destructive">{errors.expectedTimeIn.message}</p>
@@ -244,16 +239,13 @@ export function BookingModal({
                   <label className="text-sm font-medium leading-none">
                     Thời gian dự kiến ra <span className="text-destructive">*</span>
                   </label>
-                  <Controller
-                    control={control}
-                    name="expectedTimeOut"
-                    render={({ field }) => (
-                      <DateTimePicker
-                        value={field.value}
-                        onChange={field.onChange}
-                        className={errors.expectedTimeOut ? "border-destructive" : ""}
-                      />
+                  <input
+                    type="datetime-local"
+                    className={cn(
+                      "flex h-11 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+                      errors.expectedTimeOut && "border-destructive focus-visible:ring-destructive"
                     )}
+                    {...register("expectedTimeOut")}
                   />
                   {errors.expectedTimeOut && (
                     <p className="text-sm text-destructive">{errors.expectedTimeOut.message}</p>

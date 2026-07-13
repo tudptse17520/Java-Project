@@ -108,13 +108,14 @@ export function CheckOutForm() {
       {
         onSuccess: () => {
           toast.success(CHECKOUT_MESSAGES.VALIDATION_SUCCESS);
-          // MOCK: Giả lập gọi API tính tiền thành công do Backend chưa có endpoint này
-          setFeeData({
-            baseFee: 5000,
-            overtimeFee: 0,
-            penaltyFee: 0,
-            totalFee: 5000,
-            message: "Tính phí thành công"
+          // Gọi API tính tiền
+          calculateFeeMutation.mutate(selectedSession.id, {
+            onSuccess: (data) => {
+              setFeeData(data);
+            },
+            onError: (err: any) => {
+              toast.error("Không thể tính cước phí: " + (err.response?.data?.message || err.message));
+            }
           });
         },
         onError: (error: any) => {
@@ -133,13 +134,25 @@ export function CheckOutForm() {
   const handleCheckout = () => {
     if (!selectedSession) return;
     
-    // MOCK: Giả lập gọi API checkout thành công do Backend chưa hỗ trợ đủ
-    toast.success(CHECKOUT_MESSAGES.SUCCESS);
-    setSelectedSession(null);
-    setFeeData(null);
-    setSearchTerm("");
-    validateForm.reset();
-    setTimeout(() => searchInputRef.current?.focus(), 100);
+    checkOutMutation.mutate(
+      {
+        sessionId: selectedSession.id,
+        request: { timeOut: new Date().toISOString() },
+      },
+      {
+        onSuccess: () => {
+          toast.success(CHECKOUT_MESSAGES.SUCCESS);
+          setSelectedSession(null);
+          setFeeData(null);
+          setSearchTerm("");
+          validateForm.reset();
+          setTimeout(() => searchInputRef.current?.focus(), 100);
+        },
+        onError: (err: any) => {
+          toast.error("Thanh toán thất bại: " + (err.response?.data?.message || err.message));
+        }
+      }
+    );
   };
 
   return (

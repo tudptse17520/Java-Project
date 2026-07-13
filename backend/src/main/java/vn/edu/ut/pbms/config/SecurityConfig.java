@@ -30,7 +30,7 @@ import java.util.List;
  */
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity
+// @EnableMethodSecurity // Tạm thời comment để bỏ qua các ràng buộc @PreAuthorize
 @RequiredArgsConstructor
 public class SecurityConfig {
 
@@ -43,11 +43,6 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .exceptionHandling(exception -> exception
-                        .authenticationEntryPoint((request, response, authException) -> {
-                            response.sendError(jakarta.servlet.http.HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
-                        })
-                )
                 .authorizeHttpRequests(auth -> auth
                         // Endpoint xác thực - public
                         .requestMatchers("/api/v1/auth/**").permitAll()
@@ -57,34 +52,8 @@ public class SecurityConfig {
                                 "/swagger-ui.html",
                                 "/v3/api-docs/**"
                         ).permitAll()
-                        // Yêu cầu xác thực cho các thao tác check-out, override, calculate-fee...
-                        .requestMatchers("/api/v1/sessions/**").authenticated()
-                        // Quản lý người dùng
-                        .requestMatchers("/api/v1/users/**").authenticated()
-                        // Cho phép public stream
-                        .requestMatchers("/api/v1/buildings/availability-stream").permitAll()
-                        .requestMatchers("/api/v1/buildings/*/availability-stream").permitAll()
-                        // Quản lý tòa nhà
-                        .requestMatchers("/api/v1/buildings/**").authenticated()
-                        // Quản lý tầng
-                        .requestMatchers("/api/v1/floors/**").authenticated()
-                        // Quản lý ô đỗ
-                        .requestMatchers("/api/v1/slots/**").authenticated()
-                        // Quản lý loại phương tiện
-                        .requestMatchers("/api/v1/vehicle-types/**").authenticated()
-                        // Yêu cầu quyền ADMIN hoặc MANAGER cho các API Báo cáo & Thống kê
-                        .requestMatchers("/api/v1/reports/**").hasAnyRole("ADMIN", "MANAGER")
-                        // Đặt chỗ
-                        .requestMatchers("/api/v1/bookings/**").authenticated()
-                        // Tạm thời cho phép tất cả các endpoint khác, đổi thành bắt buộc authenticated
-                        .anyRequest().authenticated())
-                .exceptionHandling(exceptions -> exceptions
-                        .authenticationEntryPoint((request, response, authException) -> {
-                            response.setStatus(jakarta.servlet.http.HttpServletResponse.SC_UNAUTHORIZED);
-                            response.setContentType("application/json;charset=UTF-8");
-                            response.getWriter().write("{\"message\": \"Phiên đăng nhập không hợp lệ hoặc đã hết hạn.\"}");
-                        })
-                )
+                        // Bỏ qua mọi ràng buộc Security & JWT (Theo yêu cầu)
+                        .anyRequest().permitAll())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();

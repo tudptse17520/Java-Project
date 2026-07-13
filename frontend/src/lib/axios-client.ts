@@ -57,9 +57,9 @@ axiosClient.interceptors.response.use(
     switch (status) {
       case 401:
         // Token hết hạn hoặc không hợp lệ -> redirect login
-        if (!error.config?.url?.includes("/auth/login")) {
+        if (error.config?.url !== "/v1/auth/login") {
           removeCookie("access_token");
-          if (typeof window !== "undefined" && window.location.pathname !== "/login") {
+          if (typeof window !== "undefined") {
             window.location.href = "/login";
           }
         }

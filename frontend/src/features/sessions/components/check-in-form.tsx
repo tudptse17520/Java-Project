@@ -36,7 +36,7 @@ interface CheckInFormProps {
 export const CheckInForm = ({ onSuccess, onCancel, selectedSlotId }: CheckInFormProps) => {
   const { register, handleSubmit, formState: { errors }, reset, watch, setValue } = useForm<CheckInFormValues>({
     resolver: zodResolver(checkInSchema),
-    defaultValues: {
+    defaultValues: defaultValues || {
       plate: '',
       vehicleId: undefined,
       parkingSlotId: undefined,

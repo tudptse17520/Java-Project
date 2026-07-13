@@ -36,7 +36,7 @@ interface CheckInFormProps {
 export const CheckInForm = ({ onSuccess, onCancel, selectedSlotId }: CheckInFormProps) => {
   const { register, handleSubmit, formState: { errors }, reset, watch, setValue } = useForm<CheckInFormValues>({
     resolver: zodResolver(checkInSchema),
-    defaultValues: defaultValues || {
+    defaultValues: {
       plate: '',
       vehicleId: undefined,
       parkingSlotId: undefined,
@@ -193,8 +193,8 @@ export const CheckInForm = ({ onSuccess, onCancel, selectedSlotId }: CheckInForm
             <div>
               <label className="block text-sm font-medium mb-1 text-muted-foreground">Vị trí đỗ (Slot)</label>
               <Select
-                value={watch('parkingSlotId')?.toString()}
-                onValueChange={(val) => setValue('parkingSlotId', parseInt(val, 10))}
+                value={watch('parkingSlotId')?.toString() || ""}
+                onValueChange={(val) => setValue('parkingSlotId', val ? parseInt(val, 10) : undefined)}
               >
                 <SelectTrigger className="h-12 text-lg">
                   <SelectValue placeholder="Tùy chọn" />

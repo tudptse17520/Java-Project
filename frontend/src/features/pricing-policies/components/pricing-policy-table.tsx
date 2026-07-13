@@ -120,14 +120,6 @@ export function PricingPolicyTable({
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-8 w-8 text-muted-foreground hover:bg-primary/10 hover:text-primary"
-                title="Chi tiết"
-              >
-                <Eye className="h-4 w-4" />
-              </Button>
-              <Button
-                variant="ghost"
-                size="icon"
                 className="h-8 w-8 text-muted-foreground hover:bg-blue-500/10 hover:text-blue-500"
                 onClick={() => onEdit(policy)}
                 title="Sửa"

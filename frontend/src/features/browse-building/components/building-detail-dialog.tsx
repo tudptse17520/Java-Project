@@ -10,6 +10,7 @@ import { LoadingSpinner } from "@/components/common/loading-spinner";
 import { useQueryClient } from "@tanstack/react-query";
 import { BROWSE_BUILDING_KEYS } from "../constants/browse-building.constants";
 import type { BuildingDetail } from "../types/browse-building.type";
+import { Portal } from "@/components/common/portal";
 
 interface BuildingDetailDialogProps {
   buildingId: number | null;
@@ -85,7 +86,8 @@ export function BuildingDetailDialog({ buildingId, onClose }: BuildingDetailDial
   if (buildingId === null) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
+    <Portal>
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
       {/* Backdrop */}
       <div 
         className={cn(
@@ -172,5 +174,7 @@ export function BuildingDetailDialog({ buildingId, onClose }: BuildingDetailDial
         </div>
       </div>
     </div>
+    </Portal>
   );
 }
+

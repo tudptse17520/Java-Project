@@ -10,7 +10,7 @@ import {
   VEHICLE_TYPE_STATUS_LABELS,
 } from "@/constants/vehicle-type-status";
 import { Button } from "@/components/ui/button";
-import { Edit2, ShieldBan } from "lucide-react";
+import { Edit2, Ban } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface VehicleTypeTableProps {
@@ -98,11 +98,11 @@ export function VehicleTypeTable({
                 <Button
                   variant="outline"
                   size="sm"
-                  className="h-8 px-2 text-destructive hover:bg-destructive hover:text-destructive-foreground"
+                  className="h-8 px-2 text-destructive hover:bg-destructive/20 hover:text-destructive"
                   onClick={() => onDeactivate(vehicleType)}
                   title="Ngừng áp dụng"
                 >
-                  <ShieldBan className="h-4 w-4" />
+                  <Ban className="h-4 w-4" />
                 </Button>
               )}
             </div>

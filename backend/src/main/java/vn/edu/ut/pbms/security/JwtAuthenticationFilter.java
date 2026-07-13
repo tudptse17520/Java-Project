@@ -56,7 +56,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                     User user = userRepository.findByUsername(username).orElse(null);
                     
-                    if (user != null) {
+                    if (user != null && user.getStatus() == vn.edu.ut.pbms.constant.UserStatus.ACTIVE) {
                         // Tạo đối tượng Authentication với principal là đối tượng User
                         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                                 user,

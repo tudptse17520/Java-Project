@@ -13,5 +13,13 @@ export const slotService = {
   updateSlotStatus: async (id: number, status: string) => {
     const response = await axiosClient.patch(`/slots/${id}/status`, { status });
     return response.data;
+  },
+  updateSlot: async (id: number, data: CreateSlotDto) => {
+    const response = await axiosClient.put(`/slots/${id}`, data);
+    return response.data;
+  },
+  deleteSlot: async (id: number) => {
+    const response = await axiosClient.delete(`/slots/${id}`);
+    return response.data;
   }
 };

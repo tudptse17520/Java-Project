@@ -17,10 +17,11 @@ const REPORT_KEYS = {
   vehicleFlow: (filter: ReportFilter) => [...REPORT_KEYS.all, "vehicle-flow", filter] as const,
 };
 
-export const useDashboardReport = (filter: ReportFilter = {}) => {
+export const useDashboardReport = (filter: ReportFilter = {}, refetchInterval?: number) => {
   return useQuery({
     queryKey: REPORT_KEYS.dashboard(filter),
     queryFn: () => getDashboardReport(filter),
+    refetchInterval,
   });
 };
 
@@ -45,9 +46,10 @@ export const usePeakHourReport = (filter: ReportFilter = {}) => {
   });
 };
 
-export const useVehicleFlowReport = (filter: ReportFilter = {}) => {
+export const useVehicleFlowReport = (filter: ReportFilter = {}, refetchInterval?: number) => {
   return useQuery({
     queryKey: REPORT_KEYS.vehicleFlow(filter),
     queryFn: () => getVehicleEntryExitReport(filter),
+    refetchInterval,
   });
 };

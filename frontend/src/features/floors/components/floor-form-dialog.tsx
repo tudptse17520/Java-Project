@@ -15,6 +15,8 @@ import { useBuildings } from "@/features/buildings/hooks/use-buildings";
 // import useVehicleTypes from features if needed, wait, I need to know if vehicle type hook exists
 import { useQuery } from "@tanstack/react-query";
 import { getVehicleTypes } from "@/services/vehicle-type.service";
+import { FloorStatus, FLOOR_STATUS_LABELS } from "@/constants/floor-status";
+import { Portal } from "@/components/common/portal";
 
 interface FloorFormDialogProps {
   open: boolean;
@@ -55,34 +57,38 @@ export function FloorFormDialog({
       capacity: 100,
       buildingId: 0,
       vehicleTypeId: 0,
+      status: FloorStatus.ACTIVE,
     },
   });
 
   useEffect(() => {
     if (initialData) {
-      reset({
-        floorName: initialData.floorName,
-        floorLevel: initialData.floorLevel,
-        capacity: initialData.capacity,
-        buildingId: initialData.buildingId,
-        vehicleTypeId: initialData.vehicleTypeId,
-      });
+        reset({
+          floorName: initialData.floorName,
+          floorLevel: initialData.floorLevel,
+          capacity: initialData.capacity,
+          buildingId: initialData.buildingId,
+          vehicleTypeId: initialData.vehicleTypeId,
+          status: initialData.status,
+        });
     } else {
-      reset({
-        floorName: "",
-        floorLevel: 1,
-        capacity: 100,
-        buildingId: buildings.length > 0 ? buildings[0].id : 0,
-        vehicleTypeId: vehicleTypes && vehicleTypes.length > 0 ? vehicleTypes[0].id : 0,
-      });
+        reset({
+          floorName: "",
+          floorLevel: 1,
+          capacity: 100,
+          buildingId: buildings.length > 0 ? buildings[0].id : 0,
+          vehicleTypeId: vehicleTypes && vehicleTypes.length > 0 ? vehicleTypes[0].id : 0,
+          status: FloorStatus.ACTIVE,
+        });
     }
   }, [initialData, reset, open, buildings, vehicleTypes]);
 
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
-      <div className="fixed inset-0 bg-black/50" onClick={onClose} aria-hidden="true" />
+    <Portal>
+      <div className="fixed inset-0 z-50 flex items-center justify-center">
+        <div className="fixed inset-0 bg-black/50" onClick={onClose} aria-hidden="true" />
 
       <div className="relative z-50 w-full max-w-lg rounded-lg border bg-background p-6 shadow-lg">
         <FormContainer onSubmit={handleSubmit(onSubmit)}>
@@ -189,6 +195,27 @@ export function FloorFormDialog({
 
           </FormFields>
 
+          <FormFields>
+            <div className="space-y-1">
+              <label htmlFor="status" className="text-sm font-medium leading-none">
+                Trạng thái <span className="text-destructive">*</span>
+              </label>
+              <select
+                id="status"
+                className={cn(
+                  "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm",
+                  errors.status && "border-destructive focus-visible:ring-destructive"
+                )}
+                {...register("status")}
+              >
+                {Object.entries(FLOOR_STATUS_LABELS).map(([value, label]) => (
+                  <option key={value} value={value}>{label}</option>
+                ))}
+              </select>
+              {errors.status && <p className="text-sm text-destructive">{errors.status.message}</p>}
+            </div>
+          </FormFields>
+
           <FormActions>
             <Button type="button" variant="outline" onClick={onClose} disabled={isLoading}>
               Hủy
@@ -200,5 +227,6 @@ export function FloorFormDialog({
         </FormContainer>
       </div>
     </div>
+    </Portal>
   );
 }

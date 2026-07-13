@@ -3,6 +3,7 @@
 import { QRCodeSVG } from "qrcode.react";
 import { Button } from "@/components/ui/button";
 import { X, ExternalLink } from "lucide-react";
+import { Portal } from "@/components/common/portal";
 
 interface PaymentQrDialogProps {
   open: boolean;
@@ -20,7 +21,8 @@ export function PaymentQrDialog({
   if (!open || !paymentUrl) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
+    <Portal>
+      <div className="fixed inset-0 z-50 flex items-center justify-center">
       <div
         className="fixed inset-0 bg-black/50"
         onClick={onClose}
@@ -67,5 +69,7 @@ export function PaymentQrDialog({
         </div>
       </div>
     </div>
+    </Portal>
   );
 }
+

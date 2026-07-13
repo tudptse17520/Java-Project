@@ -14,9 +14,8 @@ import { DashboardRecentActivity } from "@/features/reports/components/dashboard
 import { DashboardKpiCards } from "@/features/reports/components/dashboard-kpi-cards";
 
 
-
-export default function AdminDashboardPage() {
-  const { data, isLoading, isError } = useDashboardReport();
+export default function ManagerDashboardPage() {
+  const { data, isLoading, isError } = useDashboardReport({}, 5000);
 
   return (
     <PageContainer>

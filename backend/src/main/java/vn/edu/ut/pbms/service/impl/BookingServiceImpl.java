@@ -114,10 +114,28 @@ public class BookingServiceImpl implements BookingService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public void cancelBooking(Long bookingId) {
+        Booking booking = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy đặt chỗ với ID: " + bookingId));
+
+        if (booking.getStatus() != BookingStatus.PENDING && booking.getStatus() != BookingStatus.CONFIRMED) {
+            throw new BusinessRuleViolationException("Chỉ có thể hủy đặt chỗ khi đang ở trạng thái PENDING hoặc CONFIRMED.");
+        }
+
+        booking.setStatus(BookingStatus.CANCELLED);
+        bookingRepository.save(booking);
+
+        if (booking.getParkingSlot() != null) {
+            slotAvailabilityService.updateSlotStatus(booking.getParkingSlot().getId(), ParkingSlotStatus.AVAILABLE);
+        }
+    }
+
     private BookingListResponseDTO mapToBookingListResponseDTO(Booking booking) {
         return BookingListResponseDTO.builder()
                 .bookingId(booking.getId())
                 .parkingSlotId(booking.getParkingSlot() != null ? booking.getParkingSlot().getId() : null)
+                .parkingSlotName(booking.getParkingSlot() != null ? booking.getParkingSlot().getSlotName() : null)
                 .expectedTimeIn(booking.getExpectedTimeIn().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
                 .status(booking.getStatus())
                 .build();

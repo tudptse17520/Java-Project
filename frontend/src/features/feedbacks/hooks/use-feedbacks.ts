@@ -13,5 +13,6 @@ export function useFeedbacks(page: number, size: number, issueType?: IssueType, 
   return useQuery({
     queryKey: FEEDBACK_QUERY_KEYS.list(page, size, issueType, status),
     queryFn: () => feedbackService.getFeedbacks(page, size, issueType, status),
+    refetchInterval: 5000,
   });
 }

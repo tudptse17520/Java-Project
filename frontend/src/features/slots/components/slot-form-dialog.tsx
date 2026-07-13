@@ -11,12 +11,15 @@ import { SlotStatus } from "@/constants/slot-status";
 import { slotSchema, type SlotFormValues } from "../schemas/slot.schema";
 import { useFloors } from "@/features/floors/hooks/use-floors";
 import { cn } from "@/lib/utils";
+import { Portal } from "@/components/common/portal";
+import { ParkingSlot } from "../types/slot.type";
 
 interface SlotFormDialogProps {
   open: boolean;
   onClose: () => void;
   onSubmit: (data: SlotFormValues) => void;
   isLoading?: boolean;
+  initialData?: ParkingSlot;
 }
 
 export function SlotFormDialog({
@@ -24,8 +27,10 @@ export function SlotFormDialog({
   onClose,
   onSubmit,
   isLoading,
+  initialData,
 }: SlotFormDialogProps) {
   const { data: floors = [], isLoading: isLoadingFloors } = useFloors();
+  const isEdit = !!initialData;
 
   const {
     register,
@@ -35,33 +40,42 @@ export function SlotFormDialog({
   } = useForm<SlotFormValues>({
     resolver: zodResolver(slotSchema) as any,
     defaultValues: {
-      floorId: 0,
-      slotName: "",
-      status: SlotStatus.AVAILABLE,
+      floorId: initialData?.floorId || 0,
+      slotName: initialData?.slotName || "",
+      status: (initialData?.status as any) || SlotStatus.AVAILABLE,
     },
   });
 
   useEffect(() => {
     if (open) {
-      reset({
-        floorId: 0,
-        slotName: "",
-        status: SlotStatus.AVAILABLE,
-      });
+      if (initialData) {
+        reset({
+          floorId: initialData.floorId || 0,
+          slotName: initialData.slotName || "",
+          status: (initialData.status as any) || SlotStatus.AVAILABLE,
+        });
+      } else {
+        reset({
+          floorId: 0,
+          slotName: "",
+          status: SlotStatus.AVAILABLE,
+        });
+      }
     }
-  }, [open, reset]);
+  }, [open, initialData, reset]);
 
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
+    <Portal>
+      <div className="fixed inset-0 z-50 flex items-center justify-center">
       <div className="fixed inset-0 bg-black/50" onClick={onClose} aria-hidden="true" />
 
       <div className="relative z-50 w-full max-w-lg rounded-lg border bg-background p-6 shadow-lg">
         <FormContainer onSubmit={handleSubmit(onSubmit)}>
           <FormHeader 
-            title="Thêm vị trí đỗ xe mới"
-            description="Tạo một ô đỗ xe mới cho tầng tương ứng."
+            title={isEdit ? "Cập nhật vị trí đỗ xe" : "Thêm vị trí đỗ xe mới"}
+            description={isEdit ? "Thay đổi thông tin cho vị trí đỗ xe này." : "Tạo một ô đỗ xe mới cho tầng tương ứng."}
           />
           <FormFields>
             <div className="space-y-1">
@@ -80,7 +94,7 @@ export function SlotFormDialog({
                 <option value={0} disabled>
                   -- Chọn tầng --
                 </option>
-                {floors.map((floor) => (
+                {floors.map((floor: any) => (
                   <option key={floor.id} value={floor.id}>
                     {floor.floorName} - {floor.buildingName}
                   </option>
@@ -147,5 +161,6 @@ export function SlotFormDialog({
         </FormContainer>
       </div>
     </div>
+    </Portal>
   );
 }

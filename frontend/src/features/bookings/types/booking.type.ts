@@ -14,6 +14,7 @@ export interface BookingResponse {
 export interface BookingListResponse {
   bookingId: number;
   parkingSlotId: number;
+  parkingSlotName?: string;
   expectedTimeIn: string;
   status: string;
 }

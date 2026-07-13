@@ -2,12 +2,15 @@ import React from 'react';
 import { CheckInForm } from './check-in-form';
 import { Portal } from '@/components/common/portal';
 
+import { CheckInFormValues } from '../schemas/check-in-form.schema';
+
 interface CheckInModalProps {
   isOpen: boolean;
   onClose: () => void;
+  defaultValues?: Partial<CheckInFormValues>;
 }
 
-export const CheckInModal = ({ isOpen, onClose }: CheckInModalProps) => {
+export const CheckInModal = ({ isOpen, onClose, defaultValues }: CheckInModalProps) => {
   if (!isOpen) return null;
 
   return (
@@ -19,7 +22,7 @@ export const CheckInModal = ({ isOpen, onClose }: CheckInModalProps) => {
             <p className="text-sm text-muted-foreground">Nhập thông tin phương tiện để check-in</p>
           </div>
           <div className="p-4">
-            <CheckInForm onSuccess={onClose} onCancel={onClose} />
+            <CheckInForm onSuccess={onClose} onCancel={onClose} defaultValues={defaultValues} />
           </div>
         </div>
       </div>

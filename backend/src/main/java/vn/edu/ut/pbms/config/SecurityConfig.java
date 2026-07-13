@@ -70,6 +70,13 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/bookings/**").authenticated()
                         // Tạm thời cho phép tất cả các endpoint khác, đổi thành bắt buộc authenticated
                         .anyRequest().authenticated())
+                .exceptionHandling(exceptions -> exceptions
+                        .authenticationEntryPoint((request, response, authException) -> {
+                            response.setStatus(jakarta.servlet.http.HttpServletResponse.SC_UNAUTHORIZED);
+                            response.setContentType("application/json;charset=UTF-8");
+                            response.getWriter().write("{\"message\": \"Phiên đăng nhập không hợp lệ hoặc đã hết hạn.\"}");
+                        })
+                )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();

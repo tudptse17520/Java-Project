@@ -38,6 +38,7 @@ export function Topbar() {
   const pathname = usePathname();
   const router = useRouter();
   const clearUser = useAuthStore((state) => state.clearUser);
+  const user = useAuthStore((state) => state.user);
   const { setTheme, theme } = useThemeStore();
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
@@ -142,28 +143,32 @@ export function Topbar() {
             <DropdownMenuTrigger render={
               <Button variant="ghost" className="relative h-10 w-10 rounded-full md:h-auto md:w-auto md:px-2 md:py-1.5 md:flex md:gap-2" />
             }>
-              <Avatar className="h-8 w-8">
-                <AvatarImage src="/avatars/admin.png" alt="@user" />
-                <AvatarFallback>{basePath.replace('/', '').substring(0, 2).toUpperCase()}</AvatarFallback>
-              </Avatar>
-              <div className="hidden flex-col items-start md:flex">
-                <span className="text-sm font-medium capitalize">{basePath.replace('/', '')} User</span>
-                <span className="text-xs text-muted-foreground capitalize">System {basePath.replace('/', '')}</span>
-              </div>
+                <Avatar className="h-8 w-8">
+                  <AvatarImage src={`/avatars/${user?.username || 'default'}.png`} alt={user?.fullName || "User"} />
+                  <AvatarFallback>{(user?.fullName || "User").substring(0, 2).toUpperCase()}</AvatarFallback>
+                </Avatar>
+                <div className="hidden flex-col items-start md:flex">
+                  <span className="text-sm font-medium">{user?.fullName || "Người dùng"}</span>
+                  <span className="text-xs text-muted-foreground">
+                    {user?.role === "ADMIN" ? "Quản trị viên" : 
+                     user?.role === "MANAGER" ? "Quản lý" : 
+                     user?.role === "STAFF" ? "Nhân viên" : "Khách"}
+                  </span>
+                </div>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56" align="end">
               <DropdownMenuGroup>
                 <DropdownMenuLabel className="font-normal">
                   <div className="flex flex-col space-y-1">
-                    <p className="text-sm font-medium leading-none capitalize">{basePath.replace('/', '')} User</p>
+                    <p className="text-sm font-medium leading-none">{user?.fullName || "Người dùng"}</p>
                     <p className="text-xs leading-none text-muted-foreground">
-                      {basePath.replace('/', '')}@pbms.ut.edu.vn
+                      @{user?.username || "username"}
                     </p>
                   </div>
                 </DropdownMenuLabel>
               </DropdownMenuGroup>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => setIsProfileOpen(true)}>
+              <DropdownMenuItem onClick={() => setIsProfileOpen(true)} className="cursor-pointer">
                 Hồ sơ cá nhân
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => setIsSettingsOpen(true)}>

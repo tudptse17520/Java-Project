@@ -10,13 +10,15 @@ interface UseSessionsParams {
   status?: SessionStatus;
   from_date?: string;
   enabled?: boolean;
+  refetchInterval?: number;
 }
 
-export const useSessions = ({ plate, status, from_date, enabled = true }: UseSessionsParams = {}) => {
+export const useSessions = ({ plate, status, from_date, enabled = true, refetchInterval }: UseSessionsParams = {}) => {
   return useQuery({
     queryKey: SESSION_QUERY_KEYS.list({ plate, status, from_date }),
     queryFn: () => sessionService.getParkingSessions({ plate, status, from_date }),
-    enabled: enabled && (!!plate || !!status || !!from_date),
+    enabled: enabled,
+    refetchInterval,
   });
 };
 

@@ -2,8 +2,8 @@
 
 import { useVehicleFlowReport } from "../hooks/use-report";
 import {
-  AreaChart,
-  Area,
+  BarChart,
+  Bar,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -13,6 +13,7 @@ import {
 } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { LoadingSpinner } from "@/components/common/loading-spinner";
+import { format } from "date-fns";
 
 const MOCK_DATA = [
   { time: "06:00", vao: 12, ra: 2 },
@@ -25,9 +26,16 @@ const MOCK_DATA = [
 ];
 
 export function DashboardCharts() {
-  const { data, isLoading, isError } = useVehicleFlowReport();
+  const today = format(new Date(), "yyyy-MM-dd");
+  const { data, isLoading, isError } = useVehicleFlowReport({ startDate: today, endDate: today }, 5000);
 
-  const chartData = (!isError && data?.details?.length) ? data.details : MOCK_DATA;
+  const chartData = (!isError && data?.details?.length) 
+    ? data.details.map((d: any) => ({
+        time: d.date ? (d.date.includes("-") ? d.date.split("-").reverse().slice(0, 2).join("/") : d.date) : "", 
+        vao: d.entries || 0,
+        ra: d.exits || 0
+      }))
+    : MOCK_DATA;
 
   return (
     <Card className="col-span-1 lg:col-span-2 shadow-sm border-neutral-200 dark:border-white/5 bg-background dark:bg-white/[0.02] transition-colors">
@@ -45,20 +53,10 @@ export function DashboardCharts() {
         ) : (
           <div className="h-[300px] w-full mt-4">
             <ResponsiveContainer width="100%" height="100%">
-              <AreaChart
+              <BarChart
                 data={chartData}
                 margin={{ top: 5, right: 30, left: 0, bottom: 5 }}
               >
-                <defs>
-                  <linearGradient id="colorVao" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3}/>
-                    <stop offset="95%" stopColor="#3b82f6" stopOpacity={0}/>
-                  </linearGradient>
-                  <linearGradient id="colorRa" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.3}/>
-                    <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0}/>
-                  </linearGradient>
-                </defs>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#555555" opacity={0.3} />
                 <XAxis 
                   dataKey="time" 
@@ -74,31 +72,26 @@ export function DashboardCharts() {
                   dx={-10} 
                 />
                 <Tooltip 
+                  cursor={{ fill: '#88888811' }}
                   contentStyle={{ borderRadius: '8px', border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(0,0,0,0.8)', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
                   itemStyle={{ color: '#fff' }}
                 />
                 <Legend iconType="circle" wrapperStyle={{ paddingTop: '20px' }} />
-                <Area
-                  type="monotone"
+                <Bar
                   name="Xe vào"
                   dataKey="vao"
-                  stroke="#3b82f6"
-                  strokeWidth={3}
-                  fillOpacity={1}
-                  fill="url(#colorVao)"
-                  activeDot={{ r: 6 }}
+                  fill="#3b82f6"
+                  radius={[4, 4, 0, 0]}
+                  barSize={20}
                 />
-                <Area
-                  type="monotone"
+                <Bar
                   name="Xe ra"
                   dataKey="ra"
-                  stroke="#8b5cf6"
-                  strokeWidth={3}
-                  fillOpacity={1}
-                  fill="url(#colorRa)"
-                  activeDot={{ r: 6 }}
+                  fill="#8b5cf6"
+                  radius={[4, 4, 0, 0]}
+                  barSize={20}
                 />
-              </AreaChart>
+              </BarChart>
             </ResponsiveContainer>
           </div>
         )}

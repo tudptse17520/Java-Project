@@ -46,7 +46,7 @@ export function PricingPolicyFilter({
       </div>
 
       <Select 
-        value={value?.toString() || undefined} 
+        value={value?.toString() || "all"} 
         onValueChange={(val) => onChange(val === "all" ? undefined : Number(val))}
         disabled={isLoading}
       >

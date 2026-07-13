@@ -48,4 +48,13 @@ public class BookingController {
         List<BookingListResponseDTO> response = bookingService.getAllBookings();
         return ResponseEntity.ok(response);
     }
+
+    @Operation(summary = "Hủy lượt đặt chỗ")
+    @PreAuthorize("hasAnyRole('MANAGER', 'ADMIN', 'STAFF')")
+    @PutMapping("/bookings/{bookingId}/cancel")
+    public ResponseEntity<Void> cancelBooking(
+            @PathVariable("bookingId") Long bookingId) {
+        bookingService.cancelBooking(bookingId);
+        return ResponseEntity.ok().build();
+    }
 }

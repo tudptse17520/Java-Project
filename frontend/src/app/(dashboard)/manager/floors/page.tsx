@@ -18,10 +18,17 @@ export default function FloorsPage() {
   const [keyword, setKeyword] = useState("");
   const [buildingId, setBuildingId] = useState<string | undefined>(undefined);
 
-  const { data: floors = [], isLoading } = useFloors();
+  const { data: initialFloors = [], isLoading } = useFloors();
   const createMutation = useCreateFloor();
   const updateMutation = useUpdateFloor();
   const deleteMutation = useDeleteFloor();
+
+  // Áp dụng bộ lọc
+  const floors = initialFloors.filter((floor) => {
+    const matchesKeyword = floor.floorName.toLowerCase().includes(keyword.toLowerCase());
+    const matchesBuilding = buildingId ? floor.buildingId.toString() === buildingId : true;
+    return matchesKeyword && matchesBuilding;
+  });
 
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [selectedFloor, setSelectedFloor] = useState<Floor | null>(null);
@@ -65,7 +72,7 @@ export default function FloorsPage() {
 
   const handleDeleteConfirm = () => {
     if (floorToDelete) {
-      deleteMutation.mutate(floorToDelete.id, {
+      deleteMutation.mutate({ id: floorToDelete.id, floorName: floorToDelete.floorName }, {
         onSuccess: () => {
           setIsDeleteOpen(false);
           setFloorToDelete(null);

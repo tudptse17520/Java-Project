@@ -23,6 +23,7 @@ import {
   FEE_TYPES,
 } from "@/features/payments/constants/payment.constants";
 import { FormContainer, FormHeader, FormFields, FormActions } from "@/components/common/form-container";
+import { Portal } from "@/components/common/portal";
 
 interface PaymentCreateDialogProps {
   open: boolean;
@@ -115,7 +116,8 @@ export function PaymentCreateDialog({
   const hasValidSession = !!parkingSessionId;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
+    <Portal>
+      <div className="fixed inset-0 z-50 flex items-center justify-center">
       {/* Backdrop */}
       <div
         className="fixed inset-0 bg-black/50"
@@ -326,5 +328,7 @@ export function PaymentCreateDialog({
         </FormContainer>
       </div>
     </div>
+    </Portal>
   );
 }
+

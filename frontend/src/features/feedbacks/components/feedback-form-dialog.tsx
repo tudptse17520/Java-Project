@@ -14,6 +14,7 @@ import { FormContainer, FormHeader, FormFields, FormActions } from "@/components
 import { Feedback } from "../types/feedback.type";
 import { feedbackFormSchema, FeedbackFormValues } from "../schemas/feedback.schema";
 import { useFeedbackActions } from "../hooks/use-feedback-actions";
+import { Portal } from "@/components/common/portal";
 
 interface FeedbackFormDialogProps {
   feedback: Feedback | null;
@@ -101,7 +102,8 @@ export function FeedbackFormDialog({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <Portal>
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div 
         className="fixed inset-0 bg-black/50 transition-opacity" 
         onClick={onClose} 
@@ -209,5 +211,7 @@ export function FeedbackFormDialog({
         </FormContainer>
       </div>
     </div>
+    </Portal>
   );
 }
+

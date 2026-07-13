@@ -19,7 +19,7 @@ interface SlotGridProps {
 export function SlotGrid({ data, isLoading }: SlotGridProps) {
   const updateMutation = useUpdateSlotStatus();
 
-  const handleStatusChange = (id: number, currentStatus: string, newStatus: SlotStatus) => {
+  const handleStatusChange = (id: number, currentStatus: string, newStatus: SlotStatus, slotName: string) => {
     if (newStatus === currentStatus) return;
     
     if (newStatus === 'MAINTENANCE' || newStatus === 'LOCKED') {
@@ -27,7 +27,7 @@ export function SlotGrid({ data, isLoading }: SlotGridProps) {
         return;
       }
     }
-    updateMutation.mutate({ id, status: newStatus });
+    updateMutation.mutate({ id, status: newStatus, slotName });
   };
 
   if (isLoading) {
@@ -89,11 +89,11 @@ export function SlotGrid({ data, isLoading }: SlotGridProps) {
               </div>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="start" className="w-40">
-              <DropdownMenuItem onClick={() => handleStatusChange(slot.id, slot.status, 'AVAILABLE')}>Còn trống</DropdownMenuItem>
-              <DropdownMenuItem onClick={() => handleStatusChange(slot.id, slot.status, 'OCCUPIED')}>Đang đỗ</DropdownMenuItem>
-              <DropdownMenuItem onClick={() => handleStatusChange(slot.id, slot.status, 'RESERVED')}>Đặt trước</DropdownMenuItem>
-              <DropdownMenuItem onClick={() => handleStatusChange(slot.id, slot.status, 'MAINTENANCE')}>Bảo trì</DropdownMenuItem>
-              <DropdownMenuItem onClick={() => handleStatusChange(slot.id, slot.status, 'LOCKED')} className="text-destructive focus:text-destructive">Đã khóa</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => handleStatusChange(slot.id, slot.status, 'AVAILABLE', slot.slotName)}>Còn trống</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => handleStatusChange(slot.id, slot.status, 'OCCUPIED', slot.slotName)}>Đang đỗ</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => handleStatusChange(slot.id, slot.status, 'RESERVED', slot.slotName)}>Đặt trước</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => handleStatusChange(slot.id, slot.status, 'MAINTENANCE', slot.slotName)}>Bảo trì</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => handleStatusChange(slot.id, slot.status, 'LOCKED', slot.slotName)} className="text-destructive focus:text-destructive">Đã khóa</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         );

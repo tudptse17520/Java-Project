@@ -49,6 +49,7 @@ function getStatusVariant(status: string): "success" | "warning" | "danger" | "i
 
 
 import { useSessionById, usePaymentDebt, useBookingById } from "@/features/payments/hooks/use-payments";
+import { Portal } from "@/components/common/portal";
 
 /**
  * Format chuỗi thời gian ISO
@@ -91,6 +92,7 @@ export function PaymentDetailDialog({
     PAYMENT_STATUS_LABELS[payment.status as PaymentStatus] || payment.status;
 
   return (
+    <Portal>
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       {/* Backdrop */}
       <div
@@ -221,6 +223,7 @@ export function PaymentDetailDialog({
         </div>
       </div>
     </div>
+    </Portal>
   );
 }
 
@@ -240,3 +243,4 @@ function DetailRow({
     </div>
   );
 }
+

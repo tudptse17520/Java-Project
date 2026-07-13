@@ -1,5 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Banknote, Car, CarFront, Percent, MapPin } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export const statCards = [
   {
@@ -46,7 +47,7 @@ export const statCards = [
 
 export function StatValue({ statKey, data }: { statKey: string; data: Record<string, unknown> }) {
   if (statKey === "revenue") {
-    const val = (data?.totalRevenue as number) || 12350000;
+    const val = (data?.totalRevenue as number) ?? 0;
     const formatted = new Intl.NumberFormat('vi-VN').format(val);
     return (
       <div className="flex items-baseline gap-1">
@@ -57,7 +58,7 @@ export function StatValue({ statKey, data }: { statKey: string; data: Record<str
   }
 
   if (statKey === "occupancy") {
-    const rate = (data?.occupancyRate as number) || 71;
+    const rate = (data?.occupancyRate as number) ?? 0;
     return (
       <div className="flex flex-col gap-2 w-full mt-1">
         <span className="tabular-nums tracking-tight">{rate.toFixed(0)}%</span>
@@ -71,13 +72,13 @@ export function StatValue({ statKey, data }: { statKey: string; data: Record<str
   let textValue = "--";
   switch (statKey) {
     case "entries":
-      textValue = String((data?.totalEntries as number) || 156);
+      textValue = String((data?.totalEntries as number) ?? 0);
       break;
     case "exits":
-      textValue = String((data?.totalExits as number) || 130);
+      textValue = String((data?.totalExits as number) ?? 0);
       break;
     case "current":
-      textValue = String((data?.currentVehicles as number) || 26);
+      textValue = String((data?.currentVehicles as number) ?? 0);
       break;
   }
 
@@ -94,12 +95,15 @@ export function DashboardKpiCards({ data = {} }: { data?: Record<string, unknown
         return (
           <Card 
             key={card.key} 
-            className={`group relative overflow-hidden border-neutral-200 dark:border-neutral-800 shadow-sm transition-all hover:shadow-md ${isRevenue ? "sm:col-span-2 lg:col-span-2" : "col-span-1"}`}
+            className={cn(
+              "group relative overflow-hidden border-neutral-200 dark:border-neutral-800 shadow-sm transition-all hover:shadow-md flex flex-col h-full",
+              isRevenue ? "sm:col-span-2 lg:col-span-2" : "col-span-1"
+            )}
           >
-            <CardContent className="p-5 flex flex-col justify-between h-full">
+            <CardContent className="p-5 flex flex-col justify-between flex-1">
               <div className="flex items-start justify-between">
                 <div className="space-y-1 w-full pr-4">
-                  <p className="text-[13px] font-medium text-muted-foreground uppercase tracking-wider">
+                  <p className="text-[13px] font-medium text-muted-foreground uppercase tracking-wider min-h-[40px]">
                     {card.label}
                   </p>
                   <div className={isRevenue ? "text-4xl font-bold py-1" : "text-3xl font-bold py-1"}>
@@ -110,7 +114,7 @@ export function DashboardKpiCards({ data = {} }: { data?: Record<string, unknown
                   <Icon className={`h-5 w-5 ${card.color}`} />
                 </div>
               </div>
-              <p className="text-[13px] text-muted-foreground/70 mt-2">
+              <p className="text-[13px] text-muted-foreground/70 mt-4">
                 {card.description}
               </p>
             </CardContent>

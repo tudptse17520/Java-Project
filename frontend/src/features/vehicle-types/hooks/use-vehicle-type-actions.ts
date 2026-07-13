@@ -48,29 +48,15 @@ export function useVehicleTypeActions() {
         { id: selectedVehicleType.id, data: values },
         {
           onSuccess: () => {
-            toast.success("Cập nhật loại phương tiện thành công");
             handleCloseForm();
-          },
-          onError: (error: AxiosError<ApiErrorResponse>) => {
-            toast.error(
-              error.response?.data?.message ||
-                "Lỗi khi cập nhật loại phương tiện"
-            );
-          },
+          }
         }
       );
     } else {
       createMutation.mutate(values, {
         onSuccess: () => {
-          toast.success("Thêm mới loại phương tiện thành công");
           handleCloseForm();
-        },
-        onError: (error: AxiosError<ApiErrorResponse>) => {
-          toast.error(
-            error.response?.data?.message ||
-              "Lỗi khi thêm mới loại phương tiện"
-          );
-        },
+        }
       });
     }
   };
@@ -94,17 +80,10 @@ export function useVehicleTypeActions() {
   const handleConfirmDeactivate = () => {
     if (!vehicleTypeToDeactivate) return;
 
-    deactivateMutation.mutate(vehicleTypeToDeactivate.id, {
+    deactivateMutation.mutate({ id: vehicleTypeToDeactivate.id, typeName: vehicleTypeToDeactivate.typeName }, {
       onSuccess: () => {
-        toast.success("Đã ngừng áp dụng loại phương tiện");
         handleCloseConfirm();
-      },
-      onError: (error: AxiosError<ApiErrorResponse>) => {
-        toast.error(
-          error.response?.data?.message ||
-            "Lỗi khi vô hiệu hóa loại phương tiện"
-        );
-      },
+      }
     });
   };
 

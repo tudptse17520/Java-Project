@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 public class BookingListResponseDTO {
     private Long bookingId;
     private Long parkingSlotId;
+    private String parkingSlotName;
     private String expectedTimeIn;
 
     private BookingStatus status;

@@ -17,6 +17,7 @@ import {
   FormActions,
 } from "@/components/common/form-container";
 import { Portal } from "@/components/common/portal";
+import { useSlots } from "@/features/slots/hooks/use-slots";
 
 interface BookingModalProps {
   open: boolean;
@@ -31,6 +32,9 @@ export function BookingModal({
   onSubmit,
   isLoading,
 }: BookingModalProps) {
+  const { data: slotsResponse } = useSlots();
+  const slots = slotsResponse?.data || [];
+
   const {
     register,
     handleSubmit,
@@ -114,15 +118,20 @@ export function BookingModal({
                 <label className="text-sm font-medium leading-none">
                   Mã Vị trí đỗ (Slot ID) <span className="text-destructive">*</span>
                 </label>
-                <input
-                  type="number"
-                  placeholder="Nhập ID vị trí đỗ trống"
+                <select
                   className={cn(
-                    "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+                    "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
                     errors.parkingSlotId && "border-destructive focus-visible:ring-destructive"
                   )}
                   {...register("parkingSlotId", { valueAsNumber: true })}
-                />
+                >
+                  <option value={0} disabled>-- Chọn vị trí đỗ --</option>
+                  {slots.map((slot: any) => (
+                    <option key={slot.id} value={slot.id}>
+                      {slot.slotName} {slot.floorName ? `- ${slot.floorName}` : ''} ({slot.status === 'AVAILABLE' ? 'Trống' : slot.status === 'RESERVED' ? 'Đã đặt' : slot.status})
+                    </option>
+                  ))}
+                </select>
                 {errors.parkingSlotId && (
                   <p className="text-sm text-destructive">
                     {errors.parkingSlotId.message}

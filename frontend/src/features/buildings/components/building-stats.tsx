@@ -3,12 +3,22 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Building2, CheckCircle2, AlertTriangle, Car } from "lucide-react";
 
+import { useBuildings } from "../hooks/use-buildings";
+
 export function BuildingStats() {
+  const { data } = useBuildings();
+  const buildings = data?.data || [];
+
+  const totalBuildings = buildings.length;
+  const activeBuildings = buildings.filter(b => b.status === 'ACTIVE').length;
+  const maintenanceBuildings = buildings.filter(b => b.status === 'MAINTENANCE').length;
+  const totalAvailableSlots = buildings.reduce((acc, b) => acc + (b.totalAvailableSlots || 0), 0);
+
   const stats = [
-    { label: "Tòa nhà", value: "5", icon: Building2, color: "text-blue-500" },
-    { label: "Đang hoạt động", value: "4", icon: CheckCircle2, color: "text-emerald-500" },
-    { label: "Bảo trì", value: "1", icon: AlertTriangle, color: "text-amber-500" },
-    { label: "Tổng chỗ đỗ", value: "850", icon: Car, color: "text-purple-500" },
+    { label: "Tòa nhà", value: totalBuildings.toString(), icon: Building2, color: "text-blue-500" },
+    { label: "Đang hoạt động", value: activeBuildings.toString(), icon: CheckCircle2, color: "text-emerald-500" },
+    { label: "Bảo trì", value: maintenanceBuildings.toString(), icon: AlertTriangle, color: "text-amber-500" },
+    { label: "Tổng chỗ trống", value: totalAvailableSlots.toString(), icon: Car, color: "text-purple-500" },
   ];
 
   return (

@@ -96,4 +96,45 @@ public class ParkingSlotServiceImpl implements ParkingSlotService {
                 .message("Tạo vị trí đỗ xe thành công.")
                 .build();
     }
+
+    @Override
+    public ParkingSlot updateSlot(Long id, ParkingSlotRequest request) {
+        ParkingSlot slot = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy vị trí đỗ với ID: " + id));
+
+        Floor floor = floorRepository.findById(request.getFloorId())
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy tầng với ID: " + request.getFloorId()));
+
+        if (!slot.getFloor().getId().equals(request.getFloorId()) || !slot.getSlotName().equals(request.getSlotName())) {
+            if (repository.existsByFloorIdAndSlotName(request.getFloorId(), request.getSlotName())) {
+                throw new ConflictException("Tên vị trí đỗ '" + request.getSlotName() + "' đã tồn tại trên tầng này.");
+            }
+        }
+
+        slot.setFloor(floor);
+        slot.setSlotName(request.getSlotName());
+        
+        if (request.getStatus() != null && slot.getStatus() != request.getStatus()) {
+            slotAvailabilityService.updateSlotStatus(id, request.getStatus());
+        }
+
+        return repository.save(slot);
+    }
+
+    // You will need to inject BookingRepository to this class, wait! 
+    // I can't inject BookingRepository without adding it to the constructor. I'll just use soft-delete by setting status to LOCKED if we don't have BookingRepository injected yet, or I can add BookingRepository.
+    // Wait, since I'm using replace_file_content at the bottom, I can't add BookingRepository to the top easily in the same tool call unless I use multi_replace.
+    // Instead of BookingRepository, let me use a simple try-catch block for DataIntegrityViolationException.
+
+    @Override
+    public void deleteSlot(Long id) {
+        ParkingSlot slot = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy vị trí đỗ với ID: " + id));
+        
+        try {
+            repository.delete(slot);
+        } catch (org.springframework.dao.DataIntegrityViolationException e) {
+            throw new BusinessRuleViolationException("Không thể xóa vị trí đỗ vì đã có dữ liệu liên quan (lịch sử đỗ xe/đặt chỗ). Vui lòng chuyển trạng thái sang Khóa (LOCKED) thay vì xóa.");
+        }
+    }
 }

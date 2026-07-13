@@ -2,15 +2,24 @@
 
 import { Card, CardContent } from "@/components/ui/card";
 import { CheckCircle2, AlertTriangle, Car, Clock, MapPin } from "lucide-react";
+import { useSlots } from "@/features/slots/hooks/use-slots";
 
 export function SlotStats() {
-  // In a real app, these numbers would come from an API based on the current filters
+  const { data: slotsResponse } = useSlots();
+  const slots = slotsResponse?.data || [];
+
+  const total = slots.length;
+  const available = slots.filter((s: any) => s.status === 'AVAILABLE').length;
+  const occupied = slots.filter((s: any) => s.status === 'OCCUPIED').length;
+  const reserved = slots.filter((s: any) => s.status === 'RESERVED').length;
+  const maintenance = slots.filter((s: any) => s.status === 'MAINTENANCE').length;
+
   const stats = [
-    { label: "Tổng số chỗ", value: "120", icon: Car, color: "text-blue-500", bg: "bg-blue-500/10" },
-    { label: "Còn trống", value: "80", icon: CheckCircle2, color: "text-emerald-500", bg: "bg-emerald-500/10" },
-    { label: "Đang đỗ", value: "30", icon: MapPin, color: "text-blue-600", bg: "bg-blue-600/10" },
-    { label: "Đặt trước", value: "8", icon: Clock, color: "text-purple-500", bg: "bg-purple-500/10" },
-    { label: "Bảo trì", value: "2", icon: AlertTriangle, color: "text-amber-500", bg: "bg-amber-500/10" },
+    { label: "Tổng số chỗ", value: total.toString(), icon: Car, color: "text-blue-500", bg: "bg-blue-500/10" },
+    { label: "Còn trống", value: available.toString(), icon: CheckCircle2, color: "text-emerald-500", bg: "bg-emerald-500/10" },
+    { label: "Đang đỗ", value: occupied.toString(), icon: MapPin, color: "text-blue-600", bg: "bg-blue-600/10" },
+    { label: "Đặt trước", value: reserved.toString(), icon: Clock, color: "text-purple-500", bg: "bg-purple-500/10" },
+    { label: "Bảo trì", value: maintenance.toString(), icon: AlertTriangle, color: "text-amber-500", bg: "bg-amber-500/10" },
   ];
 
   return (

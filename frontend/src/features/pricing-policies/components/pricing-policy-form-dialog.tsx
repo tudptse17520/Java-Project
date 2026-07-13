@@ -17,6 +17,7 @@ import {
 } from "@/features/pricing-policies/schemas/pricing-policy.schema";
 import { VehicleType } from "@/features/vehicle-types/types/vehicle-type.type";
 import { FormContainer, FormHeader, FormFields, FormActions } from "@/components/common/form-container";
+import { Portal } from "@/components/common/portal";
 
 interface PricingPolicyFormDialogProps {
   open: boolean;
@@ -105,7 +106,8 @@ export function PricingPolicyFormDialog({
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <Portal>
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       {/* Backdrop */}
       <div
         className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm transition-opacity duration-300"
@@ -279,5 +281,7 @@ export function PricingPolicyFormDialog({
         </div>
       </div>
     </div>
+    </Portal>
   );
 }
+

@@ -41,15 +41,15 @@ export function SlotFilter({
         />
       </div>
 
-      <Select value={floorId?.toString()} onValueChange={(val) => onFloorIdChange(val === "all" ? undefined : Number(val))}>
+      <Select value={floorId?.toString() || "all"} onValueChange={(val) => onFloorIdChange(val === "all" || !val ? undefined : Number(val))}>
         <SelectTrigger className="w-[180px] bg-background">
           <SelectValue placeholder="Tất cả tầng">
-            {floorId ? floors.find((f) => f.id === floorId)?.floorName || "Tất cả tầng" : "Tất cả tầng"}
+            {floorId ? floors.find((f: any) => f.id === floorId)?.floorName || "Tất cả tầng" : "Tất cả tầng"}
           </SelectValue>
         </SelectTrigger>
         <SelectContent>
           <SelectItem value="all">Tất cả tầng</SelectItem>
-          {!isLoading && floors.map((floor) => (
+          {!isLoading && floors.map((floor: any) => (
             <SelectItem key={floor.id} value={floor.id.toString()}>
               {floor.floorName} - {floor.buildingName}
             </SelectItem>
@@ -57,7 +57,7 @@ export function SlotFilter({
         </SelectContent>
       </Select>
 
-      <Select value={status || undefined} onValueChange={(val) => onStatusChange(val === "all" ? "" : val)}>
+      <Select value={status || "all"} onValueChange={(val) => onStatusChange(val === "all" || !val ? "" : val)}>
         <SelectTrigger className="w-[180px] bg-background">
           <SelectValue placeholder="Tất cả trạng thái">
             {status === "AVAILABLE" ? "Còn trống" : 

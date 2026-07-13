@@ -521,29 +521,7 @@ public class PaymentServiceImpl implements PaymentService {
         }
     }
 
-    /**
-     * Parse fee_type string to FeeType enum.
-     */
-    private FeeType parseFeeType(String feeType) {
-        try {
-            return FeeType.valueOf(feeType.toUpperCase());
-        } catch (IllegalArgumentException e) {
-            throw new BusinessRuleViolationException(
-                    "Loại phí '" + feeType + "' không hợp lệ. Các giá trị hợp lệ: Parking_Fee, Booking_Deposit, Lost_Ticket_Fine.");
-        }
-    }
 
-    /**
-     * Parse payment_method string to PaymentMethod enum.
-     */
-    private PaymentMethod parsePaymentMethod(String method) {
-        try {
-            return PaymentMethod.valueOf(method);
-        } catch (IllegalArgumentException e) {
-            throw new BusinessRuleViolationException(
-                    "Phương thức thanh toán '" + method + "' không hợp lệ. Các giá trị hợp lệ: Cash, Momo, Vnpay, Credit_Card.");
-        }
-    }
 
     /**
      * Map Payment entity to PaymentResponseDTO.

@@ -75,4 +75,27 @@ public class ParkingSlotController {
         ParkingSlotCreateResponse response = parkingSlotService.createSlot(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
+
+    @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('MANAGER', 'ADMIN')")
+    public ResponseEntity<ParkingSlotResponse> updateSlot(
+            @PathVariable Long id,
+            @Valid @RequestBody ParkingSlotRequest request) {
+        
+        ParkingSlot updated = parkingSlotService.updateSlot(id, request);
+        
+        return ResponseEntity.ok(ParkingSlotResponse.builder()
+                .id(updated.getId())
+                .floorId(updated.getFloor() != null ? updated.getFloor().getId() : null)
+                .slotName(updated.getSlotName())
+                .status(updated.getStatus())
+                .build());
+    }
+
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('MANAGER', 'ADMIN')")
+    public ResponseEntity<Void> deleteSlot(@PathVariable Long id) {
+        parkingSlotService.deleteSlot(id);
+        return ResponseEntity.noContent().build();
+    }
 }

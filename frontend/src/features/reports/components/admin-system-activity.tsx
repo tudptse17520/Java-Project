@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { ShieldAlert, UserPlus, Settings, UserMinus, Edit } from "lucide-react";
+import { ShieldAlert, UserPlus, Settings, UserMinus, Edit, Building, Plus } from "lucide-react";
 import { useActivityStore } from "@/stores/activity.store";
 
 const iconMap: Record<string, any> = {
@@ -11,6 +11,8 @@ const iconMap: Record<string, any> = {
   Settings,
   ShieldAlert,
   Edit,
+  Building,
+  BuildingPlus: Plus,
 };
 
 function getTimeAgo(timestamp: number): string {

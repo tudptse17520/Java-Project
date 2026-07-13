@@ -66,7 +66,7 @@ export function FeedbackTable({ data, isLoading, onView, onEdit }: FeedbackTable
     },
     {
       header: "Thao tác",
-      accessorKey: "id",
+      id: "actions",
       cell: ({ row }: any) => (
         <div className="flex gap-2">
           <Button

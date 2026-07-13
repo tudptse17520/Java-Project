@@ -32,3 +32,7 @@ export const getAllBookings = async (): Promise<BookingListResponse[]> => {
   );
   return response.data;
 };
+
+export const cancelBooking = async (bookingId: number): Promise<void> => {
+  await axiosClient.put(`${BASE_PATH}/bookings/${bookingId}/cancel`);
+};

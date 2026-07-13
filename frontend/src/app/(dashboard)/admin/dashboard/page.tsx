@@ -12,12 +12,41 @@ import Link from "next/link";
 import { useUsers } from "@/features/users/hooks/use-users";
 import { UserResponse } from "@/types/user.type";
 
+import { useBuildings } from "@/features/buildings/hooks/use-buildings";
+import { useFloors } from "@/features/floors/hooks/use-floors";
+import { useSlots } from "@/features/slots/hooks/use-slots";
+import { useQueryClient } from "@tanstack/react-query";
+import { useEffect } from "react";
+
 export default function AdminDashboardPage() {
+  const queryClient = useQueryClient();
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      queryClient.invalidateQueries({ queryKey: ["users"] });
+      queryClient.invalidateQueries({ queryKey: ["buildings"] });
+      queryClient.invalidateQueries({ queryKey: ["floors"] });
+      queryClient.invalidateQueries({ queryKey: ["slots"] });
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [queryClient]);
+
   const { data: usersData } = useUsers();
+  const { data: buildingsData } = useBuildings();
+  const { data: floorsData } = useFloors();
+  const { data: slotsData } = useSlots();
+
   const users = usersData?.data || [];
-  
   const totalUsers = users.length;
   const activeUsers = users.filter((u: UserResponse) => u.status === "ACTIVE").length;
+
+  const totalBuildings = buildingsData?.data?.length || 0;
+  const totalFloors = floorsData?.length || 0;
+  // slotService returns { data: ParkingSlot[] } so we count the array length if we want total slots
+  // Actually, useSlots() queryFn is slotService.getSlots() which returns `{ totalAvailable, data }`
+  // So total slots is just the data length, but wait, does it return ALL slots or paginated?
+  // It's a single array in the current implementation.
+  const totalSlots = slotsData?.data?.length || 0;
 
   const adminStatCards = [
     {
@@ -41,7 +70,7 @@ export default function AdminDashboardPage() {
     {
       key: "buildings",
       label: "Tổng Tòa Nhà",
-      value: "1",
+      value: totalBuildings.toString(),
       description: "Cơ sở đang vận hành",
       icon: Building,
       color: "text-purple-500",
@@ -50,7 +79,7 @@ export default function AdminDashboardPage() {
     {
       key: "floors",
       label: "Tổng Tầng",
-      value: "3",
+      value: totalFloors.toString(),
       description: "Khu vực phân lô xe",
       icon: Layers,
       color: "text-amber-500",
@@ -59,7 +88,7 @@ export default function AdminDashboardPage() {
     {
       key: "slots",
       label: "Tổng Slot Đỗ",
-      value: "150",
+      value: totalSlots.toString(),
       description: "Sức chứa tối đa (Capacity)",
       icon: MapPin,
       color: "text-rose-500",

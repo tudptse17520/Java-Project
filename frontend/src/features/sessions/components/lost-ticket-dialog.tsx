@@ -10,6 +10,7 @@ import {
 import { useCheckoutActions } from "../hooks/use-checkout-actions";
 import { CHECKOUT_MESSAGES } from "../constants/session.constants";
 import { FormContainer, FormHeader, FormFields, FormActions } from "@/components/common/form-container";
+import { Portal } from "@/components/common/portal";
 
 interface LostTicketDialogProps {
   sessionId: number;
@@ -55,7 +56,8 @@ export function LostTicketDialog({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
+    <Portal>
+      <div className="fixed inset-0 z-50 flex items-center justify-center">
       <div className="fixed inset-0 bg-black/50" onClick={onClose} aria-hidden="true" />
       <div className="relative z-50 w-full max-w-lg rounded-lg border bg-background p-6 shadow-lg">
         <FormContainer onSubmit={handleSubmit(onSubmit)}>
@@ -98,5 +100,7 @@ export function LostTicketDialog({
         </FormContainer>
       </div>
     </div>
+    </Portal>
   );
 }
+

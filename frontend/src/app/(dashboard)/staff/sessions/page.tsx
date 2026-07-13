@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/button';
 
 import { SessionFilter } from '@/features/sessions/components/session-filter';
 import { SessionTable } from '@/features/sessions/components/session-table';
+import { SessionSummaryCards } from '@/features/sessions/components/session-summary-cards';
 import { CheckInModal } from '@/features/sessions/components/check-in-modal';
 import { useSessionsList } from '@/features/sessions/hooks/use-sessions';
 
@@ -40,6 +41,8 @@ export default function SessionsPage() {
           onStatusChange={setStatus}
         />
       </Toolbar>
+      
+      <SessionSummaryCards />
       
       {isLoading ? (
         <TableSkeleton rows={5} />

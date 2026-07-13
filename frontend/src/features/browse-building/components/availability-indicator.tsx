@@ -3,10 +3,11 @@ import { cn } from "@/lib/utils";
 
 interface AvailabilityIndicatorProps {
   availableSlots: number;
+  totalSlots?: number;
   className?: string;
 }
 
-export function AvailabilityIndicator({ availableSlots, className }: AvailabilityIndicatorProps) {
+export function AvailabilityIndicator({ availableSlots, totalSlots, className }: AvailabilityIndicatorProps) {
   const [pulse, setPulse] = useState(false);
 
   useEffect(() => {
@@ -20,11 +21,11 @@ export function AvailabilityIndicator({ availableSlots, className }: Availabilit
   return (
     <div
       className={cn(
-        "inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-sm font-medium transition-colors",
+        "inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 text-sm font-medium transition-colors",
         isFull
           ? "bg-danger/10 text-danger"
-          : "bg-success/10 text-success",
-        pulse && !isFull && "bg-success/20 animate-pulse",
+          : "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400",
+        pulse && !isFull && "bg-emerald-500/20 animate-pulse",
         pulse && isFull && "bg-danger/20 animate-pulse",
         className
       )}
@@ -32,10 +33,10 @@ export function AvailabilityIndicator({ availableSlots, className }: Availabilit
       <span
         className={cn(
           "h-2 w-2 rounded-full",
-          isFull ? "bg-danger" : "bg-success"
+          isFull ? "bg-danger animate-pulse" : "bg-emerald-500"
         )}
       />
-      {availableSlots} chỗ trống
+      {totalSlots ? `${availableSlots} / ${totalSlots} chỗ` : `${availableSlots} chỗ trống`}
     </div>
   );
 }

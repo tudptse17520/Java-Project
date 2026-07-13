@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
 import { PageContainer } from "@/components/common/page-container";
 import { PageHeader } from "@/components/common/page-header";
 import { Button } from "@/components/ui/button";
@@ -14,6 +15,18 @@ import toast from "react-hot-toast";
 
 export default function DriverReservationsPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  
+  useEffect(() => {
+    if (searchParams.get("openModal") === "true") {
+      setIsModalOpen(true);
+      // Clean up URL so it doesn't reopen on refresh
+      const newUrl = new URL(window.location.href);
+      newUrl.searchParams.delete("openModal");
+      router.replace(newUrl.pathname + newUrl.search);
+    }
+  }, [searchParams, router]);
   const { user } = useAuthStore();
 
   const { data: bookings = [], isLoading, error } = useUserBookings(user?.id);
@@ -75,6 +88,7 @@ export default function DriverReservationsPage() {
         onClose={() => setIsModalOpen(false)}
         onSubmit={handleSubmit}
         isLoading={createBookingMutation.isPending}
+        initialBuildingId={searchParams.get("buildingId") ? Number(searchParams.get("buildingId")) : undefined}
       />
     </PageContainer>
   );

@@ -198,7 +198,7 @@ export const DRIVER_NAV: NavItem[] = [
   },
   {
     title: "Đặt chỗ",
-    href: "/user/bookings",
+    href: "/reservations",
     icon: CalendarCheck,
     roles: [Role.USER],
   },

@@ -1,5 +1,6 @@
 "use client";
 
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ParkingSquare, Moon, Sun, LogOut } from "lucide-react";
@@ -19,6 +20,12 @@ export default function DriverLayout({
   const { user } = useAuthStore();
   const { theme, setTheme } = useThemeStore();
   const navItems = getDriverNavItems();
+
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const toggleTheme = () => {
     setTheme(theme === "dark" ? "light" : "dark");
@@ -67,31 +74,35 @@ export default function DriverLayout({
 
           {/* Right side */}
           <div className="flex items-center gap-2">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={toggleTheme}
-              className="h-8 w-8 rounded-lg"
-              aria-label={theme === "dark" ? "Chế độ sáng" : "Chế độ tối"}
-            >
-              {theme === "dark" ? (
-                <Sun className="h-4 w-4" />
-              ) : (
-                <Moon className="h-4 w-4" />
-              )}
-            </Button>
+            {mounted && (
+              <>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={toggleTheme}
+                  className="h-8 w-8 rounded-lg"
+                  aria-label={theme === "dark" ? "Chế độ sáng" : "Chế độ tối"}
+                >
+                  {theme === "dark" ? (
+                    <Sun className="h-4 w-4" />
+                  ) : (
+                    <Moon className="h-4 w-4" />
+                  )}
+                </Button>
 
-            {user && (
-              <div className="flex items-center gap-2 rounded-lg px-2 py-1.5">
-                <div className="flex h-7 w-7 items-center justify-center rounded-full bg-primary/10 text-primary ring-2 ring-primary/20">
-                  <span className="text-xs font-semibold">
-                    {(user.fullName || user.username || "U").charAt(0).toUpperCase()}
-                  </span>
-                </div>
-                <span className="hidden text-sm font-medium sm:inline">
-                  {user.fullName || user.username}
-                </span>
-              </div>
+                {user && (
+                  <div className="flex items-center gap-2 rounded-lg px-2 py-1.5">
+                    <div className="flex h-7 w-7 items-center justify-center rounded-full bg-primary/10 text-primary ring-2 ring-primary/20">
+                      <span className="text-xs font-semibold">
+                        {(user.fullName || user.username || "U").charAt(0).toUpperCase()}
+                      </span>
+                    </div>
+                    <span className="hidden text-sm font-medium sm:inline">
+                      {user.fullName || user.username}
+                    </span>
+                  </div>
+                )}
+              </>
             )}
 
             <Button

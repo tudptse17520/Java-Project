@@ -18,7 +18,7 @@ interface JwtPayload {
 // =============================================
 
 /** Các route không cần xác thực */
-const PUBLIC_ROUTES = ["/", "/login"];
+const PUBLIC_ROUTES = ["/", "/login", "/forbidden"];
 
 /** Mapping role -> prefix route được phép truy cập */
 const ROLE_ROUTE_MAP: Record<string, string[]> = {

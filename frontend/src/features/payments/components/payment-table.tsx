@@ -11,6 +11,7 @@ import { Eye, Settings2, XCircle } from "lucide-react";
 import { DataTable } from "@/components/common/data-table";
 import { StatusBadge } from "@/components/common/status-badge";
 import { Button } from "@/components/ui/button";
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import type { Payment } from "@/features/payments/types/payment.type";
 import { PaymentStatus, PAYMENT_STATUS_LABELS } from "@/constants/payment-status";
 import {
@@ -65,9 +66,18 @@ export function PaymentTable({
     () => [
       {
         accessorKey: "id",
-        header: "ID",
+        header: "Mã GD",
         cell: ({ row }) => (
-          <span className="font-medium">#{row.original.id}</span>
+          <span className="font-medium text-muted-foreground">#PAY-{row.original.id.toString().padStart(4, '0')}</span>
+        ),
+      },
+      {
+        accessorKey: "parkingSessionId",
+        header: "Mã Phiên (PS)",
+        cell: ({ row }) => (
+          <span className="font-medium text-blue-600 dark:text-blue-400">
+            {row.original.parkingSessionId ? `#PS-${row.original.parkingSessionId.toString().padStart(4, '0')}` : "—"}
+          </span>
         ),
       },
       {
@@ -79,11 +89,13 @@ export function PaymentTable({
       },
       {
         accessorKey: "amount",
-        header: "Số tiền",
+        header: () => <div className="text-center">Số tiền</div>,
         cell: ({ row }) => (
-          <span className="font-semibold text-primary">
-            {formatVND(row.original.amount)}
-          </span>
+          <div className="text-center">
+            <span className="font-semibold text-primary">
+              {formatVND(row.original.amount)}
+            </span>
+          </div>
         ),
       },
       {
@@ -106,15 +118,17 @@ export function PaymentTable({
       },
       {
         accessorKey: "status",
-        header: "Trạng thái",
+        header: () => <div className="text-center">Trạng thái</div>,
         cell: ({ row }) => {
           const status = row.original.status;
           const label =
             PAYMENT_STATUS_LABELS[status as PaymentStatus] || status;
           return (
-            <StatusBadge variant={getStatusVariant(status)}>
-              {label}
-            </StatusBadge>
+            <div className="text-center">
+              <StatusBadge variant={getStatusVariant(status)}>
+                {label}
+              </StatusBadge>
+            </div>
           );
         },
       },
@@ -125,34 +139,50 @@ export function PaymentTable({
           const payment = row.original;
           const isPending = payment.status === PaymentStatus.PENDING;
           return (
-            <div className="flex items-center gap-1">
-              <Button
-                variant="ghost"
-                size="icon-xs"
-                onClick={() => onViewDetail(payment)}
-                title="Xem chi tiết"
-              >
-                <Eye className="h-4 w-4" />
-              </Button>
+            <div className="flex items-center gap-2">
+              <Tooltip>
+                <TooltipTrigger render={
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-8 w-8"
+                    onClick={() => onViewDetail(payment)}
+                  />
+                }>
+                  <Eye className="h-4 w-4" />
+                </TooltipTrigger>
+                <TooltipContent>Xem chi tiết</TooltipContent>
+              </Tooltip>
+
               {isPending && (
                 <>
-                  <Button
-                    variant="ghost"
-                    size="icon-xs"
-                    onClick={() => onManualStatus(payment)}
-                    title="Cập nhật trạng thái"
-                  >
-                    <Settings2 className="h-4 w-4" />
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="icon-xs"
-                    onClick={() => onCancel(payment)}
-                    title="Hủy giao dịch"
-                    className="text-destructive hover:text-destructive"
-                  >
-                    <XCircle className="h-4 w-4" />
-                  </Button>
+                  <Tooltip>
+                    <TooltipTrigger render={
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-8 w-8"
+                        onClick={() => onManualStatus(payment)}
+                      />
+                    }>
+                      <Settings2 className="h-4 w-4" />
+                    </TooltipTrigger>
+                    <TooltipContent>Cập nhật trạng thái</TooltipContent>
+                  </Tooltip>
+
+                  <Tooltip>
+                    <TooltipTrigger render={
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-8 w-8 text-destructive hover:text-destructive"
+                        onClick={() => onCancel(payment)}
+                      />
+                    }>
+                      <XCircle className="h-4 w-4" />
+                    </TooltipTrigger>
+                    <TooltipContent>Hủy giao dịch</TooltipContent>
+                  </Tooltip>
                 </>
               )}
             </div>

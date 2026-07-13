@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { X, MapPin } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { useBuildingDetail } from "../hooks/use-building-detail";
 import { useSlotAvailabilityStream } from "../hooks/use-slot-availability-stream";
@@ -7,6 +8,7 @@ import { BuildingStatusBadge } from "./building-status-badge";
 import { FloorAvailabilityRow } from "./floor-availability-row";
 import { AvailabilityIndicator } from "./availability-indicator";
 import { LoadingSpinner } from "@/components/common/loading-spinner";
+import { PricingSummary } from "./pricing-summary";
 import { useQueryClient } from "@tanstack/react-query";
 import { BROWSE_BUILDING_KEYS } from "../constants/browse-building.constants";
 import type { BuildingDetail } from "../types/browse-building.type";
@@ -20,6 +22,7 @@ interface BuildingDetailDialogProps {
 export function BuildingDetailDialog({ buildingId, onClose }: BuildingDetailDialogProps) {
   const [isVisible, setIsVisible] = useState(false);
   const queryClient = useQueryClient();
+  const router = useRouter();
 
   const { data: building, isLoading, error } = useBuildingDetail(buildingId);
 
@@ -47,7 +50,7 @@ export function BuildingDetailDialog({ buildingId, onClose }: BuildingDetailDial
 
           return {
             ...oldData,
-            total_available_slots: newTotal,
+            totalAvailableSlots: newTotal,
             floors: newFloors
           };
         }
@@ -132,7 +135,7 @@ export function BuildingDetailDialog({ buildingId, onClose }: BuildingDetailDial
               {/* Building Info */}
               <div className="flex flex-col gap-3">
                 <div className="flex items-start justify-between gap-4">
-                  <h3 className="text-2xl font-bold">{building.building_name}</h3>
+                  <h3 className="text-2xl font-bold">{building.buildingName}</h3>
                   <BuildingStatusBadge status={building.status} />
                 </div>
                 
@@ -144,10 +147,10 @@ export function BuildingDetailDialog({ buildingId, onClose }: BuildingDetailDial
                 <div className="mt-2 flex items-center p-4 bg-muted/50 rounded-lg border">
                   <div className="flex-1">
                     <p className="text-sm font-medium text-muted-foreground">Tổng số chỗ trống</p>
-                    <p className="text-3xl font-bold mt-1">{building.total_available_slots}</p>
+                    <p className="text-3xl font-bold mt-1">{building.totalAvailableSlots || 0}</p>
                   </div>
                   <div>
-                    <AvailabilityIndicator availableSlots={building.total_available_slots} className="text-lg px-3 py-1.5" />
+                    <AvailabilityIndicator availableSlots={building.totalAvailableSlots || 0} className="text-lg px-3 py-1.5" />
                   </div>
                 </div>
               </div>
@@ -168,6 +171,19 @@ export function BuildingDetailDialog({ buildingId, onClose }: BuildingDetailDial
                     ))}
                   </div>
                 )}
+              </div>
+
+              {/* Pricing Summary */}
+              <PricingSummary />
+
+              {/* Actions */}
+              <div className="pt-4 border-t flex justify-end">
+                <button
+                  onClick={() => router.push(`/reservations?buildingId=${building.id}&openModal=true`)}
+                  className="bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-8 py-2 rounded-md font-medium transition-colors"
+                >
+                  Đặt chỗ ngay
+                </button>
               </div>
             </div>
           )}

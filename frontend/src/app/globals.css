@@ -276,6 +276,13 @@
   animation: skeleton-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
+/* Shimmer animation for skeletons */
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
 /* Fade in animation */
 @keyframes fade-in {
   from { opacity: 0; transform: translateY(4px); }

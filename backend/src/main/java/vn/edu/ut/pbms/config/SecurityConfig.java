@@ -43,6 +43,11 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .exceptionHandling(exception -> exception
+                        .authenticationEntryPoint((request, response, authException) -> {
+                            response.sendError(jakarta.servlet.http.HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
+                        })
+                )
                 .authorizeHttpRequests(auth -> auth
                         // Endpoint xác thực - public
                         .requestMatchers("/api/v1/auth/**").permitAll()
@@ -56,14 +61,17 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/sessions/**").authenticated()
                         // Quản lý người dùng
                         .requestMatchers("/api/v1/users/**").authenticated()
+                        // Cho phép public stream
+                        .requestMatchers("/api/v1/buildings/availability-stream").permitAll()
+                        .requestMatchers("/api/v1/buildings/*/availability-stream").permitAll()
                         // Quản lý tòa nhà
-                        .requestMatchers("/api/v1/buildings/**").hasAnyRole("ADMIN", "MANAGER")
+                        .requestMatchers("/api/v1/buildings/**").authenticated()
                         // Quản lý tầng
-                        .requestMatchers("/api/v1/floors/**").hasAnyRole("ADMIN", "MANAGER")
+                        .requestMatchers("/api/v1/floors/**").authenticated()
                         // Quản lý ô đỗ
-                        .requestMatchers("/api/v1/slots/**").hasAnyRole("ADMIN", "MANAGER")
+                        .requestMatchers("/api/v1/slots/**").authenticated()
                         // Quản lý loại phương tiện
-                        .requestMatchers("/api/v1/vehicle-types/**").hasAnyRole("ADMIN", "MANAGER")
+                        .requestMatchers("/api/v1/vehicle-types/**").authenticated()
                         // Yêu cầu quyền ADMIN hoặc MANAGER cho các API Báo cáo & Thống kê
                         .requestMatchers("/api/v1/reports/**").hasAnyRole("ADMIN", "MANAGER")
                         // Đặt chỗ

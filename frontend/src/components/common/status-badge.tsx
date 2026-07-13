@@ -71,7 +71,7 @@ export function StatusBadge({
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium transition-colors shrink-0 whitespace-nowrap h-6",
+        "inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-medium transition-colors shrink-0 whitespace-nowrap h-7",
         config.colorClass,
         className
       )}

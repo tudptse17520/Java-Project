@@ -17,7 +17,11 @@ public class ParkingSessionResponseDTO {
     private Long id;
     
     private String plate;
+    private String ticketCode;
+    private String status;
     private LocalDateTime timeIn;
     private LocalDateTime timeOut;
     private BigDecimal totalFee;
+    private Long vehicleId;
+    private Long parkingSlotId;
 }

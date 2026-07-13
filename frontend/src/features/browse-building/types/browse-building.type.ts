@@ -3,33 +3,33 @@ import { FloorStatus } from "@/constants/floor-status";
 
 export interface BuildingBrowseItem {
   id: number;
-  building_name: string;
+  buildingName: string;
   address: string;
-  number_of_floors: number;
+  numberOfFloors: number;
   status: BuildingStatus;
-  available_slots: number;
+  availableSlots: number;
 }
 
 export interface FloorDetail {
   id: number;
-  floor_name: string;
-  floor_level: number;
+  floorName: string;
+  floorLevel: number;
   capacity: number;
   status: FloorStatus;
-  available_slots: number;
-  building_id: number;
-  building_name: string;
-  vehicle_type_id: number;
-  vehicle_type_name: string;
+  availableSlots: number;
+  buildingId: number | null;
+  buildingName: string | null;
+  vehicleTypeId: number | null;
+  vehicleTypeName: string;
 }
 
 export interface BuildingDetail {
   id: number;
-  building_name: string;
+  buildingName: string;
   address: string;
-  number_of_floors: number;
+  numberOfFloors: number;
   status: BuildingStatus;
-  total_available_slots: number;
+  totalAvailableSlots: number;
   floors: FloorDetail[];
 }
 

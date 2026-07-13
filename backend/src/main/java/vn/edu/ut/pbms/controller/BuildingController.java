@@ -46,11 +46,13 @@ public class BuildingController {
     }
 
     @GetMapping("/{id}/availability-stream")
+    @PreAuthorize("permitAll()")
     public SseEmitter subscribeToAvailability(@PathVariable Long id) {
         return sseEmitterManager.subscribe(id);
     }
 
     @GetMapping("/availability-stream")
+    @PreAuthorize("permitAll()")
     public SseEmitter subscribeToGlobalAvailability() {
         return sseEmitterManager.subscribe(null); // Subscribe to global
     }

@@ -10,6 +10,9 @@ import { Button } from "@/components/ui/button";
 import type { PaymentFilter as PaymentFilterType } from "@/features/payments/types/payment.type";
 import { PAYMENT_METHODS, FEE_TYPES } from "@/features/payments/constants/payment.constants";
 import { PaymentStatus, PAYMENT_STATUS_LABELS } from "@/constants/payment-status";
+import { DateRangePicker } from "@/components/common/date-range-picker";
+import { DateRange } from "react-day-picker";
+import dayjs from "dayjs";
 
 interface PaymentFilterProps {
   filter: PaymentFilterType;
@@ -121,18 +124,21 @@ export function PaymentFilter({
       {/* Từ ngày */}
       <div className="flex flex-col gap-1">
         <label className="text-xs font-medium text-muted-foreground">
-          Từ ngày
+          Thời gian giao dịch
         </label>
-        <input
-          type="date"
-          className="h-9 rounded-md border border-input bg-background px-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
-          value={filter.fromDate ? formatDateToInput(filter.fromDate) : ""}
-          onChange={(e) => {
-            const formatted = e.target.value
-              ? formatDateToDDMMYYYY(e.target.value)
-              : "";
-            onFilterChange("fromDate", formatted);
+        <DateRangePicker
+          date={{
+            from: filter.fromDate ? dayjs(filter.fromDate, "DD-MM-YYYY").toDate() : undefined,
+            to: undefined
           }}
+          onDateChange={(range) => {
+            if (range?.from) {
+              onFilterChange("fromDate", dayjs(range.from).format("DD-MM-YYYY"));
+            } else {
+              onFilterChange("fromDate", "");
+            }
+          }}
+          className="h-9 w-60"
         />
       </div>
 

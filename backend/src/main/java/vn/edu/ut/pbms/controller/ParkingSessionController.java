@@ -20,7 +20,7 @@ import vn.edu.ut.pbms.service.ParkingSessionService;
 @RequestMapping("/api/v1/sessions")
 @RequiredArgsConstructor
 @CrossOrigin
-@PreAuthorize("hasAnyRole('STAFF', 'MANAGER', 'ADMIN')")
+@PreAuthorize("hasAnyRole('USER', 'STAFF', 'MANAGER', 'ADMIN')")
 @Tag(name = "Parking Session", description = "Các API quản lý lượt gửi xe")
 public class ParkingSessionController {
 
@@ -47,12 +47,23 @@ public class ParkingSessionController {
     }
 
     /**
+     * API: Lấy danh sách lượt gửi xe của người dùng cá nhân.
+     */
+    @GetMapping("/users/{userId}/sessions")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER') or #userId == authentication.principal.id")
+    public ResponseEntity<ParkingSessionListResponseDTO> getUserSessions(@PathVariable("userId") Long userId) {
+        ParkingSessionListResponseDTO response = parkingSessionService.getParkingSessionsByUserId(userId);
+        return ResponseEntity.ok(response);
+    }
+
+    /**
      * API: Thực hiện Check-in cho xe vào bãi[cite: 74, 75].
      *
      * @param request Thông tin chi tiết lượt vào bãi (Biển số, ID xe nếu có,...) [cite: 78]
      * @return HTTP 201 CREATED với thông tin vé điện tử vừa khởi tạo [cite: 80]
      */
     @PostMapping("/check-in")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'STAFF')")
     public ResponseEntity<CheckinResponse> checkInVehicle(@Valid @RequestBody CheckinRequest request) {
         CheckinResponse response = parkingSessionService.checkInVehicle(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);

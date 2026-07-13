@@ -71,12 +71,15 @@ export function Sidebar({ role }: SidebarProps) {
         {navGroups.map((group, groupIndex) => (
           <div key={group.label} className={cn(groupIndex > 0 && "mt-6")}>
             {isSidebarOpen && (
-              <p className="mb-2 px-3 text-[10px] font-semibold uppercase tracking-[0.1em] text-sidebar-foreground/40">
+              <p className="mb-3 mt-1 px-3 text-xs font-bold uppercase tracking-widest text-sidebar-foreground/40">
                 {group.label}
               </p>
             )}
             {!isSidebarOpen && groupIndex > 0 && (
-              <div className="mx-3 mb-3 border-t border-sidebar-border" />
+              <div className="mx-3 mb-3 border-t border-sidebar-border/60" />
+            )}
+            {isSidebarOpen && groupIndex > 0 && (
+              <div className="mx-3 mb-3 -mt-2 border-t border-sidebar-border/30" />
             )}
             <ul className="space-y-0.5">
               {group.items.map((item) => {

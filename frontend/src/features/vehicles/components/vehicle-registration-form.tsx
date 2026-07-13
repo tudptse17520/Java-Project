@@ -19,7 +19,12 @@ import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-export function VehicleRegistrationForm() {
+interface VehicleRegistrationFormProps {
+  onSuccessCallback?: () => void;
+  onCancel?: () => void;
+}
+
+export function VehicleRegistrationForm({ onSuccessCallback, onCancel }: VehicleRegistrationFormProps = {}) {
   const router = useRouter();
   const user = useAuthStore((state) => state.user);
   const { data: vehicleTypes, isLoading: isLoadingTypes } = useVehicleTypes();
@@ -46,7 +51,11 @@ export function VehicleRegistrationForm() {
       onSuccess: () => {
         // Normally show a toast here
         alert("Đăng ký phương tiện thành công!");
-        router.push("/vehicles"); // or redirect to vehicle list if exists
+        if (onSuccessCallback) {
+          onSuccessCallback();
+        } else {
+          router.push("/vehicles"); // fallback
+        }
       },
       onError: (error: any) => {
         if (error.response?.status === 409) {
@@ -136,7 +145,13 @@ export function VehicleRegistrationForm() {
         <Button
           type="button"
           variant="outline"
-          onClick={() => router.back()}
+          onClick={() => {
+            if (onCancel) {
+              onCancel();
+            } else {
+              router.back();
+            }
+          }}
           disabled={isPending}
         >
           Hủy bỏ

@@ -11,7 +11,11 @@ export const SessionStatusBadge = ({ status }: SessionStatusBadgeProps) => {
       case 'IN_PROGRESS':
         return 'success';
       case 'COMPLETED':
-        return 'info';
+        return 'default';
+      case 'OVERDUE':
+        return 'danger';
+      case 'PENDING_PAYMENT':
+        return 'warning';
       default:
         return 'info';
     }
@@ -20,9 +24,13 @@ export const SessionStatusBadge = ({ status }: SessionStatusBadgeProps) => {
   const getLabel = (status: string) => {
     switch (status) {
       case 'IN_PROGRESS':
-        return 'Đang đỗ';
+        return 'Đang gửi';
       case 'COMPLETED':
         return 'Đã ra';
+      case 'OVERDUE':
+        return 'Quá hạn';
+      case 'PENDING_PAYMENT':
+        return 'Chờ thanh toán';
       default:
         return status;
     }

@@ -84,7 +84,7 @@ export default function PaymentPage() {
         actions={
           <Button onClick={handleOpenCreate}>
             <Plus className="mr-1 h-4 w-4" />
-            Tạo thanh toán
+            Xử lý thanh toán
           </Button>
         }
       />

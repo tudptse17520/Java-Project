@@ -51,6 +51,11 @@ export const sessionService = {
     return data;
   },
 
+  getUserSessions: async (userId: number): Promise<{ totalItems: number; data: ParkingSession[] }> => {
+    const { data } = await axiosClient.get<{ totalItems: number; data: ParkingSession[] }>(`/sessions/users/${userId}/sessions`);
+    return data;
+  },
+
   validatePlate: async (
     sessionId: number,
     request: PlateValidationRequest

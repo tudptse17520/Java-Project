@@ -230,4 +230,29 @@ public class ParkingSessionServiceImpl implements ParkingSessionService {
                 .message("Xe check-in thành công.")
                 .build();
     }
+
+    /**
+     * Tra cứu danh sách lượt gửi xe của một user cụ thể.
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public ParkingSessionListResponseDTO getParkingSessionsByUserId(Long userId) {
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<ParkingSession> query = cb.createQuery(ParkingSession.class);
+        Root<ParkingSession> root = query.from(ParkingSession.class);
+
+        query.where(cb.equal(root.get("user").get("id"), userId));
+        query.orderBy(cb.desc(root.get("timeIn")));
+
+        List<ParkingSession> sessions = entityManager.createQuery(query).getResultList();
+
+        List<ParkingSessionResponseDTO> data = sessions.stream()
+                .map(session -> modelMapper.map(session, ParkingSessionResponseDTO.class))
+                .collect(Collectors.toList());
+
+        return ParkingSessionListResponseDTO.builder()
+                .totalItems(data.size())
+                .data(data)
+                .build();
+    }
 }

@@ -24,6 +24,8 @@ import { CHECKOUT_MESSAGES } from "../constants/session.constants";
 import { OverrideCheckoutDialog } from "./override-checkout-dialog";
 import { LostTicketDialog } from "./lost-ticket-dialog";
 
+import { formatPlate } from '@/utils/format-plate';
+
 export function CheckOutForm() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedSession, setSelectedSession] = useState<ParkingSession | null>(null);
@@ -111,7 +113,8 @@ export function CheckOutForm() {
             baseFee: 5000,
             overtimeFee: 0,
             penaltyFee: 0,
-            totalFee: 5000
+            totalFee: 5000,
+            message: "Tính phí thành công"
           });
         },
         onError: (error: any) => {
@@ -188,7 +191,7 @@ export function CheckOutForm() {
                   className="flex h-16 w-full rounded-lg border-2 border-input bg-background px-4 text-3xl font-bold uppercase ring-offset-background placeholder:text-muted-foreground placeholder:text-xl placeholder:font-normal focus-visible:outline-none focus-visible:border-blue-500 disabled:cursor-not-allowed disabled:opacity-50 tracking-wider"
                   placeholder="VD: 51H-12345"
                   value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
+                  onChange={(e) => setSearchTerm(formatPlate(e.target.value))}
                   onKeyDown={(e) => e.key === "Enter" && handleSearch()}
                 />
                 <Button className="h-16 px-8 text-lg font-bold" onClick={handleSearch} disabled={isSearching}>
@@ -218,6 +221,11 @@ export function CheckOutForm() {
                     )}
                     placeholder="Quét biển số..."
                     {...validateForm.register("plateOut")}
+                    onChange={(e) => {
+                      const formatted = formatPlate(e.target.value);
+                      e.target.value = formatted;
+                      validateForm.setValue("plateOut", formatted);
+                    }}
                     ref={(e) => {
                       validateForm.register('plateOut').ref(e);
                       // @ts-ignore
@@ -284,7 +292,7 @@ export function CheckOutForm() {
                 </div>
                 <div>
                   <p className="text-muted-foreground flex items-center gap-1.5 mb-1"><Clock className="h-4 w-4"/> Giờ vào</p>
-                  <p className="font-semibold text-base">{formatDate(selectedSession.timeIn)}</p>
+                  <p className="font-semibold text-base">{dayjs(selectedSession.timeIn).format("DD/MM/YYYY HH:mm")}</p>
                 </div>
                 <div>
                   <p className="text-muted-foreground flex items-center gap-1.5 mb-1"><Clock className="h-4 w-4"/> Giờ ra (Dự kiến)</p>
@@ -311,9 +319,9 @@ export function CheckOutForm() {
                         <span className="font-medium">+{formatCurrency(feeData.penaltyFee)}</span>
                       </div>
                     )}
-                    <div className="flex justify-between items-center bg-indigo-50 dark:bg-indigo-900/20 p-4 rounded-lg mt-4">
-                      <span className="text-lg font-bold text-indigo-700 dark:text-indigo-400">TỔNG CỘNG</span>
-                      <span className="text-4xl font-black text-indigo-700 dark:text-indigo-400">
+                    <div className="flex justify-between items-center bg-emerald-50 dark:bg-emerald-900/20 p-4 rounded-lg mt-4 border border-emerald-100 dark:border-emerald-800">
+                      <span className="text-lg font-bold text-emerald-700 dark:text-emerald-400">TỔNG TIỀN</span>
+                      <span className="text-4xl font-black text-emerald-600 dark:text-emerald-500">
                         {formatCurrency(feeData.totalFee)}
                       </span>
                     </div>

@@ -36,7 +36,7 @@ export function TableSkeleton({
                   <div 
                     className="h-4 rounded-md bg-muted/60 dark:bg-muted/30 relative overflow-hidden"
                     style={{ 
-                      width: `${40 + Math.random() * 40}%`,
+                      width: `${40 + ((rowIndex * 7 + colIndex * 13) % 40)}%`,
                     }}
                   >
                     <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 dark:via-white/5 to-transparent animate-[shimmer_1.5s_infinite]" style={{ animationDelay: `${colIndex * 150}ms` }} />

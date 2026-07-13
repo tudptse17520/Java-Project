@@ -7,5 +7,6 @@ export function useBuildingDetail(id: number | null) {
     queryKey: BROWSE_BUILDING_KEYS.detail(id as number),
     queryFn: () => getBuildingDetail(id as number),
     enabled: id !== null,
+    refetchInterval: 5000,
   });
 }

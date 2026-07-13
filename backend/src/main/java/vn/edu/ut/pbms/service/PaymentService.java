@@ -43,6 +43,7 @@ public interface PaymentService {
      * @return the payment detail as a response DTO
      */
     PaymentResponseDTO getPaymentById(Long id);
+    PaymentListResponseDTO getPaymentsByUserId(Long userId);
 
     /**
      * Calculate and return the remaining debt for a parking session.

@@ -19,7 +19,7 @@ export const VEHICLE_TYPES_QUERY_KEY = ["vehicle-types"];
 export const useVehicleTypes = () => {
   return useQuery({
     queryKey: VEHICLE_TYPES_QUERY_KEY,
-    queryFn: getVehicleTypes,
+    queryFn: () => getVehicleTypes(true),
     refetchInterval: 5000,
   });
 };

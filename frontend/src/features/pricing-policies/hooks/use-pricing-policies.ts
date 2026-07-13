@@ -48,7 +48,7 @@ export const usePricingPolicies = (vehicleTypeId?: number) => {
 export const useVehicleTypesForFilter = () => {
   return useQuery({
     queryKey: VEHICLE_TYPES_QUERY_KEY,
-    queryFn: getVehicleTypes,
+    queryFn: () => getVehicleTypes(false),
   });
 };
 

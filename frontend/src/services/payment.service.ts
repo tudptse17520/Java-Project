@@ -33,6 +33,11 @@ export const getPayments = async (
   return response.data.data;
 };
 
+export const getUserPayments = async (userId: number): Promise<Payment[]> => {
+  const response = await axiosClient.get<PaymentListResponse>(`${BASE_PATH}/users/${userId}/payments`);
+  return response.data.data;
+};
+
 /**
  * Lấy chi tiết biên lai thanh toán
  */

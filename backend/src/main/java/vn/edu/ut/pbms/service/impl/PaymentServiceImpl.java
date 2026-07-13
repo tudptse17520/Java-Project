@@ -195,6 +195,30 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     @Transactional(readOnly = true)
+    public PaymentListResponseDTO getPaymentsByUserId(Long userId) {
+        List<Payment> payments = paymentRepository.findByUserId(userId);
+        
+        // Sort descending by payment time
+        payments.sort((p1, p2) -> {
+            if (p1.getPaymentTime() == null && p2.getPaymentTime() == null) return 0;
+            if (p1.getPaymentTime() == null) return 1;
+            if (p2.getPaymentTime() == null) return -1;
+            return p2.getPaymentTime().compareTo(p1.getPaymentTime());
+        });
+
+        List<PaymentResponseDTO> data = payments.stream()
+                .map(this::mapToResponseDTO)
+                .collect(Collectors.toList());
+
+        return PaymentListResponseDTO.builder()
+                .totalItems(data.size())
+                .message("Lấy danh sách giao dịch thành công")
+                .data(data)
+                .build();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public vn.edu.ut.pbms.dto.response.PaymentDebtResponseDTO getRemainingDebt(Long sessionId) {
         ParkingSession session = parkingSessionRepository.findById(sessionId)
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy lượt gửi xe với ID: " + sessionId));

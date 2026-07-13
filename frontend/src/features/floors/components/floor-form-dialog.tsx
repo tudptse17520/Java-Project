@@ -76,12 +76,13 @@ export function FloorFormDialog({
           floorName: "",
           floorLevel: 1,
           capacity: 100,
-          buildingId: buildings.length > 0 ? buildings[0].id : 0,
-          vehicleTypeId: vehicleTypes && vehicleTypes.length > 0 ? vehicleTypes[0].id : 0,
+          buildingId: buildings?.length ? buildings[0].id : 0,
+          vehicleTypeId: vehicleTypes?.length ? vehicleTypes[0].id : 0,
           status: FloorStatus.ACTIVE,
         });
     }
-  }, [initialData, reset, open, buildings, vehicleTypes]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialData, reset, open]);
 
   if (!open) return null;
 

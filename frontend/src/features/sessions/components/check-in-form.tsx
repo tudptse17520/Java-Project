@@ -16,15 +16,24 @@ import {
   DialogTitle,
   DialogFooter,
 } from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { useSlots } from '@/features/slots/hooks/use-slots';
 
 import { formatPlate } from '@/utils/format-plate';
 
 interface CheckInFormProps {
   onSuccess?: () => void;
   onCancel?: () => void;
+  selectedSlotId?: number;
 }
 
-export const CheckInForm = ({ onSuccess, onCancel }: CheckInFormProps) => {
+export const CheckInForm = ({ onSuccess, onCancel, selectedSlotId }: CheckInFormProps) => {
   const { register, handleSubmit, formState: { errors }, reset, watch, setValue } = useForm<CheckInFormValues>({
     resolver: zodResolver(checkInSchema),
     defaultValues: {
@@ -40,7 +49,16 @@ export const CheckInForm = ({ onSuccess, onCancel }: CheckInFormProps) => {
   const [isScanning, setIsScanning] = useState(false);
   const [successData, setSuccessData] = useState<{ plate: string; slot: string; sessionId: string } | null>(null);
 
+  const { data: slotsData } = useSlots(undefined, 'AVAILABLE');
+  const availableSlots = slotsData?.data || [];
+
   const plateValue = watch('plate');
+
+  useEffect(() => {
+    if (selectedSlotId) {
+      setValue('parkingSlotId', selectedSlotId);
+    }
+  }, [selectedSlotId, setValue]);
 
   // Mock checking member
   const isMember = plateValue && (plateValue.includes('51') || plateValue.includes('30'));
@@ -174,7 +192,25 @@ export const CheckInForm = ({ onSuccess, onCancel }: CheckInFormProps) => {
 
             <div>
               <label className="block text-sm font-medium mb-1 text-muted-foreground">Vị trí đỗ (Slot)</label>
-              <Input type="number" {...register('parkingSlotId', { setValueAs: v => v === "" ? undefined : parseInt(v, 10) })} placeholder="Tùy chọn" className="h-12 text-lg" />
+              <Select
+                value={watch('parkingSlotId')?.toString()}
+                onValueChange={(val) => setValue('parkingSlotId', parseInt(val, 10))}
+              >
+                <SelectTrigger className="h-12 text-lg">
+                  <SelectValue placeholder="Tùy chọn" />
+                </SelectTrigger>
+                <SelectContent>
+                  {availableSlots.length > 0 ? (
+                    availableSlots.map((slot: any) => (
+                      <SelectItem key={slot.id} value={slot.id.toString()}>
+                        {slot.slotName}
+                      </SelectItem>
+                    ))
+                  ) : (
+                    <div className="p-2 text-sm text-muted-foreground text-center">Không có vị trí trống</div>
+                  )}
+                </SelectContent>
+              </Select>
             </div>
           </div>
         </div>

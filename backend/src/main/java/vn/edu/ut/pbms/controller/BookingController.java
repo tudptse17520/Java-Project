@@ -50,7 +50,7 @@ public class BookingController {
     }
 
     @Operation(summary = "Hủy lượt đặt chỗ")
-    @PreAuthorize("hasAnyRole('MANAGER', 'ADMIN', 'STAFF')")
+    @PreAuthorize("hasAnyRole('USER', 'MANAGER', 'ADMIN', 'STAFF')")
     @PutMapping("/bookings/{bookingId}/cancel")
     public ResponseEntity<Void> cancelBooking(
             @PathVariable("bookingId") Long bookingId) {

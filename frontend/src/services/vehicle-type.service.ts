@@ -6,7 +6,12 @@ import { VehicleType, VehicleTypeRequest } from "@/features/vehicle-types/types/
 
 const BASE_PATH = "/vehicle-types";
 
-export const getVehicleTypes = async (): Promise<VehicleType[]> => {
+export const getVehicleTypes = async (includeStats: boolean = false): Promise<VehicleType[]> => {
+  if (!includeStats) {
+    const response = await axiosClient.get<VehicleType[]>(BASE_PATH);
+    return response.data;
+  }
+
   const [vehicleTypesRes, floorsRes, occupancyRes] = await Promise.all([
     axiosClient.get<VehicleType[]>(BASE_PATH),
     axiosClient.get<any[]>("/floors").catch(() => ({ data: [] })),

@@ -89,6 +89,22 @@ public class PaymentController {
         return ResponseEntity.ok(response);
     }
 
+    // ==================== GET - Danh sách giao dịch cá nhân ====================
+
+    /**
+     * Retrieve a list of payment transactions for a specific user.
+     * User can only retrieve their own payments.
+     *
+     * @param userId the user ID
+     * @return HTTP 200 OK with wrapped payment list
+     */
+    @GetMapping("/users/{userId}/payments")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER') or #userId == authentication.principal.id")
+    public ResponseEntity<PaymentListResponseDTO> getUserPayments(@PathVariable("userId") Long userId) {
+        PaymentListResponseDTO response = paymentService.getPaymentsByUserId(userId);
+        return ResponseEntity.ok(response);
+    }
+
     // ==================== GET - Chi tiết biên lai ====================
 
     /**

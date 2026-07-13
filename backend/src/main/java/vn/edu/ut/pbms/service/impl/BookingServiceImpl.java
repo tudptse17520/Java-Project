@@ -44,8 +44,9 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public BookingResponseDTO createBooking(BookingRequestDTO request) {
         // 1. Validate User from JWT
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        User user = userRepository.findByUsername(username)
+        org.springframework.security.core.Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User currentUser = (User) authentication.getPrincipal();
+        User user = userRepository.findByUsername(currentUser.getUsername())
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy tài khoản người dùng hợp lệ."));
 
         // 2. Validate Vehicle
@@ -118,6 +119,15 @@ public class BookingServiceImpl implements BookingService {
     public void cancelBooking(Long bookingId) {
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy đặt chỗ với ID: " + bookingId));
+
+        org.springframework.security.core.Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User currentUser = (User) authentication.getPrincipal();
+        
+        if (currentUser.getRole() == vn.edu.ut.pbms.constant.Role.USER) {
+            if (!booking.getUser().getId().equals(currentUser.getId())) {
+                throw new vn.edu.ut.pbms.exception.AuthenticationException("Bạn không có quyền hủy đặt chỗ này.");
+            }
+        }
 
         if (booking.getStatus() != BookingStatus.PENDING && booking.getStatus() != BookingStatus.CONFIRMED) {
             throw new BusinessRuleViolationException("Chỉ có thể hủy đặt chỗ khi đang ở trạng thái PENDING hoặc CONFIRMED.");

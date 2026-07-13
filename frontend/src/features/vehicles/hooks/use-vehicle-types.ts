@@ -4,6 +4,6 @@ import { getVehicleTypes } from "@/services/vehicle-type.service";
 export const useVehicleTypes = () => {
   return useQuery({
     queryKey: ["vehicle-types"],
-    queryFn: getVehicleTypes,
+    queryFn: () => getVehicleTypes(false),
   });
 };

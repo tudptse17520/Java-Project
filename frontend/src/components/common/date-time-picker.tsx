@@ -74,16 +74,13 @@ export function DateTimePicker({ value, onChange, className }: DateTimePickerPro
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger 
-        render={
-          <Button
-            variant={"outline"}
-            className={cn(
-              "w-full justify-start text-left font-normal h-11 px-3 border-input",
-              !value && "text-muted-foreground",
-              className
-            )}
-          />
-        }
+        type="button"
+        className={cn(
+          "inline-flex shrink-0 items-center justify-center rounded-lg border bg-background hover:bg-muted hover:text-foreground text-sm font-medium whitespace-nowrap transition-all outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
+          "w-full justify-start text-left font-normal h-11 px-3 border-input",
+          !value && "text-muted-foreground",
+          className
+        )}
       >
         <CalendarIcon className="mr-2 h-4 w-4 text-primary" />
         {value && !isNaN(new Date(value).getTime()) ? (

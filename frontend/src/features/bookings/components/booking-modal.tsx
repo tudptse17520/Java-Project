@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -53,6 +54,7 @@ export function BookingModal({
     queryKey: ["slots", selectedFloorId, "AVAILABLE"],
     queryFn: () => slotService.getSlots(selectedFloorId, "AVAILABLE"),
     enabled: !!selectedFloorId,
+    refetchInterval: 5000,
   });
 
   const slots = slotsData?.data || [];
@@ -90,14 +92,14 @@ export function BookingModal({
 
   return (
     <Portal>
-      <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+      <div className="fixed inset-0 z-40 flex items-center justify-center p-4">
         <div
           className="fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity"
           onClick={onClose}
           aria-hidden="true"
         />
 
-        <div className="relative z-50 w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-xl border bg-background shadow-2xl">
+        <div className="relative z-40 w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-xl border bg-background shadow-2xl">
           <button
             type="button"
             onClick={onClose}
@@ -117,9 +119,14 @@ export function BookingModal({
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 {/* Chọn Xe */}
                 <div className="space-y-2">
-                  <label className="text-sm font-medium flex items-center gap-2">
-                    <Car className="h-4 w-4 text-primary" /> Xe của bạn <span className="text-destructive">*</span>
-                  </label>
+                  <div className="flex items-center justify-between">
+                    <label className="text-sm font-medium flex items-center gap-2">
+                      <Car className="h-4 w-4 text-primary" /> Xe của bạn <span className="text-destructive">*</span>
+                    </label>
+                    <Link href="/vehicles" onClick={onClose} className="text-xs text-primary hover:underline font-medium">
+                      + Thêm xe mới
+                    </Link>
+                  </div>
                   <select
                     className={cn(
                       "flex h-11 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",

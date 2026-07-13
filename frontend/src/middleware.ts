@@ -22,10 +22,10 @@ const PUBLIC_ROUTES = ["/", "/login", "/forbidden"];
 
 /** Mapping role -> prefix route được phép truy cập */
 const ROLE_ROUTE_MAP: Record<string, string[]> = {
-  ADMIN: ["/admin", "/manager", "/staff", "/browse", "/reservations", "/vehicles", "/profile"],
+  ADMIN: ["/admin", "/manager", "/staff", "/browse", "/reservations", "/vehicles", "/profile", "/user"],
   MANAGER: ["/manager"],
   STAFF: ["/staff"],
-  USER: ["/browse", "/reservations", "/vehicles", "/profile"],
+  USER: ["/browse", "/reservations", "/vehicles", "/profile", "/user"],
 };
 
 /** Mapping role -> đường dẫn dashboard mặc định */

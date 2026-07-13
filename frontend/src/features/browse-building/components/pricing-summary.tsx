@@ -2,9 +2,14 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { getPricingPolicies } from "@/services/pricing-policy.service";
-import { useVehicleTypes } from "@/features/vehicles/hooks/use-vehicle-types";
+import axiosClient from "@/lib/axios-client";
 import { formatCurrency } from "@/utils/format-currency";
 import { Banknote } from "lucide-react";
+
+interface SimpleVehicleType {
+  id: number;
+  typeName: string;
+}
 
 export function PricingSummary() {
   const { data: policies, isLoading: isLoadingPolicies } = useQuery({
@@ -12,7 +17,14 @@ export function PricingSummary() {
     queryFn: () => getPricingPolicies(),
   });
 
-  const { data: vehicleTypes, isLoading: isLoadingTypes } = useVehicleTypes();
+  // Fetch vehicle types directly without calling /reports/occupancy (which requires MANAGER/ADMIN role)
+  const { data: vehicleTypes, isLoading: isLoadingTypes } = useQuery<SimpleVehicleType[]>({
+    queryKey: ["vehicle-types-browse"],
+    queryFn: async () => {
+      const res = await axiosClient.get<SimpleVehicleType[]>("/vehicle-types");
+      return res.data;
+    },
+  });
 
   if (isLoadingPolicies || isLoadingTypes) {
     return (
@@ -43,8 +55,8 @@ export function PricingSummary() {
             </tr>
           </thead>
           <tbody className="divide-y">
-            {policies.map((policy) => {
-              const typeName = vehicleTypes?.find(vt => vt.id === policy.vehicleTypeId)?.typeName;
+            {policies.map((policy: any) => {
+              const typeName = vehicleTypes?.find((vt: SimpleVehicleType) => vt.id === policy.vehicleTypeId)?.typeName;
               return (
                 <tr key={policy.id} className="hover:bg-muted/30 transition-colors">
                   <td className="px-4 py-2.5 font-medium">

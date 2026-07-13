@@ -74,9 +74,13 @@ function hasRouteAccess(role: string, pathname: string): boolean {
 // =============================================
 
 export function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+
   // TẠM THỜI: Bỏ qua mọi route guard cho mục đích demo
   return NextResponse.next();
 
+  // --- TẠM THỜI COMMENT TOÀN BỘ PHẦN DƯỚI ĐỂ BỎ QUA ROUTE GUARD ---
+  /*
   // 1. Bỏ qua static files và API routes
   if (
     pathname.startsWith("/_next") ||
@@ -102,7 +106,7 @@ export function middleware(request: NextRequest) {
   }
 
   // 4. Decode token và kiểm tra role
-  const payload = decodeJwtPayload(token);
+  const payload = decodeJwtPayload(token as string);
 
   if (!payload || !payload.role) {
     // Token không hợp lệ -> redirect về login
@@ -129,6 +133,7 @@ export function middleware(request: NextRequest) {
 
   // 7. Cho phép truy cập
   return NextResponse.next();
+  */
 }
 
 export const config = {

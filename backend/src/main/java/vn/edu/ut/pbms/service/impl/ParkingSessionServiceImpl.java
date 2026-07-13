@@ -191,9 +191,10 @@ public class ParkingSessionServiceImpl implements ParkingSessionService {
         if (parkingSlot != null) {
             if (parkingSlot.getStatus() == ParkingSlotStatus.OCCUPIED ||
                 parkingSlot.getStatus() == ParkingSlotStatus.MAINTENANCE ||
-                parkingSlot.getStatus() == ParkingSlotStatus.LOCKED) {
+                parkingSlot.getStatus() == ParkingSlotStatus.LOCKED ||
+                (parkingSlot.getStatus() == ParkingSlotStatus.BOOKED && (matchedBooking == null || !parkingSlot.getId().equals(matchedBooking.getParkingSlot().getId())))) {
                 throw new BusinessRuleViolationException(
-                        "Vị trí đỗ '" + parkingSlot.getSlotName() + "' hiện tại không khả dụng.");
+                        "Vị trí đỗ '" + parkingSlot.getSlotName() + "' hiện tại không khả dụng (Đã được đặt trước hoặc đang sử dụng).");
             }
 
             // Cập nhật trạng thái ô đỗ thành OCCUPIED và phát sự kiện SSE

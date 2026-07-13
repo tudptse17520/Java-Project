@@ -75,7 +75,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         // TẠM THỜI: Bỏ qua JWT và Inject một dummy User nếu chưa có (Phục vụ Demo)
         if (SecurityContextHolder.getContext().getAuthentication() == null) {
-            User dummyUser = userRepository.findAll().stream().findFirst().orElse(null);
+            User dummyUser = userRepository.findAll().stream()
+                    .filter(u -> u.getRole() == vn.edu.ut.pbms.constant.Role.ADMIN || u.getRole() == vn.edu.ut.pbms.constant.Role.MANAGER || u.getRole() == vn.edu.ut.pbms.constant.Role.STAFF)
+                    .findFirst().orElse(null);
             if (dummyUser != null) {
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         dummyUser,

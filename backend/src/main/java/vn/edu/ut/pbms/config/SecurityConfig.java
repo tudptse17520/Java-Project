@@ -43,7 +43,6 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-
                 .authorizeHttpRequests(auth -> auth
                         // Endpoint xác thực - public
                         .requestMatchers("/api/v1/auth/**").permitAll()
@@ -74,7 +73,6 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/bookings/**").authenticated()
                         // Tạm thời cho phép tất cả các endpoint khác, đổi thành bắt buộc authenticated
                         .anyRequest().authenticated())
-
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();

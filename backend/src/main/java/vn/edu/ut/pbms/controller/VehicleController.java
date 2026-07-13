@@ -6,6 +6,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -18,6 +19,7 @@ import vn.edu.ut.pbms.service.VehicleService;
 @RestController
 @RequestMapping("/api/v1/vehicles")
 @RequiredArgsConstructor
+@PreAuthorize("hasAnyRole('USER', 'STAFF', 'MANAGER', 'ADMIN')")
 @Tag(name = "Vehicle", description = "API quản lý phương tiện cá nhân")
 public class VehicleController {
 
@@ -33,6 +35,7 @@ public class VehicleController {
 
     @Operation(summary = "Lấy danh sách xe của một user cụ thể")
     @GetMapping("/user/{userId}")
+    @PreAuthorize("#userId == authentication.principal.id or hasAnyRole('ADMIN', 'MANAGER')")
     public ResponseEntity<List<VehicleResponseDTO>> getVehiclesByUser(
             @PathVariable("userId") Long userId) {
         List<VehicleResponseDTO> response = vehicleService.getVehiclesByUserId(userId);

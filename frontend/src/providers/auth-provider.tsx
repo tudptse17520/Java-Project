@@ -8,6 +8,8 @@
 import { useEffect } from "react";
 import { useAuthStore } from "@/stores/auth.store";
 import { getCookie } from "@/utils/storage";
+import { jwtDecode } from "jwt-decode";
+import { authService } from "@/services/auth.service";
 
 interface AuthProviderProps {
   children: React.ReactNode;
@@ -17,27 +19,28 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const { setUser, clearUser } = useAuthStore();
 
   useEffect(() => {
-    // Kiểm tra token trong cookie khi tải trang
-    const token = getCookie("access_token");
+    const fetchUser = async () => {
+      const token = getCookie("access_token");
 
-    if (token) {
-      try {
-        // Decode JWT payload (base64) để lấy thông tin user
-        // Placeholder: sẽ triển khai chi tiết khi có API
-        const payload = JSON.parse(atob(token.split(".")[1]));
-        setUser({
-          id: payload.sub || "",
-          email: payload.email || "",
-          fullName: payload.fullName || "",
-          role: payload.role || "USER",
-        });
-      } catch {
-        // Token không hợp lệ
+      if (token) {
+        try {
+          // Decode JWT payload an toàn bằng jwt-decode để check expiration hoặc format cơ bản
+          interface DecodedPayload { sub?: string; role?: string }
+          jwtDecode<DecodedPayload>(token);
+
+          // Lấy thông tin user đầy đủ từ API
+          const user = await authService.getMe();
+          setUser(user);
+        } catch {
+          // Token không hợp lệ hoặc API lỗi (có thể do token hết hạn)
+          clearUser();
+        }
+      } else {
         clearUser();
       }
-    } else {
-      clearUser();
-    }
+    };
+
+    fetchUser();
   }, [setUser, clearUser]);
 
   return <>{children}</>;

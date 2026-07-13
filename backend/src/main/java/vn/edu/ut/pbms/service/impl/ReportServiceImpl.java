@@ -127,19 +127,39 @@ public class ReportServiceImpl implements ReportService {
         // Create breakdown details
         List<Map<String, Object>> details = new ArrayList<>();
 
+        boolean isSingleDay = start.toLocalDate().equals(end.toLocalDate());
+
         Map<String, Long> dailyEntries = sessions.stream()
                 .collect(Collectors.groupingBy(
-                        s -> s.getTimeIn().toLocalDate().toString(),
+                        s -> isSingleDay 
+                             ? String.format("%02d:00", s.getTimeIn().getHour()) 
+                             : s.getTimeIn().toLocalDate().toString(),
                         Collectors.counting()
                 ));
 
-        dailyEntries.forEach((date, count) -> {
+        Map<String, Long> dailyExits = sessions.stream()
+                .filter(s -> s.getStatus() == ParkingSessionStatus.COMPLETED && s.getTimeOut() != null && !s.getTimeOut().isBefore(start) && !s.getTimeOut().isAfter(end))
+                .collect(Collectors.groupingBy(
+                        s -> isSingleDay 
+                             ? String.format("%02d:00", s.getTimeOut().getHour()) 
+                             : s.getTimeOut().toLocalDate().toString(),
+                        Collectors.counting()
+                ));
+
+        Set<String> allDates = new HashSet<>();
+        allDates.addAll(dailyEntries.keySet());
+        allDates.addAll(dailyExits.keySet());
+
+        List<String> sortedDates = new ArrayList<>(allDates);
+        Collections.sort(sortedDates);
+
+        for (String date : sortedDates) {
             Map<String, Object> item = new HashMap<>();
             item.put("date", date);
-            item.put("entries", count);
-            item.put("exits", dailyEntries.getOrDefault(date, 0L)); // placeholder/estimated exits same day
+            item.put("entries", dailyEntries.getOrDefault(date, 0L));
+            item.put("exits", dailyExits.getOrDefault(date, 0L));
             details.add(item);
-        });
+        }
 
         return VehicleEntryExitReportDTO.builder()
                 .totalEntries(totalEntries)

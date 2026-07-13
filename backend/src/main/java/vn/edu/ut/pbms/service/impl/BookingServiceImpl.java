@@ -7,6 +7,7 @@ import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,9 +43,10 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public BookingResponseDTO createBooking(BookingRequestDTO request) {
-        // 1. Validate User
-        User user = userRepository.findById(request.getUserId())
-                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy tài khoản người dùng với ID: " + request.getUserId()));
+        // 1. Validate User from JWT
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy tài khoản người dùng hợp lệ."));
 
         // 2. Validate Vehicle
         Vehicle vehicle = vehicleRepository.findById(request.getVehicleId())
@@ -84,7 +86,7 @@ public class BookingServiceImpl implements BookingService {
 
         return BookingResponseDTO.builder()
                 .id(savedBooking.getId())
-                .status(savedBooking.getStatus().name())
+                .status(savedBooking.getStatus())
                 .message("Tạo đơn đặt chỗ thành công. Trạng thái: PENDING.")
                 .build();
     }
@@ -112,12 +114,30 @@ public class BookingServiceImpl implements BookingService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public void cancelBooking(Long bookingId) {
+        Booking booking = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy đặt chỗ với ID: " + bookingId));
+
+        if (booking.getStatus() != BookingStatus.PENDING && booking.getStatus() != BookingStatus.CONFIRMED) {
+            throw new BusinessRuleViolationException("Chỉ có thể hủy đặt chỗ khi đang ở trạng thái PENDING hoặc CONFIRMED.");
+        }
+
+        booking.setStatus(BookingStatus.CANCELLED);
+        bookingRepository.save(booking);
+
+        if (booking.getParkingSlot() != null) {
+            slotAvailabilityService.updateSlotStatus(booking.getParkingSlot().getId(), ParkingSlotStatus.AVAILABLE);
+        }
+    }
+
     private BookingListResponseDTO mapToBookingListResponseDTO(Booking booking) {
         return BookingListResponseDTO.builder()
                 .bookingId(booking.getId())
                 .parkingSlotId(booking.getParkingSlot() != null ? booking.getParkingSlot().getId() : null)
+                .parkingSlotName(booking.getParkingSlot() != null ? booking.getParkingSlot().getSlotName() : null)
                 .expectedTimeIn(booking.getExpectedTimeIn().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
-                .status(booking.getStatus().name())
+                .status(booking.getStatus())
                 .build();
     }
 

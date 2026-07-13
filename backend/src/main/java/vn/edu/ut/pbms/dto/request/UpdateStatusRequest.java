@@ -1,6 +1,9 @@
 package vn.edu.ut.pbms.dto.request;
 
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import vn.edu.ut.pbms.constant.UserStatus;
+
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,6 +19,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UpdateStatusRequest {
 
-    @NotBlank(message = "Trạng thái không được để trống.")
-    private String status;
+    @NotNull(message = "Trạng thái không được để trống.")
+    private UserStatus status;
 }

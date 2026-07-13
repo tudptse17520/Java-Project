@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 // ---------------------------------------------
 // Payment Manual Status Dialog
 // Form cho Staff cập nhật trạng thái thủ công
@@ -16,6 +19,7 @@ import {
 import { MANUAL_STATUS_OPTIONS } from "@/features/payments/constants/payment.constants";
 import type { Payment } from "@/features/payments/types/payment.type";
 import { FormContainer, FormHeader, FormFields, FormActions } from "@/components/common/form-container";
+import { Portal } from "@/components/common/portal";
 
 interface PaymentManualStatusDialogProps {
   open: boolean;
@@ -56,7 +60,8 @@ export function PaymentManualStatusDialog({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
+    <Portal>
+      <div className="fixed inset-0 z-50 flex items-center justify-center">
       {/* Backdrop */}
       <div
         className="fixed inset-0 bg-black/50"
@@ -134,5 +139,7 @@ export function PaymentManualStatusDialog({
         </FormContainer>
       </div>
     </div>
+    </Portal>
   );
 }
+

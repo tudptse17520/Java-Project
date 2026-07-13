@@ -24,14 +24,16 @@ export function EmptyState({
   return (
     <div
       className={cn(
-        "flex flex-col items-center justify-center gap-3 py-12",
+        "flex flex-col items-center justify-center gap-5 py-24 px-6 rounded-xl border-2 border-dashed border-border/60 bg-slate-50/50 dark:bg-slate-900/20 text-center animate-fade-in",
         className
       )}
     >
-      <Icon className="h-12 w-12 text-muted-foreground/50" />
-      <div className="text-center">
-        <h3 className="text-lg font-semibold text-foreground">{title}</h3>
-        <p className="mt-1 text-sm text-muted-foreground">{description}</p>
+      <div className="relative flex h-20 w-20 items-center justify-center rounded-full bg-primary/5 ring-8 ring-primary/5">
+        <Icon className="h-10 w-10 text-primary/40" strokeWidth={1.5} />
+      </div>
+      <div className="max-w-md space-y-1.5">
+        <h3 className="text-lg font-semibold tracking-tight text-foreground">{title}</h3>
+        <p className="text-sm text-muted-foreground leading-relaxed">{description}</p>
       </div>
       {action && <div className="mt-4">{action}</div>}
     </div>

@@ -9,4 +9,5 @@ public interface BookingService {
     BookingResponseDTO createBooking(BookingRequestDTO request);
     List<BookingListResponseDTO> getBookingsByUserId(Long userId);
     List<BookingListResponseDTO> getAllBookings();
+    void cancelBooking(Long bookingId);
 }

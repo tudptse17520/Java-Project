@@ -2,13 +2,14 @@ import { VehicleTypeStatus } from "@/constants/vehicle-type-status";
 
 export interface VehicleType {
   id: number;
-  type_name: string;
+  typeName: string;
   description: string | null;
   status: VehicleTypeStatus;
+  activeSessionsCount?: number;
 }
 
 export interface VehicleTypeRequest {
-  type_name: string;
+  typeName: string;
   description?: string;
   status?: VehicleTypeStatus;
 }

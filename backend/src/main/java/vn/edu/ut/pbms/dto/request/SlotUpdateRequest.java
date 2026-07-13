@@ -1,10 +1,13 @@
 package vn.edu.ut.pbms.dto.request;
 
-import jakarta.validation.constraints.NotBlank;
+import vn.edu.ut.pbms.constant.ParkingSlotStatus;
+import jakarta.validation.constraints.NotNull;
+
+
 import lombok.Data;
 
 @Data
 public class SlotUpdateRequest {
-    @NotBlank(message = "Trạng thái không được để trống")
-    private String status; 
+    @NotNull(message = "Trạng thái không được để trống")
+    private ParkingSlotStatus status; 
 }

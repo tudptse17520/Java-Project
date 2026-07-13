@@ -9,10 +9,11 @@ import axios, {
   type InternalAxiosRequestConfig,
 } from "axios";
 import type { ApiErrorResponse } from "@/types/api";
+import { getCookie, removeCookie } from "@/utils/storage";
 
 // Sử dụng biến môi trường trực tiếp để tránh lỗi khi env.ts validate fail
 const BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080/api";
+  process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080/api/v1";
 
 /**
  * Axios instance chính cho toàn bộ ứng dụng
@@ -31,16 +32,9 @@ const axiosClient = axios.create({
 // =============================================
 axiosClient.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
-    // Chỉ chạy phía client
-    if (typeof window !== "undefined") {
-      const match = document.cookie.match(
-        /(^| )access_token=([^;]+)/
-      );
-      const token = match ? match[2] : null;
-
-      if (token && config.headers) {
-        config.headers.Authorization = `Bearer ${token}`;
-      }
+    const token = getCookie("access_token");
+    if (token && config.headers) {
+      config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
   },
@@ -63,11 +57,11 @@ axiosClient.interceptors.response.use(
     switch (status) {
       case 401:
         // Token hết hạn hoặc không hợp lệ -> redirect login
-        if (typeof window !== "undefined") {
-          // Xóa token cũ
-          document.cookie =
-            "access_token=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
-          window.location.href = "/login";
+        if (!error.config?.url?.includes("/auth/login")) {
+          removeCookie("access_token");
+          if (typeof window !== "undefined" && window.location.pathname !== "/login") {
+            window.location.href = "/login";
+          }
         }
         break;
 

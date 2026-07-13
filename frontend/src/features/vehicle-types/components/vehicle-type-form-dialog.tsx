@@ -12,6 +12,7 @@ import {
 import { VehicleType } from "@/features/vehicle-types/types/vehicle-type.type";
 import { VehicleTypeStatus } from "@/constants/vehicle-type-status";
 import { FormContainer, FormHeader, FormFields, FormActions } from "@/components/common/form-container";
+import { Portal } from "@/components/common/portal";
 
 interface VehicleTypeFormDialogProps {
   open: boolean;
@@ -38,7 +39,7 @@ export function VehicleTypeFormDialog({
   } = useForm<VehicleTypeFormValues>({
     resolver: zodResolver(vehicleTypeSchema),
     defaultValues: {
-      type_name: "",
+      typeName: "",
       description: "",
       status: VehicleTypeStatus.ACTIVE,
     },
@@ -47,13 +48,13 @@ export function VehicleTypeFormDialog({
   useEffect(() => {
     if (initialData) {
       reset({
-        type_name: initialData.type_name,
+        typeName: initialData.typeName,
         description: initialData.description || "",
         status: initialData.status,
       });
     } else {
       reset({
-        type_name: "",
+        typeName: "",
         description: "",
         status: VehicleTypeStatus.ACTIVE,
       });
@@ -63,7 +64,8 @@ export function VehicleTypeFormDialog({
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
+    <Portal>
+      <div className="fixed inset-0 z-50 flex items-center justify-center">
       {/* Backdrop */}
       <div
         className="fixed inset-0 bg-black/50"
@@ -84,23 +86,23 @@ export function VehicleTypeFormDialog({
           {/* Type Name */}
           <div className="space-y-1">
             <label
-              htmlFor="type_name"
+              htmlFor="typeName"
               className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
             >
               Tên loại phương tiện <span className="text-destructive">*</span>
             </label>
             <input
-              id="type_name"
+              id="typeName"
               type="text"
               className={cn(
                 "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
-                errors.type_name && "border-destructive focus-visible:ring-destructive"
+                errors.typeName && "border-destructive focus-visible:ring-destructive"
               )}
               placeholder="VD: Xe máy, Ô tô..."
-              {...register("type_name")}
+              {...register("typeName")}
             />
-            {errors.type_name && (
-              <p className="text-sm text-destructive">{errors.type_name.message}</p>
+            {errors.typeName && (
+              <p className="text-sm text-destructive">{errors.typeName.message}</p>
             )}
           </div>
 
@@ -126,6 +128,25 @@ export function VehicleTypeFormDialog({
             )}
           </div>
 
+          {/* Status */}
+          <div className="space-y-1">
+            <label htmlFor="status" className="text-sm font-medium leading-none">
+              Trạng thái <span className="text-destructive">*</span>
+            </label>
+            <select
+              id="status"
+              className={cn(
+                "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm",
+                errors.status && "border-destructive focus-visible:ring-destructive"
+              )}
+              {...register("status")}
+            >
+              <option value={VehicleTypeStatus.ACTIVE}>Đang áp dụng</option>
+              <option value={VehicleTypeStatus.INACTIVE}>Ngừng áp dụng</option>
+            </select>
+            {errors.status && <p className="text-sm text-destructive">{errors.status.message}</p>}
+          </div>
+
           </FormFields>
 
           {/* Action Buttons */}
@@ -140,5 +161,6 @@ export function VehicleTypeFormDialog({
         </FormContainer>
       </div>
     </div>
+    </Portal>
   );
 }

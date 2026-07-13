@@ -16,4 +16,10 @@ public interface ParkingSlotService {
 
     // Thêm mới slot
     ParkingSlotCreateResponse createSlot(ParkingSlotRequest request);
+
+    // Cập nhật thông tin slot
+    ParkingSlot updateSlot(Long id, ParkingSlotRequest request);
+
+    // Xóa slot
+    void deleteSlot(Long id);
 }

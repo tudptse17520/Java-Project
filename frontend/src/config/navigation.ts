@@ -102,9 +102,21 @@ export const MANAGER_NAV: NavGroup[] = [
         roles: [Role.MANAGER],
       },
       {
+        title: "Loại phương tiện",
+        href: "/manager/vehicle-types",
+        icon: Car,
+        roles: [Role.MANAGER],
+      },
+      {
         title: "Chính sách giá",
         href: "/manager/pricing",
         icon: DollarSign,
+        roles: [Role.MANAGER],
+      },
+      {
+        title: "Đặt chỗ",
+        href: "/manager/bookings",
+        icon: CalendarCheck,
         roles: [Role.MANAGER],
       },
     ],
@@ -167,6 +179,12 @@ export const STAFF_NAV: NavGroup[] = [
         icon: CreditCard,
         roles: [Role.STAFF],
       },
+      {
+        title: "Sự cố",
+        href: "/staff/feedbacks",
+        icon: MessageSquareWarning,
+        roles: [Role.STAFF],
+      },
     ],
   },
 ];
@@ -182,6 +200,24 @@ export const DRIVER_NAV: NavItem[] = [
     title: "Đặt chỗ",
     href: "/reservations",
     icon: CalendarCheck,
+    roles: [Role.USER],
+  },
+  {
+    title: "Lượt gửi xe",
+    href: "/user/sessions",
+    icon: ClipboardList,
+    roles: [Role.USER],
+  },
+  {
+    title: "Thanh toán",
+    href: "/user/payments",
+    icon: CreditCard,
+    roles: [Role.USER],
+  },
+  {
+    title: "Sự cố",
+    href: "/user/feedbacks",
+    icon: MessageSquareWarning,
     roles: [Role.USER],
   },
   {

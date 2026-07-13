@@ -24,16 +24,16 @@ vn\edu\ut\pbms
 ## Setup & Run
 1. Navigate to the backend directory:
    ```bash
-   cd backend
+   cd backend/
    ```
 2. Set up environment variables:
    Copy `.env.example` to `.env` and update the values (e.g., database credentials, JWT secret).
 3. Install dependencies and build the project:
    ```bash
-   mvn clean install
+   .\mvnw clean install
    ```
 4. Run the application:
    ```bash
-   mvn spring-boot:run
+   .\mvnw spring-boot:run
    ```
 The backend server will start on `http://localhost:8080`.

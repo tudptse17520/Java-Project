@@ -27,4 +27,12 @@ public interface ParkingSessionService {
      * @return check-in status and confirmation details
      */
     CheckinResponse checkInVehicle(CheckinRequest request);
+
+    /**
+     * Get parking sessions for a specific user.
+     *
+     * @param userId the user ID
+     * @return a response containing total_items and data array
+     */
+    ParkingSessionListResponseDTO getParkingSessionsByUserId(Long userId);
 }

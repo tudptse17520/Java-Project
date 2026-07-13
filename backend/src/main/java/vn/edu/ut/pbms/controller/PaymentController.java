@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 import jakarta.servlet.http.HttpServletRequest;
 import vn.edu.ut.pbms.dto.request.ManualStatusRequestDTO;
 import vn.edu.ut.pbms.dto.request.PaymentRequestDTO;
@@ -30,6 +31,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @RestController
 @RequestMapping("/api/v1/payments")
 @RequiredArgsConstructor
+@PreAuthorize("hasAnyRole('USER', 'STAFF', 'MANAGER', 'ADMIN')")
 @Tag(name = "Payment")
 public class PaymentController {
 
@@ -80,9 +82,9 @@ public class PaymentController {
      */
     @GetMapping
     public ResponseEntity<PaymentListResponseDTO> getPayments(
-            @RequestParam(name = "payment_method", required = false) String paymentMethod,
+            @RequestParam(name = "paymentMethod", required = false) String paymentMethod,
             @RequestParam(name = "status", required = false) String status,
-            @RequestParam(name = "from_date", required = false) String fromDate) {
+            @RequestParam(name = "fromDate", required = false) String fromDate) {
         PaymentListResponseDTO response = paymentService.getPayments(paymentMethod, status, fromDate);
         return ResponseEntity.ok(response);
     }
@@ -142,6 +144,7 @@ public class PaymentController {
      * @return HTTP 200 OK with VNPAY formatted JSON response
      */
     @GetMapping("/vnpay-ipn")
+    @PreAuthorize("permitAll()")
     public ResponseEntity<String> processVnpayIpn(HttpServletRequest request) {
         return paymentService.processVnpayIpn(request);
     }

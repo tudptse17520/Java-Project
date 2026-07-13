@@ -1,8 +1,53 @@
-﻿export default function Page() {
+"use client";
+
+import { useState } from "react";
+import { PageContainer } from "@/components/common/page-container";
+import { PageHeader } from "@/components/common/page-header";
+import { ConfigTable } from "@/features/system-configs/components/config-table";
+import { ConfigFilter } from "@/features/system-configs/components/config-filter";
+import { ConfigFormDialog } from "@/features/system-configs/components/config-form-dialog";
+import { useConfigs } from "@/features/system-configs/hooks/use-configs";
+import { SystemConfig } from "@/features/system-configs/types/config.type";
+
+export default function SettingsPage() {
+  const [keyword, setKeyword] = useState("");
+  const [selectedConfig, setSelectedConfig] = useState<SystemConfig | null>(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  const { data: configData, isLoading } = useConfigs({ keyword });
+
+  const handleEdit = (config: SystemConfig) => {
+    setSelectedConfig(config);
+    setIsDialogOpen(true);
+  };
+
+  const handleCloseDialog = () => {
+    setIsDialogOpen(false);
+    setSelectedConfig(null);
+  };
+
   return (
-    <div>
-      <h1 className="text-2xl font-bold">Cau hinh he thong</h1>
-      <p className="mt-2 text-muted-foreground">Trang dang duoc phat trien.</p>
-    </div>
+    <PageContainer>
+      <PageHeader
+        title="Cấu hình hệ thống"
+        description="Quản lý và cập nhật các tham số cấu hình của hệ thống bãi đỗ xe."
+      />
+
+      <div className="space-y-4 mt-6">
+        <ConfigFilter onSearch={setKeyword} isLoading={isLoading} />
+        
+        <ConfigTable
+          data={configData?.data || []}
+          isLoading={isLoading}
+          onEdit={handleEdit}
+        />
+      </div>
+
+      <ConfigFormDialog
+        config={selectedConfig}
+        isOpen={isDialogOpen}
+        onClose={handleCloseDialog}
+      />
+    </PageContainer>
   );
 }

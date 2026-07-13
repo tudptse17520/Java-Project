@@ -1,6 +1,5 @@
 package vn.edu.ut.pbms.dto.response;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,13 +17,11 @@ public class ParkingSessionResponseDTO {
     private Long id;
     
     private String plate;
-    
-    @JsonProperty("time_in")
+    private String ticketCode;
+    private String status;
     private LocalDateTime timeIn;
-    
-    @JsonProperty("time_out")
     private LocalDateTime timeOut;
-    
-    @JsonProperty("total_fee")
     private BigDecimal totalFee;
+    private Long vehicleId;
+    private Long parkingSlotId;
 }

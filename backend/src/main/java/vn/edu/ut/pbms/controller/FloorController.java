@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 import vn.edu.ut.pbms.dto.request.FloorRequestDTO;
 import vn.edu.ut.pbms.dto.response.FloorResponseDTO;
 import vn.edu.ut.pbms.service.FloorService;
@@ -16,17 +17,20 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @RestController
 @RequestMapping("/api/v1/floors")
 @RequiredArgsConstructor
+@PreAuthorize("hasAnyRole('USER', 'STAFF', 'MANAGER', 'ADMIN')")
 @Tag(name = "Floor")
 public class FloorController {
 
     private final FloorService floorService;
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('MANAGER', 'ADMIN')")
     public ResponseEntity<FloorResponseDTO> createFloor(@Valid @RequestBody FloorRequestDTO requestDTO) {
         return new ResponseEntity<>(floorService.createFloor(requestDTO), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('MANAGER', 'ADMIN')")
     public ResponseEntity<FloorResponseDTO> updateFloor(@PathVariable Long id,
             @Valid @RequestBody FloorRequestDTO requestDTO) {
         return ResponseEntity.ok(floorService.updateFloor(id, requestDTO));
@@ -48,6 +52,7 @@ public class FloorController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('MANAGER', 'ADMIN')")
     public ResponseEntity<Void> deleteFloor(@PathVariable Long id) {
         floorService.deleteFloor(id);
         return ResponseEntity.noContent().build();

@@ -1,8 +1,95 @@
-﻿export default function Page() {
+"use client";
+
+import { useState, useEffect } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
+import { PageContainer } from "@/components/common/page-container";
+import { PageHeader } from "@/components/common/page-header";
+import { Button } from "@/components/ui/button";
+import { Plus } from "lucide-react";
+import { BookingTable } from "@/features/bookings/components/booking-table";
+import { BookingModal } from "@/features/bookings/components/booking-modal";
+import { useUserBookings, useCreateBooking } from "@/features/bookings/hooks/use-bookings";
+import { useAuthStore } from "@/stores/auth.store";
+import type { BookingFormValues } from "@/features/bookings/schemas/booking-form.schema";
+import toast from "react-hot-toast";
+
+export default function DriverReservationsPage() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  
+  useEffect(() => {
+    if (searchParams.get("openModal") === "true") {
+      setIsModalOpen(true);
+      // Clean up URL so it doesn't reopen on refresh
+      const newUrl = new URL(window.location.href);
+      newUrl.searchParams.delete("openModal");
+      router.replace(newUrl.pathname + newUrl.search);
+    }
+  }, [searchParams, router]);
+  const { user } = useAuthStore();
+
+  const { data: bookings = [], isLoading, error } = useUserBookings(user?.id);
+  const createBookingMutation = useCreateBooking();
+
+  const handleSubmit = (data: BookingFormValues) => {
+    if (!user?.id) {
+      toast.error("Bạn cần đăng nhập để đặt chỗ.");
+      return;
+    }
+
+    createBookingMutation.mutate(
+      {
+        vehicleId: data.vehicleId,
+        parkingSlotId: data.parkingSlotId,
+        expectedTimeIn: data.expectedTimeIn,
+        expectedTimeOut: data.expectedTimeOut,
+      },
+      {
+        onSuccess: () => {
+          toast.success("Đã tạo đơn đặt chỗ thành công.");
+          setIsModalOpen(false);
+        },
+        onError: () => {
+          toast.error("Đã xảy ra lỗi khi tạo đặt chỗ.");
+        },
+      }
+    );
+  };
+
+  if (error) {
+    return (
+      <PageContainer>
+        <div className="flex h-full items-center justify-center text-destructive">
+          Đã xảy ra lỗi khi tải danh sách đặt chỗ của bạn.
+        </div>
+      </PageContainer>
+    );
+  }
+
   return (
-    <div>
-      <h1 className="text-2xl font-bold">Dat cho truoc</h1>
-      <p className="mt-2 text-muted-foreground">Trang dang duoc phat trien.</p>
-    </div>
+    <PageContainer>
+      <PageHeader
+        title="Đặt chỗ trước"
+        description="Quản lý và theo dõi các đơn đặt chỗ của bạn."
+        actions={
+          <Button onClick={() => setIsModalOpen(true)}>
+            <Plus className="mr-2 h-4 w-4" /> Đặt chỗ mới
+          </Button>
+        }
+      />
+      
+      <div className="mt-6">
+        <BookingTable data={bookings} isLoading={isLoading} />
+      </div>
+
+      <BookingModal
+        open={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSubmit={handleSubmit}
+        isLoading={createBookingMutation.isPending}
+        initialBuildingId={searchParams.get("buildingId") ? Number(searchParams.get("buildingId")) : undefined}
+      />
+    </PageContainer>
   );
 }

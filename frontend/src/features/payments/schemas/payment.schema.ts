@@ -8,31 +8,31 @@ import { z } from "zod";
 /**
  * Schema validate form tạo thanh toán mới.
  * Ràng buộc nghiệp vụ: phải có ít nhất 1 trong 2 trường
- * parking_session_id hoặc booking_id.
+ * parkingSessionId hoặc bookingId.
  */
 export const createPaymentSchema = z
   .object({
-    parking_session_id: z
+    plate: z.string().optional(),
+    parkingSessionId: z
       .union([z.number().int().positive(), z.nan()])
       .nullable(),
-    booking_id: z
+    bookingId: z
       .union([z.number().int().positive(), z.nan()])
       .nullable(),
     amount: z
       .number({ message: "Số tiền không được để trống." })
-      .positive("Số tiền phải lớn hơn 0.")
       .min(1000, "Số tiền tối thiểu là 1.000đ."),
-    payment_method: z
+    paymentMethod: z
       .string()
       .min(1, "Phương thức thanh toán không được để trống."),
-    fee_type: z.string().min(1, "Loại phí không được để trống."),
+    feeType: z.string().min(1, "Loại phí không được để trống."),
   })
   .refine(
-    (data) => data.parking_session_id != null || data.booking_id != null,
+    (data) => data.parkingSessionId != null || data.bookingId != null,
     {
       message:
         "Bắt buộc phải nhập Mã lượt gửi xe hoặc Mã đặt chỗ (ít nhất 1 trong 2).",
-      path: ["parking_session_id"],
+      path: ["parkingSessionId"],
     }
   );
 

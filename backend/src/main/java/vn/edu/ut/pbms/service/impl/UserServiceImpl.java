@@ -36,10 +36,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(readOnly = true)
-    public UserListResponse getUsers(String keyword, String role) {
+    public UserListResponse getUsers(String keyword, String role, String status) {
         Role roleEnum = parseRoleOrNull(role);
+        UserStatus statusEnum = null;
+        if (status != null && !status.isBlank()) {
+            statusEnum = parseStatus(status);
+        }
 
-        List<User> users = userRepository.searchUsers(keyword, roleEnum);
+        List<User> users = userRepository.searchUsers(keyword, roleEnum, statusEnum);
 
         List<UserResponse> data = users.stream()
                 .map(this::mapToUserResponse)
@@ -68,8 +72,8 @@ public class UserServiceImpl implements UserService {
                     "Số điện thoại '" + request.getPhoneNumber() + "' đã được sử dụng.");
         }
 
-        // Parse role from String to Enum
-        Role roleEnum = parseRole(request.getRole());
+        // Use enum directly
+        Role roleEnum = request.getRole();
 
         // Build entity with hashed password and default ACTIVE status
         User user = User.builder()
@@ -100,8 +104,8 @@ public class UserServiceImpl implements UserService {
                     "Số điện thoại '" + request.getPhoneNumber() + "' đã được sử dụng bởi tài khoản khác.");
         }
 
-        // Parse role from String to Enum
-        Role roleEnum = parseRole(request.getRole());
+        // Use enum directly
+        Role roleEnum = request.getRole();
 
         // Update fields
         user.setFullName(request.getFullName());
@@ -121,8 +125,8 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Không tìm thấy người dùng với ID: " + id));
 
-        // Safely parse status String to Enum
-        UserStatus statusEnum = parseStatus(request.getStatus());
+        // Safely use status enum
+        UserStatus statusEnum = request.getStatus();
 
         // Update status
         user.setStatus(statusEnum);
@@ -143,23 +147,11 @@ public class UserServiceImpl implements UserService {
                 .username(user.getUsername())
                 .fullName(user.getFullName())
                 .phoneNumber(user.getPhoneNumber())
-                .role(user.getRole().name())
-                .status(user.getStatus().name())
+                .role(user.getRole())
+                .status(user.getStatus())
                 .build();
     }
 
-    /**
-     * Parse a role String to the Role enum.
-     * Throws BusinessRuleViolationException if the value is invalid.
-     */
-    private Role parseRole(String role) {
-        try {
-            return Role.valueOf(role.toUpperCase().trim());
-        } catch (IllegalArgumentException e) {
-            throw new vn.edu.ut.pbms.exception.BusinessRuleViolationException(
-                    "Vai trò không hợp lệ: '" + role + "'. Giá trị hợp lệ: ADMIN, MANAGER, STAFF, USER.");
-        }
-    }
 
     /**
      * Parse a role String to the Role enum, returning null if blank/null.

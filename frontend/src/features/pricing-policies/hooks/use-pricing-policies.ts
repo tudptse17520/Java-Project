@@ -18,6 +18,7 @@ import {
   deletePricingPolicy,
 } from "@/services/pricing-policy.service";
 import { getVehicleTypes } from "@/services/vehicle-type.service";
+import toast from "react-hot-toast";
 
 // =============================================
 // Query Keys
@@ -37,6 +38,7 @@ export const usePricingPolicies = (vehicleTypeId?: number) => {
   return useQuery({
     queryKey: [...PRICING_POLICIES_QUERY_KEY, vehicleTypeId],
     queryFn: () => getPricingPolicies(vehicleTypeId),
+    refetchInterval: 5000,
   });
 };
 
@@ -70,7 +72,11 @@ export const useCreatePricingPolicy = () => {
       queryClient.invalidateQueries({
         queryKey: PRICING_POLICIES_QUERY_KEY,
       });
+      toast.success("Thêm bảng giá mới thành công!");
     },
+    onError: (error: any) => {
+      toast.error(error.response?.data?.message || "Đã có lỗi xảy ra khi thêm bảng giá");
+    }
   });
 };
 
@@ -90,7 +96,11 @@ export const useUpdatePricingPolicy = () => {
       queryClient.invalidateQueries({
         queryKey: PRICING_POLICIES_QUERY_KEY,
       });
+      toast.success("Cập nhật bảng giá thành công!");
     },
+    onError: (error: any) => {
+      toast.error(error.response?.data?.message || "Đã có lỗi xảy ra khi cập nhật bảng giá");
+    }
   });
 };
 
@@ -106,6 +116,10 @@ export const useDeletePricingPolicy = () => {
       queryClient.invalidateQueries({
         queryKey: PRICING_POLICIES_QUERY_KEY,
       });
+      toast.success("Xóa bảng giá thành công!");
     },
+    onError: (error: any) => {
+      toast.error(error.response?.data?.message || "Đã có lỗi xảy ra khi xóa bảng giá");
+    }
   });
 };

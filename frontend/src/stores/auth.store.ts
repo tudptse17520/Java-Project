@@ -8,10 +8,12 @@ import { create } from "zustand";
 import type { Role } from "@/constants/role";
 
 export interface AuthUser {
-  id: string;
-  email: string;
-  fullName: string;
+  username: string;
   role: Role | string;
+  id?: number;
+  fullName?: string;
+  phoneNumber?: string;
+  status?: string;
 }
 
 interface AuthState {

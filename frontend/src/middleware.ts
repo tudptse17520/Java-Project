@@ -6,17 +6,23 @@
 
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { jwtDecode } from "jwt-decode";
+
+interface JwtPayload {
+  role?: string;
+  exp?: number;
+}
 
 // =============================================
 // Route Definitions
 // =============================================
 
 /** Các route không cần xác thực */
-const PUBLIC_ROUTES = ["/", "/login"];
+const PUBLIC_ROUTES = ["/", "/login", "/forbidden"];
 
 /** Mapping role -> prefix route được phép truy cập */
 const ROLE_ROUTE_MAP: Record<string, string[]> = {
-  ADMIN: ["/admin"],
+  ADMIN: ["/admin", "/manager", "/staff", "/browse", "/reservations", "/vehicles", "/profile"],
   MANAGER: ["/manager"],
   STAFF: ["/staff"],
   USER: ["/browse", "/reservations", "/vehicles", "/profile"],
@@ -44,19 +50,11 @@ function isPublicRoute(pathname: string): boolean {
 }
 
 /**
- * Decode JWT payload từ token string
- * Placeholder - chỉ decode base64, không verify signature
+ * Decode JWT payload từ token string an toàn bằng jwt-decode
  */
-function decodeJwtPayload(
-  token: string
-): { role?: string; exp?: number } | null {
+function decodeJwtPayload(token: string): JwtPayload | null {
   try {
-    const parts = token.split(".");
-    if (parts.length !== 3) return null;
-    const payload = JSON.parse(
-      Buffer.from(parts[1], "base64").toString("utf-8")
-    );
-    return payload;
+    return jwtDecode<JwtPayload>(token);
   } catch {
     return null;
   }

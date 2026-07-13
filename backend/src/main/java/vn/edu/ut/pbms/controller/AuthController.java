@@ -9,12 +9,14 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import vn.edu.ut.pbms.dto.request.LoginRequest;
 import vn.edu.ut.pbms.dto.response.LoginResponse;
+import vn.edu.ut.pbms.dto.response.UserResponse;
 import vn.edu.ut.pbms.exception.ErrorResponse;
 import vn.edu.ut.pbms.service.AuthService;
 
@@ -67,5 +69,71 @@ public class AuthController {
     public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
         LoginResponse response = authService.login(request);
         return ResponseEntity.ok(response);
+    }
+
+    /**
+     * Lấy thông tin người dùng đang đăng nhập.
+     *
+     * @return UserResponse chứa chi tiết người dùng
+     */
+    @Operation(
+            summary = "Lấy thông tin người dùng hiện tại",
+            description = "Trả về thông tin chi tiết của người dùng đang đăng nhập dựa trên JWT token."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Thành công",
+                    content = @Content(schema = @Schema(implementation = UserResponse.class))
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Chưa đăng nhập hoặc token không hợp lệ",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class))
+            )
+    })
+    @GetMapping("/me")
+    public ResponseEntity<UserResponse> getMe() {
+        UserResponse response = authService.getMe();
+        return ResponseEntity.ok(response);
+    }
+
+    /**
+     * Thay đổi mật khẩu người dùng hiện tại.
+     *
+     * @param request chứa mật khẩu cũ và mới
+     * @return Thông báo thành công
+     */
+    @Operation(
+            summary = "Đổi mật khẩu",
+            description = "Cho phép người dùng đang đăng nhập đổi mật khẩu."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Thành công",
+                    content = @Content(schema = @Schema(implementation = vn.edu.ut.pbms.dto.response.ApiResponse.class))
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Mật khẩu cũ không chính xác hoặc xác nhận mật khẩu không khớp",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class))
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Chưa đăng nhập",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class))
+            )
+    })
+    @PostMapping("/change-password")
+    public ResponseEntity<vn.edu.ut.pbms.dto.response.ApiResponse<String>> changePassword(@Valid @RequestBody vn.edu.ut.pbms.dto.request.ChangePasswordRequest request) {
+        authService.changePassword(request);
+        return ResponseEntity.ok(
+                vn.edu.ut.pbms.dto.response.ApiResponse.<String>builder()
+                        .success(true)
+                        .message("Đổi mật khẩu thành công.")
+                        .data(null)
+                        .build()
+        );
     }
 }
